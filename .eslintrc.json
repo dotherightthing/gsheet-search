@@ -1,0 +1,107 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": [
+    "airbnb-base",
+    "plugin:jsdoc/recommended"
+  ],
+  "globals": {
+    "Atomics": "readonly",
+    "google": "readonly",
+    "GroupsApp": "readonly",
+    "HtmlService": "readonly",
+    "Logger": "readonly",
+    "PropertiesService": "readonly",
+    "ScriptApp": "readonly",
+    "Session": "readonly",
+    "SharedArrayBuffer": "readonly",
+    "SpreadsheetApp": "readonly",
+    "Utilities": "readonly",
+    "GsApp": "readonly",
+    "GsCache": "readonly",
+    "GsPage": "readonly",
+    "gsPageInstance": "readonly",
+    "GsSheet": "readonly",
+    "gsSheetInstance": "readonly",
+    "GsUtils": "readonly",
+    "gsUtilsInstance": "readonly",
+    "GsUi": "readonly",
+    "gsUiInstance": "readonly",
+    "GsUiCss": "readonly",
+    "gsUiCssInstance": "readonly",
+    "gsUiTypeahead": "readonly",
+    "pubsub": "readonly",
+    "typeahead": "readonly"
+  },
+  "ignorePatterns": [
+    "node_modules/"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2018
+  },
+  "plugins": [
+    "html",
+    "jsdoc"
+  ],
+  "rules": {
+    "array-bracket-spacing": [
+      "error",
+      "always"
+    ],
+    "block-spacing": [
+      "error",
+      "always"
+    ],
+    "comma-spacing": [
+      "error"
+    ],
+    "func-names": [
+      "warn",
+      "as-needed"
+    ],
+    "indent": [
+      "warn",
+      2
+    ],
+    "max-len": [
+      "error",
+      {
+        "code": 120,
+        "ignoreUrls": true,
+        "ignoreComments": true,
+        "ignoreRegExpLiterals": true,
+        "ignoreStrings": true,
+        "ignoreTemplateLiterals": true
+      }
+    ],
+    "no-alert": [
+      "off"
+    ],
+    "no-param-reassign": [
+      "warn",
+      {
+        "props": false
+      }
+    ],
+    "no-underscore-dangle": "off",
+    "no-unused-vars": [
+      "warn", 
+      {
+        "varsIgnorePattern": "^doGet|[gG]s|(test|trigger)"
+      }
+    ],
+    "no-unused-expressions": 0,
+    "no-use-before-define": [
+      "warn",
+      {
+        "functions": false,
+        "variables": true
+      }
+    ]
+  },
+  "settings": {
+    "html/html-extensions": [".html", ".js.html"]
+  }
+}

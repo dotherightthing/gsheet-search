@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en-NZ">
+  <head>
+    <base target="_top">
+    <?!= GsPage.include('Dependencies/Basic.css'); ?>
+    <?!= GsPage.include('Stylesheet.css', {
+      tplCompanyLogo,
+    }); ?>
+  </head>
+  <body class="bg-logo">
+    <!-- start header -->
+    <header id="header">
+      <h1 class="header-logo">
+        <img src="<?= tplCompanyLogo ?>" alt="<?= tplCompanyName ?>">
+      </h1>
+    </header>
+    <!-- end header -->
+
+    <form id="search">
+      <fieldset>
+        <input id="typeahead" placeholder="search" autocomplete="off">
+      </fieldset>
+      <input type="reset" value="Reset">
+    </form>
+
+    <!-- start messages -->
+    <div class="footer" id="footer">
+      <div class="wrapper grid grid-footer">
+        POD Search v0.0.0
+      </div>
+    </div>
+    <!-- end messages -->
+
+    <?!= GsPage.include('Dependencies/Pubsub.js'); ?>
+    <?!= GsPage.include('Dependencies/Typeahead-standalone.js'); ?>
+    <?!= GsPage.include('Classes/GsUi.js'); ?>
+    <?!= GsPage.include('Classes/GsUiCss.js'); ?>
+    <?!= GsPage.include('Classes/GsUiTypeahead.js'); ?>
+    <?!= GsPage.include('Init.js'); ?>
+  </body>
+</html>

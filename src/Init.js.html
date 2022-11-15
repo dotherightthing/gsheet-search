@@ -1,0 +1,38 @@
+<script id="init">
+/**
+ * @file Init.js.html
+ * @summary Client side scripting for the GS web app.
+ *  Instances are generated so that classes can subscribe to pubsub events and respond accordingly.
+ */
+const gsUiInstance = new GsUi();
+const gsUiCssInstance = new GsUiCss();
+const gsUiTypeaheadInstance = new GsUiTypeahead();
+
+document.onreadystatechange = () => {
+  // Polyfill for forEach
+  if (window.NodeList && !NodeList.prototype.forEach) {
+    NodeList.prototype.forEach = Array.prototype.forEach;
+  }
+
+  // Polyfill for forEach
+  if (window.HTMLCollection && !HTMLCollection.prototype.forEach) {
+    HTMLCollection.prototype.forEach = Array.prototype.forEach;
+  }
+
+  // The document has finished loading and the document has been parsed
+  // but sub-resources such as images, stylesheets and frames are still loading.
+  if (document.readyState === 'interactive') {
+    // publish events for other modules to subscribe to
+
+    pubsub.publish('domready');
+  }
+
+  // The document and all sub-resources have finished loading.
+  // The state indicates that the load event is about to fire.
+  if (document.readyState === 'complete') {
+    // publish events for other modules to subscribe to
+
+    pubsub.publish('windowLoad');
+  }
+};
+</script>

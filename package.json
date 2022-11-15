@@ -1,0 +1,68 @@
+{
+  "name": "gsheet-search",
+  "version": "0.1.0",
+  "description": "",
+  "main": "Main.js",
+  "scripts": {
+    "man": "npx jsdoc2md --template ./templates/MAN.hbs --files ./src/**/*.js* > ./MAN.md",
+    "editor": "npx clasp push && npx clasp open",
+    "lint:css": "npx stylelint './src/**/*.css.html'",
+    "lint:js": "npx eslint ./src/**/*.js",
+    "prepare": "husky install",
+    "preview": "npx clasp push && npx clasp open --webapp --deploymentId $npm_package_config_headDeploymentId",
+    "publish": "./scripts/publish.sh ${npm_package_config_pubDeploymentId} \"${npm_config_krmmessage}\"",
+    "test": "npx clasp push && npx clasp open --webapp --deploymentId $npm_package_config_testHeadDeploymentId",
+    "postinstall": "node ./scripts/copy-dependencies.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dotherightthing/gsheet-search.git"
+  },
+  "keywords": [
+    "appsscript",
+    "google-sheets"
+  ],
+  "author": "dan@dotherightthing.co.nz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dotherightthing/gsheet-search/issues"
+  },
+  "homepage": "https://github.com/dotherightthing/gsheet-search#readme",
+  "devDependencies": {
+    "@google/clasp": "^2.4.1",
+    "@types/google-apps-script": "^1.0.41",
+    "eslint": "^8.7.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-compat": "^4.0.1",
+    "eslint-plugin-html": "^6.2.0",
+    "eslint-plugin-json": "^3.1.0",
+    "husky": "^7.0.4",
+    "jsdoc-to-markdown": "^7.1.0",
+    "postcss-html": "^1.3.0",
+    "postcss-syntax": "^0.36.2",
+    "stylelint": "^14.3.0",
+    "stylelint-config-html": "^1.0.0",
+    "stylelint-order": "^5.0.0",
+    "stylelint-selector-bem-pattern": "^2.1.1"
+  },
+  "config": {
+    "headDeploymentId": "AKfycbyXIo-wDHA4IIzSsMAmcT97XUiFPaMdsUaI2vPnLX1s",
+    "pubDeploymentId": "AKfycbyFMw-ILDiJD6E1oWd7Gv6UkQSAkNZ5OezOcTAWjqoNgtkM2X5ZUDfK1Afp3Ih_mn0PYg",
+    "testHeadDeploymentId": "AKfycbz2R2G4KDjQ9V5KFZQoc9P3Z3211bN9yZODmY8KiPc",
+    "copyDependencies": {
+      "pubsub.js": [
+        "pubsub.js"
+      ],
+      "typeahead-standalone": [
+        "dist/typeahead-standalone.js",
+        "dist/basic.css"
+      ]
+    }
+  },
+  "dependencies": {
+    "eslint-plugin-jsdoc": "^39.6.2",
+    "pubsub.js": "^1.5.2",
+    "serve": "^14.1.1",
+    "typeahead-standalone": "^4.13.0"
+  }
+}

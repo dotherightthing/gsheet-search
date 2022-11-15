@@ -1,0 +1,277 @@
+<style id="heights"></style>
+<style>
+/* ----------------------------------------
+Font - match https://kaicycle.org.nz/
+-------------------------------------- */
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,300;1,700&family=Unna:ital,wght@0,400;0,700;1,400;1,700');
+
+/* ----------------------------------------
+Variables
+-------------------------------------- */
+
+:root {
+  --rgb-black: 0, 0, 0;
+  --rgb-white: 255, 255, 255;
+
+  --rgb-lightergrey: 215, 215, 215;
+  --rgb-lightgrey: 204, 204, 204;
+  --rgb-midgrey: 153, 153, 153;
+  --rgb-darkgrey: 50, 50, 50;
+  --rgb-darkergrey: 40, 40, 40;
+
+  --brand-border: rgb(var(--rgb-black));
+
+  --text-dark: rgb(var(--rgb-black));
+  --text-light: rgb(var(--rgb-white));
+  --text-midlight: rgba(var(--rgb-white), .8);
+  --text-tertiary: rgba(var(--rgb-black), .8);
+  --text-underline: var(--rgb-black);
+
+  --bg-non-ui: rgb(var(--rgb-lightergrey));
+
+  --gutter: .75rem;
+  --gutter-half: calc(var(--gutter) / 2);
+  --gutter-quarter: calc(var(--gutter) / 4);
+  --gutter-sixth: calc(var(--gutter) / 6);
+
+  --font-serif-brand: Unna, serif;
+  --font-sans-serif: Arial, sans-serif;
+  --font-sans-serif-brand: 'Source Sans Pro', sans-serif;
+
+  --header-padding-top: 1.2rem;
+  --header-padding-bottom: 1.35rem;
+
+  --z-index-header-footer: 1;
+}
+
+/* ----------------------------------------
+Resets
+-------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+abbr {
+  text-decoration: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.a {
+  display: inline-block;
+}
+
+.a::after {
+  content: '';
+  display: block;
+  opacity: .2;
+  border-bottom: 1px solid var(--text-underline);
+  margin-top: -.05em;
+}
+
+button {
+  background-color: transparent;
+  padding: 0;
+  border: 0;
+}
+
+button * {
+  /* prevent child from interfering with button click event */
+  pointer-events: none;
+}
+
+/* ----------------------------------------
+Helpers
+-------------------------------------- */
+
+.wrapper {
+  padding: 0 var(--gutter);
+}
+
+.hidden,
+[hidden] {
+  display: none;
+}
+
+.hidden-assistive {
+  /* stylelint-disable-next-line declaration-no-important */
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* ----------------------------------------
+Grids
+-------------------------------------- */
+
+.grid:not([hidden]) {
+  display: grid;
+}
+
+/* ----------------------------------------
+body
+-------------------------------------- */
+
+body {
+  min-height: 100vh;
+  background-color: rgba(var(--rgb-darkergrey), .1);
+  color: var(--text-dark);
+  font-family: var(--font-sans-serif-brand);
+  /* allow for elements with fixed position */
+  padding: var(--height-fixed-header) 0 var(--height-fixed-footer);
+  margin: 0;
+
+  /* Disable pull-to-refresh and overscroll glow effect, retain swipe navigation */
+  /* See: https://developer.chrome.com/blog/overscroll-behavior/ */
+  overscroll-behavior-y: none;
+}
+
+/* ----------------------------------------
+#header (pinned)
+-------------------------------------- */
+
+header {
+  position: fixed;
+  top: 0;
+  z-index: var(--z-index-header-footer);
+  width: 100%;
+
+  background:
+    linear-gradient(rgba(var(--rgb-white), .7), rgba(var(--rgb-white), .4));
+  padding-top: var(--header-padding-top);
+  padding-bottom: var(--header-padding-bottom);
+  /* h1 */
+  margin: 0;
+}
+
+header::after {
+  content: '';
+  display: block;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-bottom: .25rem solid rgba(var(--rgb-white), .3);
+}
+
+h1 {
+  margin: 0;
+}
+
+.header-logo {
+  width: 6rem;
+  height: auto;
+  margin: 0 auto;
+}
+
+.header-logo > img {
+  display: block;
+  position: relative;
+  width: 100%;
+  background-color: rgb(var(--rgb-white));
+  padding: .5rem;
+}
+
+/* ----------------------------------------
+form
+-------------------------------------- */
+
+form {
+  position: relative;
+  width: 90%;
+  margin: 1rem auto 0;
+}
+
+fieldset {
+  padding: 0;
+  border: 0;
+}
+
+form input#typeahead {
+  font-size: 1.2rem;
+  padding: .2rem 1.5rem .2rem .2rem;
+  border: 2px solid;
+}
+
+/* form input.tt-input {
+
+} */
+
+form input.tt-hint {
+  height: 100%;
+}
+
+form input[type='reset'] {
+  float: right;
+  font-size: 1rem;
+  padding: .3rem .5rem;
+  margin: 0;
+}
+
+.typeahead-standalone {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.typeahead-standalone > * {
+  width: 100%;
+}
+
+.typeahead-standalone .tt-list div[class^="tt-"] {
+  border-bottom: 1px solid;
+}
+
+/* ----------------------------------------
+.footer
+-------------------------------------- */
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: var(--z-index-header-footer);
+  width: 100%;
+  background-color: var(--bg-non-ui);
+  color: var(--text-tertiary);
+  text-align: center;
+  padding: var(--gutter-half) 0;
+  border-top: 1px solid var(--brand-border);
+  margin: 0 auto;
+}
+
+a.small,
+.a.small {
+  text-transform: none;
+}
+
+.footer p {
+  text-overflow: ellipsis;
+  margin: 0;
+  overflow: hidden;
+}
+
+.footer a,
+.footer .a {
+  color: var(--text-tertiary);
+}
+
+.footer-links > * {
+  display: inline-block;
+  margin-right: var(--gutter);
+}
+
+.a.footer-version {
+  text-transform: uppercase;
+}
+
+</style>

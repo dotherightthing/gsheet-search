@@ -1,0 +1,10 @@
+_admin
+.husky
+node_modules
+scripts
+templates
+.*
+creds.json*
+*.code-workspace
+*.md
+package*.json

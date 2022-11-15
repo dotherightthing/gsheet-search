@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test</title>
+
+  </head>
+  <body>
+    <script>
+      /* globals typeahead */
+
+      // input element to attach to
+      const inputElement = document.getElementById('typeahead');
+
+      const data = [
+        {
+          business: 'ANZ',
+          name: 'Sophia',
+          address: 'Panama St',
+        },
+        {
+          business: 'BNZ',
+          name: 'Georgia',
+          address: '96 The Terrace',
+        },
+        {
+          business: 'BNZ',
+          name: 'Sophie',
+          address: '96 The Terrace',
+        },
+        {
+          business: 'NZX',
+          name: 'Paul',
+          address: '11 Cable St',
+        },
+        {
+          business: 'Ministry of Education',
+          abbreviation: 'MOE',
+          name: 'Lonise',
+          address: '1 The Terrace',
+        },
+      ];
+
+      const instance = typeahead({ // eslint-disable-line no-unused-vars
+        input: inputElement,
+        source: {
+          local: data,
+          identifier: 'name',
+          // identity: (suggestion) => `${suggestion.business}${suggestion.address}`,
+          groupIdentifier: 'business',
+          // TODO doesn't search within string
+          dataTokens: [ 'abbreviation', 'business', 'address' ], // fields one can search on
+          diacritics: true,
+        },
+        hint: true,
+        autoSelect: false,
+        highlight: true,
+        templates: {
+          suggestion: (item) => {
+            const abbr = item.abbreviation ? ` (${item.abbreviation})` : '';
+
+            return `<div class="text">${item.business}${abbr} ${item.address}:</div>
+            <div class="text">${item.name}</div>`;
+          },
+          group: (name) => `<div class="custom-group">${name}</div>`,
+          // header: () => 'PODs',
+          // footer: () => '<a href="#">See more...</a>',
+          notFound: () => 'No results',
+        },
+      });
+    </script>
+  </body>
+</html>
