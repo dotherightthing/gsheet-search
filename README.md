@@ -88,7 +88,7 @@ Code execution can be tested by directly calling the serverside functions contai
 
 This is a great way to get developer-friendly error messages, rather than the user-friendly ones provided in-app.
 
-Due to issue [#1](https://github.com/dotherightthing/kaicycle-run-mobile-standalone/issues/1), this requires jumping over to the online development environment.
+Currently this requires jumping over to the online development environment.
 
 ```sh
 npm run editor
@@ -122,21 +122,9 @@ npx clasp push
 
 ##### Data
 
-Data manipulation can be verified by viewing the source spreadsheet. A separate test sheet is used during development, to prevent accidental corruption of the original data.
+Data manipulation can be verified by viewing the source spreadsheet.
 
-Both spreadsheets are linked to the app via the `spreadsheetIds` object in `Main.gs`.
-
-TODO: move [Gsheet Search Testsheet](https://docs.google.com/spreadsheets/d/1KdzxNoJLBijG4388dXTTSKQbSv5x17O76a4F9wPYgHc/edit#gid=867197459) to Google Doc.
-
-##### Sync the Gsheet Search Testsheet to the Kaicycle Run spreadsheet
-
-**Warning:** This overwrites all data in the test sheet!
-
-1. Open the [Gsheet Search project](https://script.google.com/home/projects/19XgAvUOgCc8lFIswiDq5SjMhPfMnhNIXtVdwLDATmKqHm_qWOR8_j_3_/edit)
-2. Open `Main.gs`
-3. Run: `krmSyncRunSheets`
-
-This overwrites the test sheet with the latest data (and formatting) from the master sheet.
+The spreadsheet is linked to the app via the `spreadsheetIds` object in `Main.gs`.
 
 #### Deploy
 
@@ -149,9 +137,9 @@ npm run preview
 npx clasp push
 ```
 
-This updates and opens the latest [TEST BUILD / [DEV]](https://script.google.com/macros/s/AKfycbyXIo-wDHA4IIzSsMAmcT97XUiFPaMdsUaI2vPnLX1s/dev) version of the web app.
+This updates and opens the latest DEV version of the web app.
 
-This allows changes to be tested without impacting the STABLE BUILD of the web app.
+This allows changes to be tested without impacting the STABLE of the web app.
 
 Note: In the online IDE, this *Web app URL* is accessed under *Test deployments*.
 
@@ -166,11 +154,11 @@ Thereafter, deployments can be managed from the commandline:
 npm run publish --krmmessage="VERSION_DESCRIPTION"
 ```
 
-This updates and opens the latest [STABLE BUILD / [STABLE]](https://script.google.com/macros/s/AKfycbyFMw-ILDiJD6E1oWd7Gv6UkQSAkNZ5OezOcTAWjqoNgtkM2X5ZUDfK1Afp3Ih_mn0PYg/exec) version of the web app.
+This updates and opens the latest STABLE version of the web app.
 
 Then:
 
-1. Open ['Kaicycle Run & customer details' Apps Script, in the online IDE](https://script.google.com/home/projects/1GtG5NW7WasptRV9upomoeL2ezZ4XHj008iO0XKqp8XC9hI1F1szWZR3H/edit)
+1. Open the Apps Script project in the online IDE
 2. Open `appsscript.json`
 3. Change `dependencies.libraries.version` to the deployed version (integer)
 4. Save changes
@@ -181,54 +169,36 @@ The [MAN](MAN.md)ual is generated from JSDoc comments in the sourcecode (*Local 
 
 ## Using the app
 
-### 1. Share the master spreadsheet with any editors and app users
+### 1. Share the spreadsheet with any editors and app users
 
-1. Open ['Kaicycle Run & customer details' spreadsheet](https://docs.google.com/spreadsheets/d/1Vn2RNqZ_SmS5Tw3W9RAy_V9SHfzZzoyGPGtT-BzKrxs/edit#gid=1582070571)
+1. Open the spreadsheet
 2. *Share > Add people and groups > [Enter email] > Editor*
 
 Note:
 
 * The app reads and writes company data, therefore you will need permission to edit the spreadsheet in order to access the app.
-* If the spreadsheet is not shared, the user may still be able to view it, but they will not see the dropdown menus or the *Kaicycle Help* menu item, and the app will not be able to write to it.
+* If the spreadsheet is not shared, the user may still be able to view it, but the app will not be able to write to it.
 
 ### 2a. Spreadsheet users - share the Apps Script project, which is linked to the spreadsheet as a code library
 
-1. Open the ['Gsheet Search' project](https://script.google.com/home/projects/19XgAvUOgCc8lFIswiDq5SjMhPfMnhNIXtVdwLDATmKqHm_qWOR8_j_3_/edit)
+1. Open the 'Gsheet Search' project
 2. *Share this project with others > Add people and groups > [Enter email] > Editor*.
 
 Note:
 
-* *Viewer* access only provides access to the [STABLE/deployed]((https://script.google.com/macros/s/AKfycbyFMw-ILDiJD6E1oWd7Gv6UkQSAkNZ5OezOcTAWjqoNgtkM2X5ZUDfK1Afp3Ih_mn0PYg/exec)) version of the app
-* *Editor* also provides access to the *Deploy* menu and in turn the [DEV/Head]((https://script.google.com/macros/s/AKfycbyXIo-wDHA4IIzSsMAmcT97XUiFPaMdsUaI2vPnLX1s/exec)) version of the app.
+* *Viewer* access only provides access to the STABLE/deployed version of the app
+* *Editor* also provides access to the *Deploy* menu and in turn the DEV/Head version of the app.
 
 ### 2b. App users - share the GCP (Google Cloud Platform) project (during development)
 
-During development, the app has a status of *testing* rather than *in production*. While in testing, only test users may access the app.
+During development, the app has a status of *testing* rather than *in production*. While in testing, only the developer and any test users may access the app.
 
 Add a test user:
 
-1. Open [the script's parent GCP (Google Cloud Platform) project](https://console.cloud.google.com/apis/credentials/consent?authuser=0&project=gsheet-search)
+1. Open the script's parent GCP (Google Cloud Platform) project
 2. *OAuth user cap > Test users > + ADD USERS*
 3. This user is now allowed to access the STABLE version. The DEV version will show a prompt to 'Request access'.
 
 ### Data integrity
 
 The good functioning of the app is dependent on the structure of the source spreadsheet being maintained.
-
-Brittleness is mitigated somewhat by referencing strings/labels rather than ranges/locations:
-
-* Column headers - Row and column containing header strings
-* Named ranges
-* Run range - e.g. Row containing "MT VIC RUN", down to the row containing "MT COOK RUN"
-* etc
-
-## Roadmap
-
-See the project [milestones](https://github.com/dotherightthing/gsheet-search/milestones):
-
-1. [UX](https://github.com/dotherightthing/gsheet-search/milestone/6)
-1. [Stabilisation](https://github.com/dotherightthing/gsheet-search/milestone/4)
-1. [Performance](https://github.com/dotherightthing/gsheet-search/milestone/2)
-1. [Security & permissions](https://github.com/dotherightthing/gsheet-search/milestone/3)
-1. [Content](https://github.com/dotherightthing/gsheet-search/milestone/7)
-1. [Customisation](https://github.com/dotherightthing/gsheet-search/milestone/5)

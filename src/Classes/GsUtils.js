@@ -269,7 +269,6 @@ class GsUtils {
    * @static
    * @param {string} str - String to convert
    * @returns {string} capitalisedStr
-   * @see {@link https://github.com/dotherightthing/kaicycle-run-mobile-tests}
    */
   static stringToCapitalised(str) {
     if (typeof str !== 'string') {
@@ -287,7 +286,6 @@ class GsUtils {
    * @static
    * @param {string} str - String to convert
    * @returns {string} safeStr
-   * @see {@link https://github.com/dotherightthing/kaicycle-run-mobile-tests}
    */
   static stringToId(str) {
     if (typeof str !== 'string') {
