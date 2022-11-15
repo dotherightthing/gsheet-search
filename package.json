@@ -10,7 +10,7 @@
     "lint:js": "npx eslint ./src/**/*.js",
     "prepare": "husky install",
     "preview": "npx clasp push && npx clasp open --webapp --deploymentId $npm_package_config_headDeploymentId",
-    "publish": "./scripts/publish.sh ${npm_package_config_pubDeploymentId} \"${npm_config_krmmessage}\"",
+    "publish": "./scripts/publish.sh ${npm_package_config_pubDeploymentId} \"${npm_config_gsmessage}\"",
     "test": "npx clasp push && npx clasp open --webapp --deploymentId $npm_package_config_testHeadDeploymentId",
     "postinstall": "node ./scripts/copy-dependencies.js"
   },

@@ -151,7 +151,7 @@ Thereafter, deployments can be managed from the commandline:
 
 ```sh
 # Update the STABLE BUILD
-npm run publish --krmmessage="VERSION_DESCRIPTION"
+npm run publish --gsmessage="VERSION_DESCRIPTION"
 ```
 
 This updates and opens the latest STABLE version of the web app.
