@@ -15,7 +15,7 @@ const gsConfig = {
   imageFavicon: 'https://images.squarespace-cdn.com/content/v1/5509fa79e4b068c780a986a4/1439431242134-20WAGLYZ8SPU3VYP8K0E/favicon.png',
   imageLogo: 'http://images.squarespace-cdn.com/content/v1/5509fa79e4b068c780a986a4/1499595271907-XVPJW6WB8ZGN618V1154/layer3.png?format=500w',
   organisationName: 'Nocar Cargo',
-  pageTitle: 'POD Search',
+  pageTitle: 'Gsheet Search',
   scriptIds: {
     app: '1_5vomwUsWKlMA07DtaWmGBJlup7M-kCIhcnVhH4PdLf_pgGNmqPTxoHj',
     // testSpreadsheet: '',

@@ -144,6 +144,7 @@ class GsPage {
     const {
       imageLogo,
       organisationName,
+      pageTitle,
       tplFile,
     } = this;
 
@@ -154,6 +155,7 @@ class GsPage {
     const tplVariables = {
       tplCompanyLogo: imageLogo,
       tplCompanyName: organisationName,
+      tplPageTitle: pageTitle,
     };
 
     // merge variables object into the template object

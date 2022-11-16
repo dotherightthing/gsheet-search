@@ -184,8 +184,8 @@ class GsUiTypeahead extends GsUi {
       } = spreadsheet;
 
       html += '<div class="radio">';
-      html += `<label for="spreadsheet-${i}">${sheetName}</label>`;
       html += `<input type="radio" name="dataSource" id="spreadsheet-${i}" value="spreadsheet-${i}" data-sheet-name="${sheetName}" data-spreadsheet-id="${spreadsheetId}">`;
+      html += `<label for="spreadsheet-${i}">${sheetName}</label>`;
       html += '</div>';
     });
 

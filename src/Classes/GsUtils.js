@@ -135,15 +135,7 @@ class GsUtils {
    */
   static classFactory(className, config) {
     const classMap = new Map([
-      [ 'KrmCache', KrmCache ],
-      [ 'KrmCollection', KrmCollection ],
-      [ 'KrmColor', KrmColor ],
-      [ 'KrmContainer', KrmContainer ],
       [ 'GsPage', GsPage ],
-      [ 'KrmRun', KrmRun ],
-      [ 'KrmRunGroup', KrmRunGroup ],
-      [ 'KrmSheet', KrmSheet ],
-      [ 'KrmSpreadsheet', KrmSpreadsheet ],
     ]);
 
     const Class = classMap.get(className, config);

@@ -28,7 +28,7 @@ Variables
   --text-tertiary: rgba(var(--rgb-black), .8);
   --text-underline: var(--rgb-black);
 
-  --bg-ui: rgb(var(--rgb-lightergrey));
+  --bg-ui: rgb(var(--rgb-lightergrey), .8);
   --bg-non-ui: rgb(var(--rgb-lightergrey));
   --bg-tag-person: rgba(var(--rgb-lightergrey), .5);
 
@@ -204,10 +204,6 @@ form input#typeahead {
   border: 2px solid;
 }
 
-/* form input.tt-input {
-
-} */
-
 form input.tt-hint {
   height: 100%;
 }
@@ -219,9 +215,17 @@ form input[type='reset'] {
   margin: 0;
 }
 
+#typeahead,
+.typeahead-standalone {
+  margin-bottom: var(--gutter);
+}
+
 .typeahead-standalone {
   display: block;
-  margin-bottom: 1rem;
+}
+
+.typeahead-standalone > #typeahead {
+  margin-bottom: 0;
 }
 
 .typeahead-standalone > * {
