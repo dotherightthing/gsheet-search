@@ -6,6 +6,7 @@
 // global config settings
 
 const gsConfig = {
+  debug: false,
   deploymentIds: {
     appsScriptEditor: '1_5vomwUsWKlMA07DtaWmGBJlup7M-kCIhcnVhH4PdLf_pgGNmqPTxoHj',
     head: 'AKfycbxDAU1hFDr2beTfsx9TkcIBqoUkIbfCgoKsCdDYsxwc',
@@ -29,6 +30,10 @@ const gsConfig = {
 };
 
 // classes that don't require multiple instances but do require configuration
+
+const gsCacheInstance = new GsCache({
+  debug: gsConfig.debug,
+});
 
 const gsUtilsInstance = new GsUtils({
   deploymentIds: gsConfig.deploymentIds,

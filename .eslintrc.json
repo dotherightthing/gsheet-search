@@ -21,6 +21,7 @@
     "Utilities": "readonly",
     "GsApp": "readonly",
     "GsCache": "readonly",
+    "gsCacheInstance": "readonly",
     "GsPage": "readonly",
     "gsPageInstance": "readonly",
     "GsSheet": "readonly",
