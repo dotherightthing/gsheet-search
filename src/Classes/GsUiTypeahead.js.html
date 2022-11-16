@@ -189,7 +189,7 @@ class GsUiTypeahead extends GsUi {
       html += '</div>';
     });
 
-    radiosContainerEl.innerHTML = html;
+    radiosContainerEl.innerHTML = `<legend>Data source</legend>${html}`;
 
     formEl.addEventListener('change', this.handleChange.bind(this));
 
