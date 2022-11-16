@@ -27,7 +27,7 @@ This script is deployed as a 'standalone' project to ensure that integration and
 
 ### Gsheet Search web app
 
-1. Link to the source spreadsheets via the `spreadsheetIds` object in `Main.js`
+1. Link to the source spreadsheets via the `spreadsheets` array in `Init.js.html`
 
 ### Spreadsheet
 

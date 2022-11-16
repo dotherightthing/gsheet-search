@@ -6,42 +6,9 @@ class GsSheet {
    * @class
    * @summary Properties and methods relating to querying of the spreadsheet.
    * @param {object} config               - Module configuration.
-   * @param {object} config.sheetName     - Name of the sheet
-   * @param {object} config.spreadsheetId - ID of the spreadsheet (taken from its URL).
    */
-  constructor(config = {}) {
-    // accepts an object of named arguments
-    this.sheetName = config.sheetName;
-    this.spreadsheetId = config.spreadsheetId;
-  }
 
   /* Setters and Getters */
-
-  /**
-   * spreadsheetId
-   *
-   * @type {object}
-   */
-  get sheetName() {
-    return this._sheetName;
-  }
-
-  set sheetName(sheetName) {
-    this._spreadsheetId = GsUtils.validate(sheetName, 'string', 'GsSheet.sheetName');
-  }
-
-  /**
-   * spreadsheetId
-   *
-   * @type {object}
-   */
-  get spreadsheetId() {
-    return this._spreadsheetId;
-  }
-
-  set spreadsheetId(spreadsheetId) {
-    this._spreadsheetId = GsUtils.validate(spreadsheetId, 'string', 'GsSheet.spreadsheetId');
-  }
 
   /* Instance methods */
 
@@ -53,12 +20,11 @@ class GsSheet {
    * @summary Get spreadsheet sheet (if the user is allowed to access it).
    * @memberof GsSheet
    * @static
-   * @param {object} sheetName Sheet name
+   * @param {string} spreadsheetId Spreadsheet ID
+   * @param {string} sheetName Sheet name
    * @returns {object} Sheet
    */
-  static getSheet(sheetName) {
-    const { spreadsheetId } = gsSheetInstance;
-
+  static getSheet(spreadsheetId, sheetName) {
     let sheet = null;
 
     try {
@@ -76,11 +42,16 @@ class GsSheet {
    * @summary Convert spreadsheet to a JSON representation
    * @memberof GsSheet
    * @static
-   * @param {object} sheetName Sheet name
+   * @param {object} spreadsheet Spreadsheet
    * @returns {object} Sheet
    */
-  static sheetToJSON(sheetName) {
-    const sheet = GsSheet.getSheet(sheetName);
+  static sheetToJSON(spreadsheet) {
+    const {
+      id: spreadsheetId,
+      sheet: sheetName,
+    } = spreadsheet;
+
+    const sheet = GsSheet.getSheet(spreadsheetId, sheetName);
 
     // getRange(row, column, number of rows, number of columns)
     const headersRow = sheet.getRange(1, 1, 1, sheet.getLastColumn());

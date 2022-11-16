@@ -7,7 +7,7 @@
       tplCompanyLogo,
     }); ?>
   </head>
-  <body class="bg-logo">
+  <body>
     <!-- start header -->
     <header id="header">
       <h1 class="header-logo">
@@ -18,7 +18,11 @@
 
     <form id="search">
       <fieldset>
+        <legend>Search</legend>
         <input id="typeahead" placeholder="search" autocomplete="off">
+      </fieldset>
+      <fieldset id="select-data-source">
+        <legend>Data source</legend>
       </fieldset>
       <input type="reset" value="Reset">
     </form>

@@ -3,10 +3,34 @@
  * @file Init.js.html
  * @summary Client side scripting for the GS web app.
  *  Instances are generated so that classes can subscribe to pubsub events and respond accordingly.
+ * @todo Add searchable fields to spreadsheets objects as they differ between sheets
  */
+const gsUiConfig = {
+  formId: 'search',
+  radiosContainerId: 'select-data-source',
+  spreadsheets: [
+    {
+      id: '1n4QOxfS3hDe3v9KKZt3HObIQZpQnk2sKT-GFcMXHjOc',
+      sheet: 'Names',
+    },
+    // {
+    //   id: '1n4QOxfS3hDe3v9KKZt3HObIQZpQnk2sKT-GFcMXHjOc',
+    //   sheet: 'Door codes (imp)',
+    // },
+  ],
+  typeaheadId: 'typeahead',
+};
+
 const gsUiInstance = new GsUi();
+
 const gsUiCssInstance = new GsUiCss();
-const gsUiTypeaheadInstance = new GsUiTypeahead();
+
+const gsUiTypeaheadInstance = new GsUiTypeahead({
+  formId: gsUiConfig.formId,
+  radiosContainerId: gsUiConfig.radiosContainerId,
+  spreadsheets: gsUiConfig.spreadsheets,
+  typeaheadId: gsUiConfig.typeaheadId,
+});
 
 document.onreadystatechange = () => {
   // Polyfill for forEach

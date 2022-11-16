@@ -6,121 +6,250 @@ class GsUiTypeahead extends GsUi {
   /**
    * @class
    * @public
-   * @param {object} config                      - Module configuration.
-   * @param {string} config.placeholderLogoClass - Class selector which applies the background logo
-   * @param {string} config.typeaheadId          - ID selector used to target the typeahead
+   * @param {object} config                   - Module configuration.
+   * @param {string} config.formId            - ID selector used to target the parent form
+   * @param {string} config.radiosContainerId - ID selector used to target the radios container
+   * @param {Array}  config.spreadsheets      - Array of objects
+   * @param {string} config.typeaheadId       - ID selector used to target the parent form
    */
-  /* eslint-disable class-methods-use-this */
   constructor(config = {}) {
     super();
 
     // accepts an object of named arguments
-    const options = {
-      placeholderLogoClass: 'bg-logo',
-      typeaheadId: 'typeahead',
-    };
-
-    // private settings
-    // Note: when using setAttribute, any non-string value specified is automatically converted into a string.
-
-    // merge config and options objects to create this instance's settings
-    this._settings = { ...options, ...config, ...super.settings };
+    this.formId = config.formId;
+    this.radiosContainerId = config.radiosContainerId;
+    this.spreadsheets = config.spreadsheets;
+    this.typeaheadId = config.typeaheadId;
 
     // subscribe to other module's events
-
-    pubsub.subscribe('domready', (data) => {
+    pubsub.subscribe('domready', () => {
       this.init();
     });
+  }
+
+  /* Getters and Setters */
+
+  /**
+   * formId
+   *
+   * @type {string}
+   */
+  get formId() {
+    return this._formId;
+  }
+
+  set formId(formId) {
+    if (formId.trim().length > 0) {
+      this._formId = formId;
+    } else {
+      throw new Error('GsUiTypeahead.formId cannot be empty');
+    }
+  }
+
+  /**
+   * radiosId
+   *
+   * @type {string}
+   */
+  get radiosContainerId() {
+    return this._radiosContainerId;
+  }
+
+  set radiosContainerId(radiosContainerId) {
+    if (radiosContainerId.trim().length > 0) {
+      this._radiosContainerId = radiosContainerId;
+    } else {
+      throw new Error('GsUiTypeahead.radiosContainerId cannot be empty');
+    }
+  }
+
+  /**
+   * spreadsheets
+   *
+   * @type {Array}
+   */
+  get spreadsheets() {
+    return this._spreadsheets;
+  }
+
+  set spreadsheets(spreadsheets) {
+    if (Array.isArray(spreadsheets)) {
+      this._spreadsheets = spreadsheets;
+    } else {
+      throw new Error('GsUiTypeahead.spreadsheets must be an Array');
+    }
+  }
+
+  /**
+   * typeaheadId
+   *
+   * @type {string}
+   */
+  get typeaheadId() {
+    return this._typeaheadId;
+  }
+
+  set typeaheadId(typeaheadId) {
+    if (typeaheadId.trim().length > 0) {
+      this._typeaheadId = typeaheadId;
+    } else {
+      throw new Error('GsUiTypeahead.typeaheadId cannot be empty');
+    }
+  }
+
+  /**
+   * typeaheadInstance
+   *
+   * @type {object}
+   */
+  get typeaheadInstance() {
+    return this._typeaheadInstance;
+  }
+
+  set typeaheadInstance(typeaheadInstance) {
+    if (Object.prototype.toString.call(typeaheadInstance) === '[object Object]') {
+      this._typeaheadInstance = typeaheadInstance;
+    } else {
+      throw new Error('GsUiTypeahead.typeaheadInstance requires an object');
+    }
   }
 
   /* Instance methods */
 
   /**
+   * handleChange
+   *
+   * @memberof GsUiTypeahead
+   * @param {object} event - Event object
+   */
+  handleChange(event) {
+    const changedEl = event.target;
+
+    if (changedEl.name === 'dataSource') {
+      const {
+        sheetName,
+        spreadsheetId,
+      } = changedEl.dataset;
+
+      google.script.run
+        .withSuccessHandler(this.initTypeahead)
+        .withFailureHandler(this.handleError)
+        .gsSheetToJSON({
+          id: spreadsheetId,
+          sheet: sheetName,
+        });
+    }
+  }
+
+  /**
    * handleLoadError
    *
+   * @memberof GsUiTypeahead
    * @param {string} error Error
    */
-  handleLoadError(error) {
+  handleLoadError(error) { // eslint-disable-line class-methods-use-this
     throw new Error(error);
   }
 
   /**
    * init
    *
+   * @memberof GsUiTypeahead
    * @summary Runs on page load
    */
   init() {
     const {
+      formId,
+      radiosContainerId,
+      spreadsheets,
       typeaheadId,
-    } = this._settings;
+    } = this;
 
+    const formEl = document.getElementById(formId);
+    const radiosContainerEl = document.getElementById(radiosContainerId);
     const typeaheadEl = document.getElementById(typeaheadId);
+    let html = '';
 
     if (typeaheadEl === null) {
       return;
     }
 
-    google.script.run
-      .withSuccessHandler(this.initTypeahead)
-      .withFailureHandler(this.handleError)
-      .gsSheetToJSON();
+    // TODO generate radio buttons to switch source
+    // on radio change, change source by destroying then running this load function
+
+    spreadsheets.forEach((spreadsheet, i) => {
+      const {
+        id: spreadsheetId,
+        sheet: sheetName,
+      } = spreadsheet;
+
+      html += '<div class="radio">';
+      html += `<label for="spreadsheet-${i}">${sheetName}</label>`;
+      html += `<input type="radio" name="dataSource" id="spreadsheet-${i}" value="spreadsheet-${i}" data-sheet-name="${sheetName}" data-spreadsheet-id="${spreadsheetId}">`;
+      html += '</div>';
+    });
+
+    radiosContainerEl.innerHTML = html;
+
+    formEl.addEventListener('change', this.handleChange.bind(this));
+
+    setTimeout(() => {
+      const radio1El = document.getElementById('spreadsheet-0');
+      radio1El.click();
+    }, 500);
   }
 
   /**
    * initTypeahead
    *
+   * @memberof GsUiTypeahead
    * @summary Set up the search box
+   * @param {Array} data Data
    */
-  initTypeahead(data) {
-    const { typeaheadId } = gsUiTypeaheadInstance._settings; // 'this' is undefined
+  initTypeahead(data) { // eslint-disable-line class-methods-use-this
+    // this is undefined in GAS callback
+    const _this = gsUiTypeaheadInstance;
+
+    const {
+      typeaheadId,
+    } = _this;
 
     // input element to attach to
-    const inputElement = document.getElementById(typeaheadId);
+    const typeaheadEl = document.getElementById(typeaheadId);
 
-    const instance = typeahead({ // eslint-disable-line no-unused-vars
-      input: inputElement,
+    if (typeof _this.typeaheadInstance !== 'undefined') {
+      _this.typeaheadInstance.destroy();
+    }
+
+    _this.typeaheadInstance = typeahead({
+      input: typeaheadEl,
       source: {
         local: JSON.parse(JSON.stringify(data)),
         identifier: 'name',
         // identity: (suggestion) => `${suggestion.business}${suggestion.address}`,
-        groupIdentifier: 'business',
-        dataTokens: [ 'abbr', 'business', 'no', 'street' ], // fields one can search on
-        diacritics: true,
+        // groupIdentifier: 'business',
+        dataTokens: [ 'abbr', 'business', 'no', 'street' ], // fields user can search on
+        diacritics: true, // in case this includes macrons
       },
       hint: false,
       autoSelect: false,
       highlight: true,
       templates: {
         suggestion: (item) => {
-          // const abbr = item.abbr ? ` (${item.abbr})` : '';
-          // ${abbr}
+          const abbr = item.abbr ? ` (${item.abbr})` : '';
+          const names = item.name.split(', ');
+          const namesHtml = `<span class="tag tag-person">${names.join('</span><span class="tag tag-person">')}</span>`;
 
-          return `<div class="text">LOCATION: ${item.no} ${item.street}</div>
-          <div class="text">PEOPLE: <span>${item.name}</span></div>`;
+          return `<div class="text text-business">${item.business}${abbr}</div>
+          <div class="text">${item.no} ${item.street}</div>
+          <div class="text">${namesHtml}</div>`;
         },
-        group: (name) => `<div class="custom-group">${name}</div>`,
+        // group: (name) => `<div class="custom-group">${name}</div>`,
         // header: () => 'PODs',
         // footer: () => '<a href="#">See more...</a>',
         notFound: () => 'No results',
       },
     });
-  }
-
-  /**
-   * showPlaceholderLogo
-   *
-   * @memberof GsUiTypeahead
-   * @summary Show the placeholder logo when the run form is not present.
-   * @param {boolean} show Whether to show the placeholder
-   */
-  showPlaceholderLogo(show) {
-    const { placeholderLogoClass } = this._settings;
-
-    if (show) {
-      document.body.classList.add(placeholderLogoClass);
-    } else {
-      document.body.classList.remove(placeholderLogoClass);
-    }
   }
 }
 </script>

@@ -28,7 +28,9 @@ Variables
   --text-tertiary: rgba(var(--rgb-black), .8);
   --text-underline: var(--rgb-black);
 
+  --bg-ui: rgb(var(--rgb-lightergrey));
   --bg-non-ui: rgb(var(--rgb-lightergrey));
+  --bg-tag-person: rgba(var(--rgb-lightergrey), .5);
 
   --gutter: .75rem;
   --gutter-half: calc(var(--gutter) / 2);
@@ -146,8 +148,7 @@ header {
   z-index: var(--z-index-header-footer);
   width: 100%;
 
-  background:
-    linear-gradient(rgba(var(--rgb-white), .7), rgba(var(--rgb-white), .4));
+  background: linear-gradient(rgba(var(--rgb-white), .7), rgba(var(--rgb-white), .4));
   padding-top: var(--header-padding-top);
   padding-bottom: var(--header-padding-bottom);
   /* h1 */
@@ -227,8 +228,39 @@ form input[type='reset'] {
   width: 100%;
 }
 
-.typeahead-standalone .tt-list div[class^="tt-"] {
+.typeahead-standalone .tt-list div[class^='tt-'] {
   border-bottom: 1px solid;
+}
+
+/* ----------------------------------------
+.tag
+-------------------------------------- */
+
+.tag {
+  display: inline-block;
+  padding: 0 var(--gutter-half);
+  border-radius: var(--gutter);
+  margin: 0 var(--gutter-half) 0 0;
+}
+
+.tag-person {
+  background-color: var(--bg-tag-person);
+}
+
+/* ----------------------------------------
+.text-business
+-------------------------------------- */
+
+.text {
+  padding-bottom: 4px;
+}
+
+.text-business {
+  background-color: var(--bg-ui);
+  padding-right: 4px;
+  padding-left: 4px;
+  margin-right: -4px;
+  margin-left: -4px;
 }
 
 /* ----------------------------------------

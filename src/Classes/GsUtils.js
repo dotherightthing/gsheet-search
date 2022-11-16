@@ -8,14 +8,12 @@ class GsUtils {
    * @public
    * @param {object} config                - Module configuration.
    * @param {object} config.deploymentIds  - Deployment IDs of this standalone project.
-   * @param {object} config.scriptIds      - IDs of the various Apps Scripts. Note that the spreadsheetId is used to retrieve named ranges.
-   * @param {object} config.spreadsheetIds - Unique IDs of the master and test spreadsheets (taken from their URL).
+   * @param {object} config.scriptIds      - IDs of the various Apps Scripts.
    */
   constructor(config = {}) {
     // accepts an object of named arguments
     this.deploymentIds = config.deploymentIds;
     this.scriptIds = config.scriptIds;
-    this.spreadsheetIds = config.spreadsheetIds;
   }
 
   /* Setters and Getters */
@@ -54,23 +52,6 @@ class GsUtils {
     this._scriptIds = { ...ids };
   }
 
-  /**
-   * spreadsheetIds
-   *
-   * @type {object}
-   */
-  get spreadsheetIds() {
-    return this._spreadsheetIds;
-  }
-
-  set spreadsheetIds(ids) {
-    if (Object.prototype.toString.call(ids) !== '[object Object]') {
-      throw new Error('GsUtils.spreadsheetIds must be an object');
-    }
-
-    this._spreadsheetIds = { ...ids };
-  }
-
   /* Instance methods */
 
   /**
@@ -84,7 +65,6 @@ class GsUtils {
     const {
       deploymentIds,
       scriptIds,
-      spreadsheetIds,
     } = this;
 
     const {
@@ -99,11 +79,6 @@ class GsUtils {
       masterSpreadsheet: masterSpreadsheetScriptId,
       testSpreadsheet: testSpreadsheetScriptId,
     } = scriptIds;
-
-    const {
-      master: masterSpreadsheetId,
-      test: testSpreadsheetId,
-    } = spreadsheetIds;
 
     const env = {};
     let scriptId = '';
@@ -121,36 +96,25 @@ class GsUtils {
       env.deployment = null;
       env.deploymentAbbr = null;
       env.deploymenttId = null;
-      env.spreadsheetId = masterSpreadsheetId;
-    } else if (scriptId.indexOf(testSpreadsheetScriptId) !== -1) {
-      // spreadsheet onOpen/onEdit triggers
-      env.deployment = null;
-      env.deploymentAbbr = null;
-      env.deploymenttId = null;
-      env.spreadsheetId = testSpreadsheetId;
     } else if (scriptId.indexOf(appScriptId) !== -1) {
       // mobile app
       if (scriptUrl.indexOf(headDeploymentId) !== -1) {
         env.deployment = 'TEST Build';
         env.deploymentAbbr = 'DEV';
         env.deploymenttId = headDeploymentId;
-        env.spreadsheetId = testSpreadsheetId;
       } else if (scriptUrl.indexOf(pubDeploymentId) !== -1) {
         env.deployment = 'STABLE Build';
         env.deploymentAbbr = 'STABLE';
         env.deploymenttId = pubDeploymentId;
-        env.spreadsheetId = masterSpreadsheetId;
       } else if (scriptUrl.indexOf(appsScriptEditorDeploymentId) !== -1) {
         env.deployment = 'TEST Build';
         env.deploymentAbbr = 'DEV';
         env.deploymenttId = headDeploymentId;
-        env.spreadsheetId = testSpreadsheetId;
       }
     } else if (scriptId.indexOf(unitTestsScriptId) !== -1) {
       env.deployment = 'TEST Build';
       env.deploymentAbbr = 'DEV';
       env.deploymenttId = headDeploymentId;
-      env.spreadsheetId = testSpreadsheetId;
     }
 
     return env;

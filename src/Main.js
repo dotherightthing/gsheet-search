@@ -22,10 +22,6 @@ const gsConfig = {
     // masterSpreadsheet: '',
   },
   sheetName: 'Names',
-  spreadsheetIds: {
-    master: '1n4QOxfS3hDe3v9KKZt3HObIQZpQnk2sKT-GFcMXHjOc',
-    // test: '',
-  },
   tplFile: 'Search',
 };
 
@@ -38,12 +34,6 @@ const gsCacheInstance = new GsCache({
 const gsUtilsInstance = new GsUtils({
   deploymentIds: gsConfig.deploymentIds,
   scriptIds: gsConfig.scriptIds,
-  spreadsheetIds: gsConfig.spreadsheetIds,
-});
-
-const gsSheetInstance = new GsSheet({
-  sheetName: gsConfig.sheetName,
-  spreadsheetId: gsConfig.spreadsheetIds.master,
 });
 
 // functions

@@ -9,9 +9,9 @@
  * krmWriteToSheetFromRunFormObject
  *
  * @summary Calls serverside function from clientside function (GsUiTypeahead.handleLoadClick)
+ * @param {object} spreadsheet Spreadsheet
  * @returns {*} Sheet as JSON
- * @todo Get sheetName from the correct place
  */
-function gsSheetToJSON() {
-  return GsSheet.sheetToJSON('Names');
+function gsSheetToJSON(spreadsheet) {
+  return GsSheet.sheetToJSON(spreadsheet);
 }
