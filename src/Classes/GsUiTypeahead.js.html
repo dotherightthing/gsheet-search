@@ -228,7 +228,7 @@ class GsUiTypeahead extends GsUi {
         identifier: 'name',
         // identity: (suggestion) => `${suggestion.business}${suggestion.address}`,
         // groupIdentifier: 'business',
-        dataTokens: [ 'abbr', 'business', 'no', 'street' ], // fields user can search on
+        dataTokens: [ 'abbr', 'business', 'level', 'no', 'street' ], // fields user can search on
         diacritics: true, // in case this includes macrons
       },
       hint: false,
@@ -236,13 +236,25 @@ class GsUiTypeahead extends GsUi {
       highlight: true,
       templates: {
         suggestion: (item) => {
-          const abbr = item.abbr ? ` (${item.abbr})` : '';
+          const {
+            abbr,
+            business,
+            level,
+            name,
+            no,
+            phone,
+            street,
+          } = item;
+
+          const _abbr = abbr ? ` (${abbr})` : '';
+          const _level = item.level ? `${level}/` : '';
           const names = item.name.split(', ');
           const namesHtml = `<span class="tag tag-person">${names.join('</span><span class="tag tag-person">')}</span>`;
+          const phoneHtml = phone ? ` <span class="text-phone">Phone: <a href="tel:${phone}">${phone}</a></span>` : '';
 
-          return `<div class="text text-business">${item.business}${abbr}</div>
-          <div class="text">${item.no} ${item.street}</div>
-          <div class="text">${namesHtml}</div>`;
+          return `<div class="text text-business">${business}${_abbr}</div>
+          <div class="text text-address">${_level}${no} ${street} ${phoneHtml}</div>
+          <div class="text text-names">${namesHtml}</div>`;
         },
         // group: (name) => `<div class="custom-group">${name}</div>`,
         // header: () => 'PODs',
