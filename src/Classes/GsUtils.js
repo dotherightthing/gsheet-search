@@ -77,7 +77,6 @@ class GsUtils {
       app: appScriptId,
       unitTests: unitTestsScriptId,
       masterSpreadsheet: masterSpreadsheetScriptId,
-      testSpreadsheet: testSpreadsheetScriptId,
     } = scriptIds;
 
     const env = {};

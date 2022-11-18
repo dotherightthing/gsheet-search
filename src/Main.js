@@ -18,7 +18,6 @@ const gsConfig = {
   pageTitle: 'Gsheet Search',
   scriptIds: {
     app: '1_5vomwUsWKlMA07DtaWmGBJlup7M-kCIhcnVhH4PdLf_pgGNmqPTxoHj',
-    // testSpreadsheet: '',
     // masterSpreadsheet: '',
   },
   sheetName: 'Names',
