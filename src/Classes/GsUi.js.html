@@ -13,11 +13,7 @@ class GsUi {
   /* eslint-disable class-methods-use-this */
   constructor() {
     // private settings
-    // Note: when using setAttribute, any non-string value specified is automatically converted into a string.
-
-    this._settings = {
-      focusableSelector: 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex="0"]:not(.dialog-tabtrap)',
-    };
+    this.focusableSelector = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex="0"]:not(.dialog-tabtrap)';
 
     // subscribe to other module's events
 
@@ -28,16 +24,24 @@ class GsUi {
 
   /* Getters and Setters */
 
-  get settings() {
-    return this._settings;
+  /**
+   * dataTokenIdentifier
+   *
+   * @type {string}
+   */
+  get focusableSelector() {
+    return this._focusableSelector;
   }
 
-  set settings(settings) {
-    // merge settings objects
-    this._settings = { ...this._settings, ...settings };
+  set focusableSelector(focusableSelector) {
+    if (focusableSelector.trim().length > 0) {
+      this._focusableSelector = focusableSelector;
+    } else {
+      throw new Error('GsUi.focusableSelector cannot be empty');
+    }
   }
 
-  /* Methods */
+  /* Instance methods */
 
   /**
    * createCustomEvent
