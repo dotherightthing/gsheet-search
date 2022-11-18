@@ -418,6 +418,9 @@ class GsUiTypeahead extends GsUi {
       // without this step Typeahead won't accept the array
       _dataTokens = JSON.parse(JSON.stringify(dataTokens));
 
+      // sort tokens for consistent placement in the filters
+      _dataTokens = _dataTokens.sort();
+
       if (_this.filtersFocusTypeahead) {
         _this.focusTypeaheadOnInit();
       }
@@ -428,8 +431,6 @@ class GsUiTypeahead extends GsUi {
       _this.storedData = JSON.parse(JSON.stringify(data));
       _this.initFilters(_dataTokens);
     }
-
-    _dataTokens = _dataTokens.sort();
 
     const {
       dataTokenIdentifier: identifier,
