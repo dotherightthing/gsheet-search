@@ -205,6 +205,23 @@ class GsUiTypeahead extends GsUi {
     }
   }
 
+  /**
+   * typeaheadInstance
+   *
+   * @type {object}
+   */
+  get typeaheadInstance() {
+    return this._typeaheadInstance;
+  }
+
+  set typeaheadInstance(typeaheadInstance) {
+    // if (Object.prototype.toString.call(typeaheadInstance) === '[object Object]') {
+    this._typeaheadInstance = typeaheadInstance;
+    // } else {
+      // throw new Error('GsUiTypeahead.typeaheadInstance must be an object');
+    // }
+  }
+
   /* Instance methods */
 
   /**
@@ -417,6 +434,7 @@ class GsUiTypeahead extends GsUi {
     const {
       dataTokenIdentifier: identifier,
       storedData,
+      typeaheadInstance,
     } = _this;
 
     // if no data was received and no data was stored, exit
@@ -426,7 +444,7 @@ class GsUiTypeahead extends GsUi {
 
     if (typeaheadInstance) {
       typeaheadInstance.destroy();
-      typeaheadInstance = null;
+      _this.typeaheadInstance = null;
     }
 
     const typeaheadConfig = {
@@ -478,7 +496,7 @@ class GsUiTypeahead extends GsUi {
       },
     };
 
-    typeaheadInstance = typeahead(typeaheadConfig);
+    _this.typeaheadInstance = typeahead(typeaheadConfig);
   }
 
   /**

@@ -38,10 +38,6 @@ const gsUiTypeaheadInstance = new GsUiTypeahead({
   typeaheadId: gsUiConfig.typeaheadId,
 });
 
-// The typeahead created by gsUiTypeaheadInstance.initTypeahead
-// This doesn't work as a property of gsUiTypeaheadInstance
-let typeaheadInstance = null;
-
 document.onreadystatechange = () => {
   // Polyfill for forEach
   if (window.NodeList && !NodeList.prototype.forEach) {
