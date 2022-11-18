@@ -410,8 +410,6 @@ class GsUiTypeahead extends GsUi {
 
     let _dataTokens = dataTokens;
 
-    // console.log('_dataTokens', _dataTokens);
-
     // data will only be supplied by server, and only on a change of data source (via the radio buttons)
     // so we don't do this if no data was supplied because then a change of dataTokens would delete some filter options
     if (typeof data !== 'undefined') {
