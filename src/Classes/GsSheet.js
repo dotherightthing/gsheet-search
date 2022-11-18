@@ -15,6 +15,30 @@ class GsSheet {
   /* Static methods */
 
   /**
+   * getNamedRange
+   *
+   * @memberof GsSheet
+   * @static
+   * @param {string} spreadsheetId Spreadsheet ID
+   * @param {string} name Name
+   * @returns {Range} namedRange
+   */
+  static getNamedRange(spreadsheetId, name) {
+    let namedRange = {};
+    const ss = SpreadsheetApp.openById(spreadsheetId);
+    const namedRanges = ss.getNamedRanges();
+
+    namedRanges.forEach((_namedRange) => {
+      const namedRangeName = _namedRange.getName();
+      if (namedRangeName.indexOf(name) !== -1) {
+        namedRange = _namedRange.getRange();
+      }
+    });
+
+    return namedRange;
+  }
+
+  /**
    * getSheet
    *
    * @summary Get spreadsheet sheet (if the user is allowed to access it).
@@ -58,7 +82,16 @@ class GsSheet {
     const headerValues = headersRow.getValues()[0];
     const dataRows = sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn());
     const dataRowValues = dataRows.getValues(); // arrays, each one represents a row of columns
-    const rowsArray = [];
+    const data = [];
+
+    // GsSearchResult
+
+    // Select Cell > Data > Named Ranges > Enter 'GsSearchResult' > Done
+    const gsSearchResultHeader = GsSheet.getNamedRange(spreadsheetId, 'GsSearchResult');
+
+    if (gsSearchResultHeader === null) {
+      throw new Error('GsSheet.sheetToJSON cannot find a named range "GsSearchResult"');
+    }
 
     dataRowValues.forEach((rowArray) => {
       const rowJson = {};
@@ -67,25 +100,42 @@ class GsSheet {
         rowJson[headerValues[c].toLowerCase()] = columnValue || '';
       });
 
-      rowsArray.push(rowJson);
+      data.push(rowJson);
     });
 
-    // const rowsArray = [
+    const dataTokenIdentifier = gsSearchResultHeader.getValue().trim().toLowerCase();
+
+    let dataTokens = headerValues.map((val) => GsUtils.stringToId(val));
+    dataTokens = dataTokens.filter((val) => (val !== dataTokenIdentifier));
+
+    // const data = [
     //   {
     //     business: 'Andy Bee Cooking',
     //     abbr: 'ABC',
-    //     name: 'Bob',
-    //     address: 'Main St',
+    //     pod: 'Bob',
+    //     level: 10,
+    //     number: 123,
+    //     street: 'Main St',
+    //     phone: '045678911'
+    //     description: 'Produces vegan treats'
     //   },
     //   {
-    //     business: 'Easy Flowing Guidance',
+    //     business: 'Residential',
     //     abbr: 'EFG',
-    //     name: 'Mary',
-    //     address: 'The Crescent',
+    //     pod: 'Mary',
+    //     level: '',
+    //     number: 4,
+    //     street: 'The Crescent',
+    //     phone: ''
+    //     description: ''
     //   },
     // ];
 
-    return rowsArray;
+    return {
+      data,
+      dataTokens,
+      dataTokenIdentifier,
+    };
   }
 
   /* Static methods */

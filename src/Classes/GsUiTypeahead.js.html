@@ -6,17 +6,21 @@ class GsUiTypeahead extends GsUi {
   /**
    * @class
    * @public
-   * @param {object} config                   - Module configuration.
-   * @param {string} config.formId            - ID selector used to target the parent form
-   * @param {string} config.radiosContainerId - ID selector used to target the radios container
-   * @param {Array}  config.spreadsheets      - Array of objects
-   * @param {string} config.typeaheadId       - ID selector used to target the parent form
+   * @param {object} config                           - Module configuration.
+   * @param {string} config.formId                    - ID selector used to target the parent form
+   * @param {string} config.filterClass               - Class selector used to target each checkbox filter
+   * @param {string} config.filtersContainerId        - ID selector used to target the filters container
+   * @param {string} config.radiosContainerId         - ID selector used to target the radios container
+   * @param {Array}  config.spreadsheets              - Array of objects
+   * @param {string} config.typeaheadId               - ID selector used to target the parent form
    */
   constructor(config = {}) {
     super();
 
     // accepts an object of named arguments
     this.formId = config.formId;
+    this.filterClass = config.filterClass;
+    this.filtersContainerId = config.filtersContainerId;
     this.radiosContainerId = config.radiosContainerId;
     this.spreadsheets = config.spreadsheets;
     this.typeaheadId = config.typeaheadId;
@@ -28,6 +32,74 @@ class GsUiTypeahead extends GsUi {
   }
 
   /* Getters and Setters */
+
+  /**
+   * dataTokenIdentifier
+   *
+   * @type {string}
+   */
+  get dataTokenIdentifier() {
+    return this._dataTokenIdentifier;
+  }
+
+  set dataTokenIdentifier(dataTokenIdentifier) {
+    if (dataTokenIdentifier.trim().length > 0) {
+      this._dataTokenIdentifier = dataTokenIdentifier;
+    } else {
+      throw new Error('GsUiTypeahead.dataTokenIdentifier cannot be empty');
+    }
+  }
+
+  /**
+   * dataTokens
+   *
+   * @type {Array}
+   */
+  get dataTokens() {
+    return this._dataTokens;
+  }
+
+  set dataTokens(dataTokens) {
+    if (Array.isArray(dataTokens)) {
+      this._dataTokens = dataTokens;
+    } else {
+      throw new Error('GsUiTypeahead.dataTokens must be an Array');
+    }
+  }
+
+  /**
+   * filterClass
+   *
+   * @type {string}
+   */
+  get filterClass() {
+    return this._filterClass;
+  }
+
+  set filterClass(filterClass) {
+    if (filterClass.trim().length > 0) {
+      this._filterClass = filterClass;
+    } else {
+      throw new Error('GsUiTypeahead.filterClass cannot be empty');
+    }
+  }
+
+  /**
+   * filtersContainerId
+   *
+   * @type {string}
+   */
+  get filtersContainerId() {
+    return this._filtersContainerId;
+  }
+
+  set filtersContainerId(filtersContainerId) {
+    if (filtersContainerId.trim().length > 0) {
+      this._filtersContainerId = filtersContainerId;
+    } else {
+      throw new Error('GsUiTypeahead.filtersContainerId cannot be empty');
+    }
+  }
 
   /**
    * formId
@@ -47,7 +119,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   /**
-   * radiosId
+   * radiosContainerId
    *
    * @type {string}
    */
@@ -81,6 +153,23 @@ class GsUiTypeahead extends GsUi {
   }
 
   /**
+   * storedData
+   *
+   * @type {Array}
+   */
+  get storedData() {
+    return this._storedData;
+  }
+
+  set storedData(storedData) {
+    if (Array.isArray(storedData)) {
+      this._storedData = storedData;
+    } else {
+      throw new Error('GsUiTypeahead.storedData must be an Array');
+    }
+  }
+
+  /**
    * typeaheadId
    *
    * @type {string}
@@ -97,24 +186,23 @@ class GsUiTypeahead extends GsUi {
     }
   }
 
-  /**
-   * typeaheadInstance
-   *
-   * @type {object}
-   */
-  get typeaheadInstance() {
-    return this._typeaheadInstance;
-  }
-
-  set typeaheadInstance(typeaheadInstance) {
-    if (Object.prototype.toString.call(typeaheadInstance) === '[object Object]') {
-      this._typeaheadInstance = typeaheadInstance;
-    } else {
-      throw new Error('GsUiTypeahead.typeaheadInstance requires an object');
-    }
-  }
-
   /* Instance methods */
+
+  /**
+   * capitalise
+   *
+   * @summary Convert the leading character to uppercase
+   * @memberof GsUiTypeahead
+   * @param {string} str - String to capitalise
+   * @returns {string|*} str Capitalised string
+   */
+  capitalise(str) { // eslint-disable-line class-methods-use-this
+    if (typeof str === 'string') {
+      return str.replace(/^\w/, (c) => c.toUpperCase());
+    }
+
+    return str;
+  }
 
   /**
    * handleChange
@@ -123,9 +211,16 @@ class GsUiTypeahead extends GsUi {
    * @param {object} event - Event object
    */
   handleChange(event) {
-    const changedEl = event.target;
+    const {
+      target: changedEl,
+    } = event;
 
-    if (changedEl.name === 'dataSource') {
+    const {
+      name,
+      type,
+    } = changedEl;
+
+    if (name === 'dataSource') {
       const {
         sheetName,
         spreadsheetId,
@@ -138,7 +233,36 @@ class GsUiTypeahead extends GsUi {
           id: spreadsheetId,
           sheet: sheetName,
         });
+    } else if (type === 'checkbox') {
+      this.handleFilterChange();
     }
+  }
+
+  /**
+   * handleFilterChange
+   *
+   * @memberof GsUiTypeahead
+   */
+  handleFilterChange() {
+    const {
+      filterClass,
+      formId,
+    } = this;
+
+    const checkedFilters = [];
+    const formEls = document.getElementById(formId).elements;
+
+    formEls.forEach((formEl) => {
+      if ((formEl.nodeName === 'INPUT') && (formEl.className === filterClass) && (formEl.checked)) {
+        checkedFilters.push(formEl.name.toLowerCase());
+      }
+    });
+
+    const obj = {
+      dataTokens: checkedFilters,
+    };
+
+    this.initTypeahead(obj);
   }
 
   /**
@@ -174,9 +298,6 @@ class GsUiTypeahead extends GsUi {
       return;
     }
 
-    // TODO generate radio buttons to switch source
-    // on radio change, change source by destroying then running this load function
-
     spreadsheets.forEach((spreadsheet, i) => {
       const {
         id: spreadsheetId,
@@ -184,51 +305,120 @@ class GsUiTypeahead extends GsUi {
       } = spreadsheet;
 
       html += '<div class="radio">';
-      html += `<input type="radio" name="dataSource" id="spreadsheet-${i}" value="spreadsheet-${i}" data-sheet-name="${sheetName}" data-spreadsheet-id="${spreadsheetId}">`;
+      html += `<input type="radio" class="source" name="dataSource" id="spreadsheet-${i}" value="spreadsheet-${i}" data-sheet-name="${sheetName}" data-spreadsheet-id="${spreadsheetId}">`;
       html += `<label for="spreadsheet-${i}">${sheetName}</label>`;
       html += '</div>';
     });
 
-    radiosContainerEl.innerHTML = `<legend>Data source</legend>${html}`;
+    radiosContainerEl.innerHTML = `<legend>Search in</legend>${html}`;
 
     formEl.addEventListener('change', this.handleChange.bind(this));
 
     setTimeout(() => {
       const radio1El = document.getElementById('spreadsheet-0');
       radio1El.click();
-    }, 500);
+    }, 100);
+  }
+
+  /**
+   * initFilters
+   *
+   * @memberof GsUiTypeahead
+   * @param {Array} dataTokens All fields that could be searched
+   */
+  initFilters(dataTokens) {
+    const {
+      filtersContainerId,
+    } = this;
+
+    const filtersContainerEl = document.getElementById(filtersContainerId);
+
+    let html = '';
+
+    dataTokens.forEach((dataToken, i) => {
+      html += '<div class="checkbox">';
+      html += `<input type="checkbox" class="filter" name="${dataToken}" id="filter-${i}" checked="checked">`;
+      html += `<label for="filter-${i}">${this.capitalise(dataToken)}</label>`;
+      html += '</div>';
+    });
+
+    filtersContainerEl.innerHTML = `<legend>Filter by</legend>${html}`;
   }
 
   /**
    * initTypeahead
    *
    * @memberof GsUiTypeahead
-   * @summary Set up the search box
-   * @param {Array} data Data
+   * @summary Set up the search box. Typeahead has a limited API so must be destroyed and reinitialised to update options.
+   * @param {object} obj Object: { data:[], dataTokens:[], dataTokenIdentifier:'' }
+   * @todo Template is too content-specific
+   * @todo Determine if there are comma separated values and output appropriate generic html
+   * @todo Use CSS grid to layout generic/unknown keys
+   * @todo Only works first and every other run (1, 3, 5, 7...) - maybe some flag is set but not retrieved until next go-round
    */
-  initTypeahead(data) { // eslint-disable-line class-methods-use-this
-    // this is undefined in GAS callback
-    const _this = gsUiTypeaheadInstance;
+  initTypeahead(obj) { // eslint-disable-line class-methods-use-this
+    const {
+      data, // supplied by server, on spreadsheet change
+      dataTokens, // supplied by server and filters, on filter change or spreadsheet change
+      dataTokenIdentifier, // supplied by server, on spreadsheet change
+    } = obj;
+
+    let _this;
+
+    // this is undefined when initTypeahead is called from server
+    if (typeof this === 'undefined') {
+      _this = gsUiTypeaheadInstance;
+    } else {
+      _this = this;
+    }
 
     const {
       typeaheadId,
     } = _this;
 
-    // input element to attach to
-    const typeaheadEl = document.getElementById(typeaheadId);
+    let _dataTokens = dataTokens;
 
-    if (typeof _this.typeaheadInstance !== 'undefined') {
-      _this.typeaheadInstance.destroy();
+    // console.log('_dataTokens', _dataTokens);
+
+    // data will only be supplied by server, and only on a change of data source (via the radio buttons)
+    // so we don't do this if no data was supplied because then a change of dataTokens would delete some filter options
+    if (typeof data !== 'undefined') {
+      // without this step Typeahead won't accept the array
+      _dataTokens = JSON.parse(JSON.stringify(dataTokens));
+
+      // store properties supplied by the server so it they be reused
+      // when only the dataTokens are updated by the checkbox filters
+      _this.dataTokenIdentifier = dataTokenIdentifier;
+      _this.storedData = JSON.parse(JSON.stringify(data));
+      _this.initFilters(_dataTokens);
     }
 
-    _this.typeaheadInstance = typeahead({
-      input: typeaheadEl,
+    _dataTokens = _dataTokens.sort();
+
+    const {
+      dataTokenIdentifier: identifier,
+      storedData,
+    } = _this;
+
+    // if no data was received and no data was stored, exit
+    if ((identifier === 'undefined') || (storedData === 'undefined')) {
+      throw new Error('GsUiTypeahead.initTypeahead requires data');
+    }
+
+    if (typeaheadInstance) {
+      typeaheadInstance.destroy();
+      typeaheadInstance = null;
+    }
+
+    const typeaheadConfig = {
+      input: document.getElementById(typeaheadId), // referencing a var here failed every second time
       source: {
-        local: JSON.parse(JSON.stringify(data)),
-        identifier: 'name',
+        local: storedData,
+        identifier,
         // identity: (suggestion) => `${suggestion.business}${suggestion.address}`,
         // groupIdentifier: 'business',
-        dataTokens: [ 'abbr', 'business', 'level', 'no', 'street' ], // fields user can search on
+        // dataTokens, // fields user can search on
+        dataTokens: _dataTokens, // fields user can search on; note that GsSheet.sheetToJSON removes the identifier from this array
         diacritics: true, // in case this includes macrons
       },
       hint: false,
@@ -239,29 +429,37 @@ class GsUiTypeahead extends GsUi {
           const {
             abbr,
             business,
+            description,
             level,
-            name,
             no,
             phone,
+            pod,
             street,
           } = item;
 
           const _abbr = abbr ? ` (${abbr})` : '';
+          const _business = business || '';
+          const _description = description ? `<div class="text text-description">${description}</div>` : '';
           const _level = item.level ? `${level}/` : '';
-          const names = item.name.split(', ');
-          const namesHtml = `<span class="tag tag-person">${names.join('</span><span class="tag tag-person">')}</span>`;
+          const _no = no || '';
+          const pods = pod.split(', ');
+          const podsHtml = `<span class="tag tag-person">${pods.join('</span><span class="tag tag-person">')}</span>`;
           const phoneHtml = phone ? ` <span class="text-phone">Phone: <a href="tel:${phone}">${phone}</a></span>` : '';
+          const _street = street || '';
 
-          return `<div class="text text-business">${business}${_abbr}</div>
-          <div class="text text-address">${_level}${no} ${street} ${phoneHtml}</div>
-          <div class="text text-names">${namesHtml}</div>`;
+          return `<div class="text text-business">${_business}${_abbr}</div>
+          <div class="text text-address">${_level}${_no} ${_street} ${phoneHtml}</div>
+          ${_description}
+          <div class="text text-pods">${podsHtml}</div>`;
         },
         // group: (name) => `<div class="custom-group">${name}</div>`,
         // header: () => 'PODs',
         // footer: () => '<a href="#">See more...</a>',
         notFound: () => 'No results',
       },
-    });
+    };
+
+    typeaheadInstance = typeahead(typeaheadConfig);
   }
 }
 </script>

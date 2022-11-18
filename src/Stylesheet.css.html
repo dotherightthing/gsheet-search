@@ -120,6 +120,18 @@ Grids
   display: grid;
 }
 
+.grid-inline:not([hidden]) {
+  display: inline-grid;
+}
+
+/* grid-1-1-1 */
+
+.grid-1-1-1 {
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: var(--gutter);
+  row-gap: var(--gutter-quarter);
+}
+
 /* ----------------------------------------
 body
 -------------------------------------- */
@@ -136,6 +148,22 @@ body {
   /* Disable pull-to-refresh and overscroll glow effect, retain swipe navigation */
   /* See: https://developer.chrome.com/blog/overscroll-behavior/ */
   overscroll-behavior-y: none;
+}
+
+/* ----------------------------------------
+.data-filters
+-------------------------------------- */
+
+.data-filters {
+  margin-bottom: var(--gutter);
+}
+
+/* ----------------------------------------
+.data-sources
+-------------------------------------- */
+
+.data-sources {
+  margin-bottom: var(--gutter);
 }
 
 /* ----------------------------------------
@@ -252,10 +280,11 @@ form input[type='reset'] {
 }
 
 /* ----------------------------------------
-.text-business
+.text
 -------------------------------------- */
 
 .text {
+  text-transform: capitalize;
   padding-bottom: 4px;
 }
 

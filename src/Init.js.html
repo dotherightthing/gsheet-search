@@ -7,7 +7,9 @@
  */
 const gsUiConfig = {
   formId: 'search',
-  radiosContainerId: 'select-data-source',
+  radiosContainerId: 'data-sources',
+  filterClass: 'filter',
+  filtersContainerId: 'data-filters',
   spreadsheets: [
     {
       id: '1n4QOxfS3hDe3v9KKZt3HObIQZpQnk2sKT-GFcMXHjOc',
@@ -26,11 +28,17 @@ const gsUiInstance = new GsUi();
 const gsUiCssInstance = new GsUiCss();
 
 const gsUiTypeaheadInstance = new GsUiTypeahead({
+  filterClass: gsUiConfig.filterClass,
   formId: gsUiConfig.formId,
+  filtersContainerId: gsUiConfig.filtersContainerId,
   radiosContainerId: gsUiConfig.radiosContainerId,
   spreadsheets: gsUiConfig.spreadsheets,
   typeaheadId: gsUiConfig.typeaheadId,
 });
+
+// The typeahead created by gsUiTypeaheadInstance.initTypeahead
+// This doesn't work as a property of gsUiTypeaheadInstance
+let typeaheadInstance = null;
 
 document.onreadystatechange = () => {
   // Polyfill for forEach

@@ -34,7 +34,8 @@
     "GsUiTypeahead": "readonly",
     "gsUiTypeaheadInstance": "readonly",
     "pubsub": "readonly",
-    "typeahead": "readonly"
+    "typeahead": "readonly",
+    "typeaheadInstance": "writable"
   },
   "ignorePatterns": [
     "node_modules/"
