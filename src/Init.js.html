@@ -10,6 +10,7 @@ const gsUiConfig = {
   radiosContainerId: 'data-sources',
   filterClass: 'filter',
   filtersContainerId: 'data-filters',
+  filtersFocusTypeahead: true,
   spreadsheets: [
     {
       id: '1n4QOxfS3hDe3v9KKZt3HObIQZpQnk2sKT-GFcMXHjOc',
@@ -31,6 +32,7 @@ const gsUiTypeaheadInstance = new GsUiTypeahead({
   filterClass: gsUiConfig.filterClass,
   formId: gsUiConfig.formId,
   filtersContainerId: gsUiConfig.filtersContainerId,
+  filtersFocusTypeahead: gsUiConfig.filtersFocusTypeahead,
   radiosContainerId: gsUiConfig.radiosContainerId,
   spreadsheets: gsUiConfig.spreadsheets,
   typeaheadId: gsUiConfig.typeaheadId,

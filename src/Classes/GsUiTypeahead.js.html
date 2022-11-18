@@ -13,6 +13,7 @@ class GsUiTypeahead extends GsUi {
    * @param {string} config.radiosContainerId         - ID selector used to target the radios container
    * @param {Array}  config.spreadsheets              - Array of objects
    * @param {string} config.typeaheadId               - ID selector used to target the parent form
+   * @param {boolean} config.filtersFocusTypeahead - Whether clicking a filter should re-focus the typeahead input
    */
   constructor(config = {}) {
     super();
@@ -22,6 +23,7 @@ class GsUiTypeahead extends GsUi {
     this.filterClass = config.filterClass;
     this.filtersContainerId = config.filtersContainerId;
     this.radiosContainerId = config.radiosContainerId;
+    this.filtersFocusTypeahead = config.filtersFocusTypeahead;
     this.spreadsheets = config.spreadsheets;
     this.typeaheadId = config.typeaheadId;
 
@@ -98,6 +100,23 @@ class GsUiTypeahead extends GsUi {
       this._filtersContainerId = filtersContainerId;
     } else {
       throw new Error('GsUiTypeahead.filtersContainerId cannot be empty');
+    }
+  }
+
+  /**
+   * filtersFocusTypeahead
+   *
+   * @type {boolean}
+   */
+  get filtersFocusTypeahead() {
+    return this._filtersFocusTypeahead;
+  }
+
+  set filtersFocusTypeahead(filtersFocusTypeahead) {
+    if (typeof filtersFocusTypeahead === 'boolean') {
+      this._filtersFocusTypeahead = filtersFocusTypeahead;
+    } else {
+      throw new Error('GsUiTypeahead.filtersFocusTypeahead must be a boolean');
     }
   }
 
@@ -386,6 +405,10 @@ class GsUiTypeahead extends GsUi {
       // without this step Typeahead won't accept the array
       _dataTokens = JSON.parse(JSON.stringify(dataTokens));
 
+      if (_this.filtersFocusTypeahead) {
+        _this.focusTypeaheadOnInit();
+      }
+
       // store properties supplied by the server so it they be reused
       // when only the dataTokens are updated by the checkbox filters
       _this.dataTokenIdentifier = dataTokenIdentifier;
@@ -460,6 +483,43 @@ class GsUiTypeahead extends GsUi {
     };
 
     typeaheadInstance = typeahead(typeaheadConfig);
+  }
+
+  /**
+   * focusTypeaheadOnInit
+   *
+   * @memberof GsUiTypeahead
+   * @summary Waits for Typeahead to initialise, then focuses the search box
+   */
+  focusTypeaheadOnInit() {
+    const {
+      formId,
+      typeaheadId,
+    } = this;
+    const targetNode = document.getElementById(formId);
+    const config = {
+      childList: true,
+      subtree: true,
+    };
+
+    const callback = (mutationList, observer) => {
+      mutationList.every((mutation) => {
+        if (mutation.type === 'childList') {
+          if (mutation.addedNodes.length) {
+            if (mutation.addedNodes[0].className === 'typeahead-standalone') {
+              document.getElementById(typeaheadId).focus();
+              return false; // stop looping
+            }
+          }
+        }
+
+        return true; // continue looping
+      });
+    };
+
+    const observer = new MutationObserver(callback);
+
+    observer.observe(targetNode, config);
   }
 }
 </script>
