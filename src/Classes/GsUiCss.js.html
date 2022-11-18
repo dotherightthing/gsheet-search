@@ -5,36 +5,46 @@
 class GsUiCss extends GsUi {
   /**
    * @class
-   * @summary Toggle a loading animation
+   * @summary Manage dynamic CSS
    * @public
-   * @param {object} config - Module configuration.
+   * @param {object} config                  - Module configuration.
+   * @param {Array}  config.fixedPositionIds - IDs of elements that use fixed positioning, used to generate CSS variables
    */
   /* eslint-disable class-methods-use-this */
   constructor(config = {}) {
     super();
 
     // accepts an object of named arguments
-    const options = {
-      fixedPositionIds: [
-        'footer',
-      ],
-    };
-
-    // private settings
-    // Note: when using setAttribute, any non-string value specified is automatically converted into a string.
-
-    // merge config and options objects to create this instance's settings
-    this._settings = { ...options, ...config, ...super.settings };
+    this.fixedPositionIds = config.fixedPositionIds;
 
     // subscribe to other module's events
 
     pubsub.subscribe([ 'domready' ], (data) => {
-      this.injectHeightVariables(); // handles new elements added with the run form
+      this.injectHeightVariables(); // handles any new elements added
     });
 
     pubsub.subscribe('windowLoad', () => {
       this.injectHeightVariables();
     });
+  }
+
+  /* Getters and Setters */
+
+  /**
+   * fixedPositionIds
+   *
+   * @type {Array}
+   */
+  get fixedPositionIds() {
+    return this._fixedPositionIds;
+  }
+
+  set fixedPositionIds(fixedPositionIds) {
+    if (Array.isArray(fixedPositionIds)) {
+      this._fixedPositionIds = fixedPositionIds;
+    } else {
+      throw new Error('GsUiCss.fixedPositionIds must be an Array');
+    }
   }
 
   /* Methods */
@@ -45,7 +55,10 @@ class GsUiCss extends GsUi {
    * @summary Store heights of fixed position elements
    */
   injectHeightVariables() {
-    const { fixedPositionIds } = this._settings;
+    const {
+      fixedPositionIds,
+    } = this;
+
     const styleEl = document.getElementById('heights'); // <style></style>
     let cssVariables = '';
 

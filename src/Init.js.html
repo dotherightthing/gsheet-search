@@ -6,6 +6,7 @@
  * @todo Add searchable fields to spreadsheets objects as they differ between sheets
  */
 const gsUiConfig = {
+  fixedPositionIds: [ 'footer' ],
   formId: 'search',
   radiosContainerId: 'data-sources',
   filterClass: 'filter',
@@ -26,7 +27,9 @@ const gsUiConfig = {
 
 const gsUiInstance = new GsUi();
 
-const gsUiCssInstance = new GsUiCss();
+const gsUiCssInstance = new GsUiCss({
+  fixedPositionIds: gsUiConfig.fixedPositionIds,
+});
 
 const gsUiTypeaheadInstance = new GsUiTypeahead({
   filterClass: gsUiConfig.filterClass,
