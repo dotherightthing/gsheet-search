@@ -8,14 +8,6 @@
     }); ?>
   </head>
   <body>
-    <!-- start header -->
-    <header id="header">
-      <h1 class="header-logo">
-        <img src="<?= tplCompanyLogo ?>" alt="<?= tplCompanyName ?>">
-      </h1>
-    </header>
-    <!-- end header -->
-
     <form id="search">
       <fieldset class="data-sources grid grid-1-1-1" id="data-sources"></fieldset>
       <fieldset class="data-filters grid grid-1-1-1" id="data-filters"></fieldset>
@@ -26,13 +18,18 @@
       <!--<input type="reset" value="Reset">-->
     </form>
 
-    <!-- start messages -->
-    <div class="footer" id="footer">
-      <div class="wrapper grid grid-footer">
-        <?= tplPageTitle ?> v0.0.0
+    <!-- start footer -->
+    <footer id="footer">
+      <p class="footer-logo">
+        <img src="<?= tplCompanyLogo ?>" alt="<?= tplCompanyName ?>">
+      </p>
+      <div class="footer-version">
+        <div class="wrapper">
+          <?= tplPageTitle ?> v0.0.0
+        </div>
       </div>
-    </div>
-    <!-- end messages -->
+    </footer>
+    <!-- end footer -->
 
     <?!= GsPage.include('Dependencies/Pubsub.js'); ?>
     <?!= GsPage.include('Dependencies/Typeahead-standalone.js'); ?>

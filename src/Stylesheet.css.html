@@ -41,10 +41,10 @@ Variables
   --font-sans-serif: Arial, sans-serif;
   --font-sans-serif-brand: 'Source Sans Pro', sans-serif;
 
-  --header-padding-top: 1.2rem;
-  --header-padding-bottom: 1.35rem;
+  --footer-padding-top: 1.2rem;
+  --footer-padding-bottom: 1.35rem;
 
-  --z-index-header-footer: 1;
+  --z-index-footer-footer: 1;
 }
 
 /* ----------------------------------------
@@ -142,7 +142,7 @@ body {
   color: var(--text-dark);
   font-family: var(--font-sans-serif-brand);
   /* allow for elements with fixed position */
-  padding: var(--height-fixed-header) 0 var(--height-fixed-footer);
+  padding: 0 0 var(--height-fixed-footer);
   margin: 0;
 
   /* Disable pull-to-refresh and overscroll glow effect, retain swipe navigation */
@@ -167,23 +167,22 @@ body {
 }
 
 /* ----------------------------------------
-#header (pinned)
+#footer (pinned)
 -------------------------------------- */
 
-header {
+footer {
   position: fixed;
-  top: 0;
-  z-index: var(--z-index-header-footer);
+  bottom: 0;
+  z-index: var(--z-index-footer-footer);
   width: 100%;
 
   background: linear-gradient(rgba(var(--rgb-white), .7), rgba(var(--rgb-white), .4));
-  padding-top: var(--header-padding-top);
-  padding-bottom: var(--header-padding-bottom);
+  padding-top: var(--footer-padding-top);
   /* h1 */
   margin: 0;
 }
 
-header::after {
+footer::after {
   content: '';
   display: block;
   position: absolute;
@@ -193,22 +192,29 @@ header::after {
   border-bottom: .25rem solid rgba(var(--rgb-white), .3);
 }
 
-h1 {
-  margin: 0;
-}
-
-.header-logo {
+.footer-logo {
   width: 6rem;
   height: auto;
-  margin: 0 auto;
+  margin: 0 auto var(--footer-padding-bottom);
 }
 
-.header-logo > img {
+.footer-logo > img {
   display: block;
   position: relative;
   width: 100%;
   background-color: rgb(var(--rgb-white));
   padding: .5rem;
+}
+
+.footer-version {
+  background-color: var(--bg-non-ui);
+  color: var(--text-tertiary);
+  text-align: center;
+  text-transform: uppercase;
+  font-size: .7rem;
+  padding: var(--gutter-half) 0 var(--gutter);
+  border-top: 1px solid var(--brand-border);
+  margin: 0 auto;
 }
 
 /* ----------------------------------------
@@ -218,7 +224,7 @@ form
 form {
   position: relative;
   width: 90%;
-  height: calc(100vh - var(--height-fixed-header) - var(--height-fixed-footer) - 2rem);
+  height: calc(100vh - var(--height-fixed-footer) - var(--height-fixed-footer) - 2rem);
   margin: 1rem auto;
 }
 
@@ -265,6 +271,11 @@ form input[type='reset'] {
   border-bottom: 1px solid;
 }
 
+.tt-list {
+  overflow: scroll;
+  height: 20vh;
+}
+
 /* ----------------------------------------
 .tag
 -------------------------------------- */
@@ -295,49 +306,6 @@ form input[type='reset'] {
   padding-left: 4px;
   margin-right: -4px;
   margin-left: -4px;
-}
-
-/* ----------------------------------------
-.footer
--------------------------------------- */
-
-.footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: var(--z-index-header-footer);
-  width: 100%;
-  background-color: var(--bg-non-ui);
-  color: var(--text-tertiary);
-  text-align: center;
-  padding: var(--gutter-half) 0;
-  border-top: 1px solid var(--brand-border);
-  margin: 0 auto;
-}
-
-a.small,
-.a.small {
-  text-transform: none;
-}
-
-.footer p {
-  text-overflow: ellipsis;
-  margin: 0;
-  overflow: hidden;
-}
-
-.footer a,
-.footer .a {
-  color: var(--text-tertiary);
-}
-
-.footer-links > * {
-  display: inline-block;
-  margin-right: var(--gutter);
-}
-
-.a.footer-version {
-  text-transform: uppercase;
 }
 
 </style>
