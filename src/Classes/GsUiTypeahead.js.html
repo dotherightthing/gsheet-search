@@ -459,6 +459,7 @@ class GsUiTypeahead extends GsUi {
         dataTokens: _dataTokens, // fields user can search on; note that GsSheet.sheetToJSON removes the identifier from this array
         diacritics: true, // in case this includes macrons
       },
+      limit: 99, // default is 5
       hint: false,
       autoSelect: false,
       highlight: true,
