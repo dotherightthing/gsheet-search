@@ -17,21 +17,15 @@ This app seeks to bypass usability issues present in the Google Sheets mobile ap
 
 ## Single-user
 
-This app is designed to be used by a single user per configured spreadsheet. Multiple consecutive users will overwrite each other's data.
+This app is designed to be used by a single user per configured spreadsheet.
+
+Although editing is not currently supported, when it is multiple consecutive users will overwrite each other's data.
 
 ## Integration with data source
 
 The web app reads and writes from a Google Sheet. Google Apps Script offers the choice of a 'container-bound' (spreadsheet linked) or 'standalone' project.
 
 This script is deployed as a 'standalone' project to ensure that integration and testing yields predictable results across both the original and any cloned/test spreadsheets.
-
-### Gsheet Search web app
-
-1. Link to the source spreadsheets via the `spreadsheets` array in `Init.js.html`
-
-### Spreadsheet
-
-Currently there is no extra functionality provided for the spreadsheet itself. Data is manually checked and groomed.
 
 ## Developing the app
 
@@ -169,7 +163,13 @@ The [MAN](MAN.md)ual is generated from JSDoc comments in the sourcecode (*Local 
 
 ## Using the app
 
-### 1. Share the spreadsheet with any editors and app users
+### 1. Set up your spreadsheet
+
+1. In Google Sheets, set the `GsSearchResult` named range to the header of the column you wish to use for search results:
+   * Select Cell > Data > Named Ranges > "GsSearchResult" > Done
+2. Link to the source spreadsheets via the `spreadsheets` array in `Init.js.html`
+
+### 2. Share the spreadsheet with any editors and app users
 
 1. Open the spreadsheet
 2. *Share > Add people and groups > [Enter email] > Editor*
@@ -179,7 +179,7 @@ Note:
 * The app reads and writes company data, therefore you will need permission to edit the spreadsheet in order to access the app.
 * If the spreadsheet is not shared, the user may still be able to view it, but the app will not be able to write to it.
 
-### 2a. Spreadsheet users - share the Apps Script project, which is linked to the spreadsheet as a code library
+### 3a. Spreadsheet users - share the Apps Script project, which is linked to the spreadsheet as a code library
 
 1. Open the 'Gsheet Search' project
 2. *Share this project with others > Add people and groups > [Enter email] > Editor*.
@@ -189,7 +189,7 @@ Note:
 * *Viewer* access only provides access to the STABLE/deployed version of the app
 * *Editor* also provides access to the *Deploy* menu and in turn the DEV/Head version of the app.
 
-### 2b. App users - share the GCP (Google Cloud Platform) project (during development)
+### 3b. App users - share the GCP (Google Cloud Platform) project (during development)
 
 During development, the app has a status of *testing* rather than *in production*. While in testing, only the developer and any test users may access the app.
 
