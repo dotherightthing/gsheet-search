@@ -57,6 +57,10 @@
       "node_modules/typeahead-standalone": [
         "dist/typeahead-standalone.js",
         "dist/basic.css"
+      ],
+      "src/Classes": [
+        "GsUtils.js",
+        "GsValidate.js"
       ]
     }
   },

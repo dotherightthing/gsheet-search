@@ -26,6 +26,9 @@ const gsConfig = {
 
 // classes that don't require multiple instances but do require configuration
 
+// used by other classes
+const gsValidateInstance = new GsValidate();
+
 const gsCacheInstance = new GsCache({
   debug: gsConfig.debug,
 });

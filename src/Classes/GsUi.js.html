@@ -33,11 +33,7 @@ class GsUi {
   }
 
   set focusableSelector(focusableSelector) {
-    if (focusableSelector.trim().length > 0) {
-      this._focusableSelector = focusableSelector;
-    } else {
-      throw new Error('GsUi.focusableSelector cannot be empty');
-    }
+    this._focusableSelector = gsValidateInstance.validate(focusableSelector, 'string1', 'GsUi.focusableSelector');
   }
 
   /* Instance methods */

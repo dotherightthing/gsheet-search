@@ -3,7 +3,6 @@
  * @file Init.js.html
  * @summary Client side scripting for the GS web app.
  *  Instances are generated so that classes can subscribe to pubsub events and respond accordingly.
- * @todo Add searchable fields to spreadsheets objects as they differ between sheets
  */
 const gsUiConfig = {
   fixedPositionIds: [ 'footer' ],
@@ -24,6 +23,11 @@ const gsUiConfig = {
   ],
   typeaheadId: 'typeahead',
 };
+
+// used by other classes
+// note: backend file copied into frontend dependencies
+// note: GsUtils is also included, but doesn't require an instance
+const gsValidateInstance = new GsValidate();
 
 const gsUiInstance = new GsUi();
 

@@ -39,11 +39,7 @@ class GsUiCss extends GsUi {
   }
 
   set fixedPositionIds(fixedPositionIds) {
-    if (Array.isArray(fixedPositionIds)) {
-      this._fixedPositionIds = fixedPositionIds;
-    } else {
-      throw new Error('GsUiCss.fixedPositionIds must be an Array');
-    }
+    this._fixedPositionIds = gsValidateInstance.validate(fixedPositionIds, 'Array', 'GsUiCss.fixedPositionIds');
   }
 
   /* Instance methods */

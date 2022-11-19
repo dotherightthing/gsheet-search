@@ -27,6 +27,8 @@
     "GsSheet": "readonly",
     "GsUtils": "readonly",
     "gsUtilsInstance": "readonly",
+    "GsValidate": "readonly",
+    "gsValidateInstance": "readonly",
     "GsUi": "readonly",
     "gsUiInstance": "readonly",
     "GsUiCss": "readonly",
