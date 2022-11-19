@@ -232,7 +232,7 @@ class GsUiTypeahead extends GsUi {
    * @param {string} str - String to capitalise
    * @returns {string|*} str Capitalised string
    */
-  capitalise(str) { // eslint-disable-line class-methods-use-this
+  capitalise(str) {
     if (typeof str === 'string') {
       return str.replace(/^\w/, (c) => c.toUpperCase());
     }
@@ -307,7 +307,7 @@ class GsUiTypeahead extends GsUi {
    * @memberof GsUiTypeahead
    * @param {string} error Error
    */
-  handleLoadError(error) { // eslint-disable-line class-methods-use-this
+  handleLoadError(error) {
     throw new Error(error);
   }
 
@@ -388,7 +388,7 @@ class GsUiTypeahead extends GsUi {
    * @todo Determine if there are comma separated values and output appropriate generic html
    * @todo Use CSS grid to layout generic/unknown keys
    */
-  initTypeahead(obj) { // eslint-disable-line class-methods-use-this
+  initTypeahead(obj) {
     const {
       data, // supplied by server, on spreadsheet change
       dataTokens, // supplied by server and filters, on filter change or spreadsheet change

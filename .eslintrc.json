@@ -56,6 +56,9 @@
       "error",
       "always"
     ],
+    "class-methods-use-this": [
+      "off"
+    ],
     "comma-spacing": [
       "error"
     ],
