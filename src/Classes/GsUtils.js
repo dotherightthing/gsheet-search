@@ -309,7 +309,7 @@ class GsUtils {
               valid = true;
               return false; // stop looping
             }
-          } else if (typeof value === t) { // eslint-disable-line valid-typeof
+          } else if (typeof value === t) {
             valid = true;
             return false; // stop looping
           }

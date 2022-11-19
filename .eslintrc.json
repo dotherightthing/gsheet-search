@@ -104,6 +104,9 @@
         "functions": false,
         "variables": true
       }
+    ],
+    "valid-typeof": [
+      "off"
     ]
   },
   "settings": {
