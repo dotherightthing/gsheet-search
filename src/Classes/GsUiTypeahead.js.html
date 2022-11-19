@@ -7,10 +7,10 @@ class GsUiTypeahead extends GsUi {
    * @class
    * @public
    * @param {object}  config                       - Module configuration.
-   * @param {string}  config.formId                - ID selector used to target the parent form
    * @param {string}  config.filterClass           - Class selector used to target each checkbox filter
    * @param {string}  config.filtersContainerId    - ID selector used to target the filters container
    * @param {boolean} config.filtersFocusTypeahead - Whether clicking a filter should re-focus the typeahead input (in order to display the results)
+   * @param {string}  config.formId                - ID selector used to target the parent form
    * @param {string}  config.radiosContainerId     - ID selector used to target the radios container
    * @param {Array}   config.spreadsheets          - Array of objects
    * @param {string}  config.typeaheadId           - ID selector used to target the parent form
@@ -19,11 +19,11 @@ class GsUiTypeahead extends GsUi {
     super();
 
     // accepts an object of named arguments
-    this.formId = config.formId;
     this.filterClass = config.filterClass;
     this.filtersContainerId = config.filtersContainerId;
-    this.radiosContainerId = config.radiosContainerId;
     this.filtersFocusTypeahead = config.filtersFocusTypeahead;
+    this.formId = config.formId;
+    this.radiosContainerId = config.radiosContainerId;
     this.spreadsheets = config.spreadsheets;
     this.typeaheadId = config.typeaheadId;
 
