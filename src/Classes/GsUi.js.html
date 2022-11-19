@@ -7,8 +7,6 @@ class GsUi {
    * @class
    * @summary UI helpers.
    * @public
-   * @param {object} config                   - Module configuration.
-   * @param {string} config.focusableSelector - CSS selector of elements that can be focussed
    */
   constructor() {
     // private settings
@@ -24,7 +22,7 @@ class GsUi {
   /* Getters and Setters */
 
   /**
-   * dataTokenIdentifier
+   * focusableSelector
    *
    * @type {string}
    */
@@ -98,7 +96,9 @@ class GsUi {
    * @see {@link https://codepen.io/dotherightthingnz/pen/bGwaGmM}
    */
   enableActiveStates(parentSelector) {
-    const { focusableSelector } = this._settings;
+    const {
+      focusableSelector,
+    } = this;
 
     if (/iP(hone|ad)/.test(window.navigator.userAgent)) {
       // focus event does not bubble
