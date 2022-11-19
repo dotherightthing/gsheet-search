@@ -1,7 +1,6 @@
 /**
  * @file ./scripts/copy-dependencies.js
- * @summary Copy dependencies into project, transform into include-ready HTML files.
- * @todo Group files into dependency folders.
+ * @summary Copy backend and 3rd party dependencies into project, transform into include-ready HTML files.
  */
 /*
 {
@@ -21,7 +20,6 @@ const packageJson = require('../package.json');
 const files = [];
 const dest = '/src/Dependencies/';
 const toCopy = packageJson.config.copyDependencies;
-let n = 0;
 
 if (typeof toCopy === 'object') {
   const deps = Object.keys(toCopy);
@@ -29,16 +27,14 @@ if (typeof toCopy === 'object') {
   deps.forEach((dep) => {
     const paths = toCopy[dep];
 
-    n += paths.length;
-
     paths.forEach((path) => {
-      files.push(`./node_modules/${dep}/${path}`);
+      files.push(`./${dep}/${path}`);
     });
   });
 }
 
 files.forEach((file) => {
-  const id = file.replace('./', '').replaceAll(/([ /.,_'"!()])+/g, '-');
+  const id = file.toLowerCase().replace('./', '').replaceAll(/([ /.,_'"!()])+/g, '-');
 
   fs.readFile(file, 'utf-8', (err, data) => {
     if (err) {
@@ -68,15 +64,15 @@ files.forEach((file) => {
         recursive: true,
       });
     } catch (err3) {
-      console.log('Cannot create folder ', err3);
+      console.log('Cannot create folder ', err3); // eslint-disable-line no-console
     }
 
     fs.writeFile(`${process.cwd()}${dest}${fileName}.html`, fileValue, 'utf-8', (err2) => {
       if (err2) {
         throw err2;
       }
-
-      console.log(`${n} ${(n > 1) ? 'dependencies' : 'dependency'} copied to ${dest}`); // eslint-disable-line no-console
     });
   });
 });
+
+console.log(`${files.length} ${(files.length > 1) ? 'dependencies' : 'dependency'} copied to ${dest}`); // eslint-disable-line no-console

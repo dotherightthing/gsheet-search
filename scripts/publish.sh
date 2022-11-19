@@ -49,7 +49,7 @@ cd $INIT_CWD \
 && git add $VERSION_FILE \
 && git commit -m "Bump version" \
 && npm version $NPM_VERSION_BUMP --message "$KRM_MESSAGE" \
-&& npx clasp push \
+&& npm run clasp:push \
 && npx clasp version "$KRM_MESSAGE" \
 && npx clasp deploy --description "$KRM_MESSAGE" --deploymentId $DEPLOYMENT_ID --versionNumber $CLASP_VERSION_BUMP \
 && npx clasp open --webapp --deploymentId $DEPLOYMENT_ID

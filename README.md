@@ -111,7 +111,7 @@ Application files are stored in the *Gsheet Search tests* *Apps Script* project,
 # EITHER: Update the TEST BUILD then automatically open the test results page
 npm run test
 # OR: Update the TEST BUILD then manually open/refresh the test results page
-npx clasp push
+npm run clasp:push
 ```
 
 ##### Data
@@ -128,7 +128,7 @@ Visual and interactive testing requires viewing the web app.
 # EITHER: Update the TEST BUILD then automatically open the web app
 npm run preview
 # OR: Update the TEST BUILD then manually open/refresh the web app
-npx clasp push
+npm run clasp:push
 ```
 
 This updates and opens the latest DEV version of the web app.
