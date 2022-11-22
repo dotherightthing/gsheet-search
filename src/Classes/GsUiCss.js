@@ -17,7 +17,7 @@ class GsUiCss extends GsUi {
 
     // subscribe to other module's events
 
-    pubsub.subscribe([ 'domready' ], (data) => {
+    pubsub.subscribe([ 'domready' ], () => {
       this.injectHeightVariables(); // handles any new elements added
     });
 

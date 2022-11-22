@@ -217,7 +217,7 @@ class GsUiTypeahead extends GsUi {
     // if (Object.prototype.toString.call(typeaheadInstance) === '[object Object]') {
     this._typeaheadInstance = typeaheadInstance;
     // } else {
-      // throw new Error('GsUiTypeahead.typeaheadInstance must be an object');
+    //  throw new Error('GsUiTypeahead.typeaheadInstance must be an object');
     // }
   }
 
@@ -515,7 +515,7 @@ class GsUiTypeahead extends GsUi {
       subtree: true,
     };
 
-    const callback = (mutationList, observer) => {
+    const callback = (mutationList) => {
       mutationList.every((mutation) => {
         if (mutation.type === 'childList') {
           if (mutation.addedNodes.length) {
