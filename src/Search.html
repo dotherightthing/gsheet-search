@@ -8,11 +8,17 @@
     }); ?>
   </head>
   <body>
+    <h1 class="logo">
+      <img src="<?= tplCompanyLogo ?>" alt="<?= tplCompanyName ?>">
+    </h1>
+
     <form id="search">
       <fieldset class="data-sources grid grid-1-1-1" id="data-sources"></fieldset>
       <fieldset class="data-filters grid grid-1-1-1" id="data-filters"></fieldset>
       <fieldset class="search">
-        <legend>Search</legend>
+        <legend>
+          <span class="legend">Search for</span>
+        </legend>
         <input id="typeahead" autocomplete="off">
       </fieldset>
       <!--<input type="reset" value="Reset">-->
@@ -20,9 +26,6 @@
 
     <!-- start footer -->
     <footer id="footer">
-      <p class="footer-logo">
-        <img src="<?= tplCompanyLogo ?>" alt="<?= tplCompanyName ?>">
-      </p>
       <div class="footer-version">
         <div class="wrapper">
           <?= tplPageTitle ?> v0.0.0

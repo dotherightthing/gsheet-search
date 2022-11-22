@@ -345,7 +345,7 @@ class GsUiTypeahead extends GsUi {
       html += '</div>';
     });
 
-    radiosContainerEl.innerHTML = `<legend>Search in</legend>${html}`;
+    radiosContainerEl.innerHTML = `<legend><span class="legend">Search in</span></legend>${html}`;
 
     formEl.addEventListener('change', this.handleChange.bind(this));
 
@@ -374,7 +374,7 @@ class GsUiTypeahead extends GsUi {
       html += '</div>';
     });
 
-    filtersContainerEl.innerHTML = `<legend>Filter by</legend>${html}`;
+    filtersContainerEl.innerHTML = `<legend><span class="legend">Filter by</span></legend>${html}`;
   }
 
   /**
@@ -463,7 +463,6 @@ class GsUiTypeahead extends GsUi {
       templates: {
         suggestion: (item) => {
           const {
-            abbr,
             business,
             description,
             level,
@@ -473,20 +472,21 @@ class GsUiTypeahead extends GsUi {
             street,
           } = item;
 
-          const _abbr = abbr ? ` (${abbr})` : '';
           const _business = business || '';
           const _description = description ? `<div class="text text-description">${description}</div>` : '';
           const _level = item.level ? `${level}/` : '';
           const _no = no || '';
           const pods = pod.split(', ');
-          const podsHtml = `<span class="tag tag-person">${pods.join('</span><span class="tag tag-person">')}</span>`;
+          const podsHtml = `<span class="text text-person">${pods.join('</span><span class="text text-person">')}</span>`;
           const phoneHtml = phone ? ` <span class="text-phone">Phone: <a href="tel:${phone}">${phone}</a></span>` : '';
           const _street = street || '';
 
-          return `<div class="text text-business">${_business}${_abbr}</div>
+          return `<div class="text text-business">${_business}</div>
           <div class="text text-address">${_level}${_no} ${_street} ${phoneHtml}</div>
           ${_description}
-          <div class="text text-pods">${podsHtml}</div>`;
+          <div class="text text-pods">
+            <div class="grid-pods">${podsHtml}</div>
+          </div>`;
         },
         // group: (name) => `<div class="custom-group">${name}</div>`,
         // header: () => 'PODs',
