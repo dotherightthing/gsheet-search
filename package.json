@@ -4,7 +4,7 @@
   "description": "",
   "main": "Main.js",
   "scripts": {
-    "clasp:push": "node ./scripts/copy-dependencies.js && npx clasp push",
+    "clasp:push": "node ./scripts/htmlify.js && npx clasp push",
     "man": "npx jsdoc2md --template ./templates/MAN.hbs --files ./src/**/*.js* > ./MAN.md",
     "editor": "npx clasp push && npx clasp open",
     "lint:css": "npx stylelint './src/**/*.css.html'",
@@ -13,7 +13,7 @@
     "preview": "npx clasp push && npx clasp open --webapp --deploymentId $npm_package_config_headDeploymentId",
     "publish": "./scripts/publish.sh ${npm_package_config_pubDeploymentId} \"${npm_config_gsmessage}\"",
     "test": "npx clasp push && npx clasp open --webapp --deploymentId $npm_package_config_testHeadDeploymentId",
-    "postinstall": "node ./scripts/copy-dependencies.js"
+    "postinstall": "node ./scripts/htmlify.js"
   },
   "repository": {
     "type": "git",
@@ -50,7 +50,7 @@
     "headDeploymentId": "AKfycbyXIo-wDHA4IIzSsMAmcT97XUiFPaMdsUaI2vPnLX1s",
     "pubDeploymentId": "AKfycbyFMw-ILDiJD6E1oWd7Gv6UkQSAkNZ5OezOcTAWjqoNgtkM2X5ZUDfK1Afp3Ih_mn0PYg",
     "testHeadDeploymentId": "AKfycbz2R2G4KDjQ9V5KFZQoc9P3Z3211bN9yZODmY8KiPc",
-    "copyDependencies": {
+    "htmlify": {
       "node_modules/pubsub.js": [
         "pubsub.js"
       ],
@@ -59,6 +59,9 @@
         "dist/basic.css"
       ],
       "src/Classes": [
+        "GsUi.js",
+        "GsUiCss.js",
+        "GsUiTypeahead.js",
         "GsUtils.js",
         "GsValidate.js"
       ]

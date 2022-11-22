@@ -1,4 +1,3 @@
-<script id="gs-ui-css">
 /**
  * @file GsUiCss.js
  */
@@ -75,4 +74,3 @@ class GsUiCss extends GsUi {
     styleEl.innerHTML = styles;
   }
 }
-</script>

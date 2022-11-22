@@ -8,7 +8,6 @@
     "files.associations": {
       "src/*.css.html": "css",
       "src/*.js.html": "javascript",
-      "src/Classes/*.js.html": "javascript",
       "**/src/Partials/*.part.html": "html",
     },
     "editor.tabSize": 2,

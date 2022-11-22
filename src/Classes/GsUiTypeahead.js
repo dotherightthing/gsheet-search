@@ -1,4 +1,3 @@
-<script id="krm-ui-run-form">
 /**
  * @file GsUiTypeahead.js
  */
@@ -536,4 +535,3 @@ class GsUiTypeahead extends GsUi {
     observer.observe(targetNode, config);
   }
 }
-</script>

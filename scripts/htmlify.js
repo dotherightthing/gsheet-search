@@ -1,11 +1,11 @@
 /**
- * @file ./scripts/copy-dependencies.js
+ * @file ./scripts/htmlify.js
  * @summary Copy backend and 3rd party dependencies into project, transform into include-ready HTML files.
  */
 /*
 {
   "config": {
-    "copyDependencies": {
+    "htmlify": {
       "pubsub.js": ["pubsub.js"]
     }
   },
@@ -18,8 +18,8 @@ const fs = require('fs');
 const packageJson = require('../package.json');
 
 const files = [];
-const dest = '/src/Dependencies/';
-const toCopy = packageJson.config.copyDependencies;
+const dest = '/src/Htmlified/';
+const toCopy = packageJson.config.htmlify;
 
 if (typeof toCopy === 'object') {
   const deps = Object.keys(toCopy);

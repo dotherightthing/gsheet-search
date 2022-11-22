@@ -1,4 +1,3 @@
-<script id="gs-ui">
 /**
  * @file GsUi.js
  */
@@ -147,4 +146,3 @@ class GsUi {
     return safeStr;
   }
 }
-</script>
