@@ -422,7 +422,7 @@ class GsUiTypeahead extends GsUi {
         _this.focusTypeaheadOnInit();
       }
 
-      // store properties supplied by the server so it they be reused
+      // store properties supplied by the server so they be reused
       // when only the dataTokens are updated by the checkbox filters
       _this.dataTokenIdentifier = dataTokenIdentifier;
       _this.storedData = JSON.parse(JSON.stringify(data));
