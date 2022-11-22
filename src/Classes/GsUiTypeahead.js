@@ -464,7 +464,7 @@ class GsUiTypeahead extends GsUi {
         suggestion: (item) => {
           const {
             business,
-            description,
+            notes,
             level,
             no,
             phone,
@@ -473,7 +473,7 @@ class GsUiTypeahead extends GsUi {
           } = item;
 
           const _business = business || '';
-          const _description = description ? `<div class="text text-description">${description}</div>` : '';
+          const _notes = notes ? `<div class="text text-notes">${notes}</div>` : '';
           const _level = item.level ? `${level}/` : '';
           const _no = no || '';
           const pods = pod.split(', ');
@@ -483,10 +483,10 @@ class GsUiTypeahead extends GsUi {
 
           return `<div class="text text-business">${_business}</div>
           <div class="text text-address">${_level}${_no} ${_street} ${phoneHtml}</div>
-          ${_description}
           <div class="text text-pods">
             <div class="grid-pods">${podsHtml}</div>
-          </div>`;
+          </div>
+          ${_notes}`;
         },
         // group: (name) => `<div class="custom-group">${name}</div>`,
         // header: () => 'PODs',

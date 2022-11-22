@@ -273,6 +273,7 @@ form input[type='reset'] {
   grid-template-areas:
     "business address"
     "pods pods"
+    "notes notes"
     "divider divider";
   grid-template-columns: 1fr 1fr;
   grid-gap: var(--gutter-quarter);
@@ -298,6 +299,10 @@ form input[type='reset'] {
 
 .tt-suggestion > .text-address {
   grid-area: address;
+}
+
+.tt-suggestion > .text-notes {
+  grid-area: notes;
 }
 
 .tt-suggestion > .text-pods {
