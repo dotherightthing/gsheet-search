@@ -404,6 +404,7 @@ class GsUiTypeahead extends GsUi {
     }
 
     const {
+      linkPhoneNumbers,
       typeaheadId,
     } = _this;
 
@@ -467,22 +468,20 @@ class GsUiTypeahead extends GsUi {
             notes,
             level,
             no,
-            phone,
             pod,
             street,
           } = item;
 
           const _business = business || '';
-          const _notes = notes ? `<div class="text text-notes">${notes}</div>` : '';
+          const _notes = notes ? `<div class="text text-notes">${linkPhoneNumbers(notes)}</div>` : '';
           const _level = item.level ? `${level}/` : '';
           const _no = no || '';
           const pods = pod.split(', ');
           const podsHtml = `<span class="text text-person">${pods.join('</span><span class="text text-person">')}</span>`;
-          const phoneHtml = phone ? ` <span class="text-phone">Phone: <a href="tel:${phone}">${phone}</a></span>` : '';
           const _street = street || '';
 
           return `<div class="text text-business">${_business}</div>
-          <div class="text text-address">${_level}${_no} ${_street} ${phoneHtml}</div>
+          <div class="text text-address">${_level}${_no} ${_street}</div>
           <div class="text text-pods">
             <div class="grid-pods">${podsHtml}</div>
           </div>
@@ -533,5 +532,40 @@ class GsUiTypeahead extends GsUi {
     const observer = new MutationObserver(callback);
 
     observer.observe(targetNode, config);
+  }
+
+  /**
+   * linkPhoneNumbers
+   *
+   * @summary Link phone numbers in a body of text.
+   * @memberof GsUiTypeahead
+   * @param {string} text Text
+   * @returns {string} linkedText
+   * @see {@link https://en.wikipedia.org/wiki/Telephone_numbers_in_New_Zealand}
+   */
+  linkPhoneNumbers(text) {
+    // xxx 021 123 4567 yyy
+    // -> xxx <a href="tel:021 234 5678" class="a">021 234 5678</a> yyy
+    const replacements = text.replace(/(0204|021|022|027|028|029|03|04|06|07|09)(\s*\d+)+/g, '<a href="tel:$&" class="a">$&</a>');
+
+    // xxx <a href="tel:021 234 5678" class="a">021 234 5678</a> yyy
+    // -> ['xxx <a href=', '"tel:021 234 5678"', ' class="a">021 234 5678</a> yyy']
+    let replacementParts = replacements.split(/("tel:.*?")/g);
+
+    // ['xxx <a href=', '"tel:021 234 5678"', ' class="a">021 234 5678</a> yyy']
+    // -> ['xxx <a href=', '"tel:0212345678"', ' class="a">021 234 5678</a> yyy']
+    replacementParts = replacementParts.map((item) => {
+      if (item.substring(0, 5) === '"tel:') {
+        return item.replace(/\s/g, '');
+      }
+
+      return item;
+    });
+
+    // ['xxx <a href=', '"tel:0212345678"', ' class="a">021 234 5678</a> yyy']
+    // -> 'xxx <a href="tel:0212345678" class="a">021 234 5678</a> yyy'
+    const replacementPartsStr = replacementParts.join('');
+
+    return replacementPartsStr;
   }
 }
