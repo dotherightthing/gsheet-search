@@ -5,6 +5,11 @@
 
 // global config settings
 
+console.log('Gsheet Search loaded');
+
+let gsValidateInstance;
+let gsCacheInstance;
+let gsUtilsInstance;
 const gsConfig = {
   debug: false,
   deploymentIds: {
@@ -24,35 +29,49 @@ const gsConfig = {
   tplFile: 'Search',
 };
 
-// classes that don't require multiple instances but do require configuration
-
-// used by other classes
-const gsValidateInstance = new GsValidate();
-
-const gsCacheInstance = new GsCache({
-  debug: gsConfig.debug,
-});
-
-const gsUtilsInstance = new GsUtils({
-  deploymentIds: gsConfig.deploymentIds,
-  scriptIds: gsConfig.scriptIds,
-});
-
 // functions
 
 /**
  * doGet
  *
  * @summary Called when the user loads the web app in a web browser.
+ * @param {object} config - Config
  * @returns {*} - HTML Template
  */
-function doGet() {
+function doGet(config) {
+  // when consumed as a library, an object is passed to this function
+  // when tested directly, the default object is passed
+  if (Object.prototype.hasOwnProperty.call(config, 'queryString')) { // default object
+    config = gsConfig; // app config
+  } else {
+    // used as a library
+    standalone = false;
+  }
+
+  console.log('Gsheet Search initialised standalone', standalone, 'with config', config);
+
+  // classes that don't require multiple instances but do require configuration
+
+  // used by other classes
+  gsValidateInstance = new GsValidate();
+
+  gsCacheInstance = new GsCache({
+    debug: config.debug,
+  });
+
+  gsUtilsInstance = new GsUtils({
+    deploymentIds: config.deploymentIds,
+    scriptIds: config.scriptIds,
+  });
+
+  console.log('gsUtilsInstance.deploymentIds', gsUtilsInstance.deploymentIds);
+
   const page = new GsPage({
-    imageFavicon: gsConfig.imageFavicon,
-    imageLogo: gsConfig.imageLogo,
-    organisationName: gsConfig.organisationName,
-    pageTitle: gsConfig.pageTitle,
-    tplFile: gsConfig.tplFile,
+    imageFavicon: config.imageFavicon,
+    imageLogo: config.imageLogo,
+    organisationName: config.organisationName,
+    pageTitle: config.pageTitle,
+    tplFile: config.tplFile,
   });
 
   return page.template;
