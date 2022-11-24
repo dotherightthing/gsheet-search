@@ -205,6 +205,7 @@ class GsSheet extends Gs {
       data,
       dataTokens,
       dataTokenIdentifier,
+      sheetName,
     };
 
     if (Object.prototype.toString.call(json) === '[object Object]') {

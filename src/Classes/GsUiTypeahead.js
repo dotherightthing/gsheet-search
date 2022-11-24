@@ -360,6 +360,7 @@ class GsUiTypeahead extends GsUi {
       data, // supplied by server, on spreadsheet change
       dataTokens, // supplied by server and filters, on filter change or spreadsheet change
       dataTokenIdentifier, // supplied by server, on spreadsheet change
+      sheetName,
     } = obj;
 
     let _this;
@@ -414,17 +415,6 @@ class GsUiTypeahead extends GsUi {
       _this.typeaheadInstance = null;
     }
 
-    /*
-    TODO: replace
-            business,
-            notes,
-            level,
-            no,
-            pod,
-            street,
-    with datatokens
-    */
-
     const typeaheadConfig = {
       input: document.getElementById(typeaheadId), // referencing a var here failed every second time
       source: {
@@ -442,29 +432,38 @@ class GsUiTypeahead extends GsUi {
       highlight: true,
       templates: {
         suggestion: (item) => {
-          const {
-            business,
-            notes,
-            level,
-            no,
-            pod,
-            street,
-          } = item;
+          let html = '';
 
-          const _business = business || '';
-          const _notes = notes ? `<div class="text text-notes">${linkPhoneNumbers(notes)}</div>` : '';
-          const _level = item.level ? `${level}/` : '';
-          const _no = no || '';
-          const pods = pod.split(', ');
-          const podsHtml = `<span class="text text-person">${pods.join('</span><span class="text text-person">')}</span>`;
-          const _street = street || '';
+          // TODO add formatting functions to handle different kinds of data
+          // TODO support GsResultHeader1, GsResultHeader2, GsSearchHeaders1, GsSearchHeaders2, as there can't be two named ranges with the same name
+          if (sheetName === 'Names') {
+            const {
+              business,
+              // abbr,
+              pod,
+              level,
+              no,
+              street,
+              notes,
+            } = item;
 
-          return `<div class="text text-business">${_business}</div>
-          <div class="text text-address">${_level}${_no} ${_street}</div>
-          <div class="text text-pods">
-            <div class="grid-pods">${podsHtml}</div>
-          </div>
-          ${_notes}`;
+            const _business = business || '';
+            const pods = pod.split(', ');
+            const podsHtml = `<span class="text text-person">${pods.join('</span><span class="text text-person">')}</span>`;
+            const _level = item.level ? `${level}/` : '';
+            const _no = no || '';
+            const _street = street || '';
+            const _notes = notes ? `<div class="text text-notes">${linkPhoneNumbers(notes)}</div>` : '';
+
+            html = `<div class="text text-business">${_business}</div>
+            <div class="text text-address">${_level}${_no} ${_street}</div>
+            <div class="text text-pods">
+              <div class="grid-pods">${podsHtml}</div>
+            </div>
+            ${_notes}`;
+          }
+
+          return html;
         },
         // group: (name) => `<div class="custom-group">${name}</div>`,
         // header: () => 'PODs',
