@@ -23,13 +23,13 @@ class GsValidate {
    */
   errorMessage(value, types, identifier) {
     const actualType = typeof value;
-    const actualTypeArticle = GsUtils.getIndefiniteArticle(actualType);
+    const actualTypeArticle = this.getIndefiniteArticle(actualType);
     const typeSeparator = ', or ';
     let typeArticle;
     let typesStr = '';
 
     types.forEach((type) => {
-      typeArticle = GsUtils.getIndefiniteArticle(type);
+      typeArticle = this.getIndefiniteArticle(type);
       typesStr += `${typeArticle} ${type}${typeSeparator}`;
     });
 
@@ -37,6 +37,28 @@ class GsValidate {
     typesStr = typesStr.slice(0, (-1 * typeSeparator.length));
 
     throw new Error(`${identifier} must be ${typesStr}, not ${actualTypeArticle} ${actualType}`);
+  }
+
+  /**
+   * getIndefiniteArticle
+   *
+   * @summary Get the appropriate indefinite article for the specified string
+   * @memberof GsValidate
+   * @param {string} str - String
+   * @returns {string} indefiniteArticle
+   * @see {@link https://github.com/dotherightthing/kaicycle-run-mobile-tests}
+   */
+  getIndefiniteArticle(str) {
+    const firstLetter = str.slice(0, 1).toLowerCase();
+    const strLower = str.toLowerCase();
+
+    let art = (firstLetter.match(/^(a|e|i|o|u)$/)) ? 'an' : 'a';
+
+    if (strLower.match(/^(null|undefined)$/)) {
+      art = '';
+    }
+
+    return art;
   }
 
   /**
@@ -137,6 +159,22 @@ class GsValidate {
   }
 
   /**
+   * stringToCapitalised
+   *
+   * @summary Capitalise a string
+   * @memberof GsValidate
+   * @param {string} str - String to convert
+   * @returns {string} capitalisedStr
+   */
+  stringToCapitalised(str) {
+    if (typeof str !== 'string') {
+      return '';
+    }
+
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  /**
    * validate
    *
    * @summary Validate a value against a type.
@@ -155,7 +193,7 @@ class GsValidate {
 
       // type can be singular (e.g. 'number') or multiple (e.g. 'number|string|boolean')
       types.every((t) => {
-        const validationMethod = `is${GsUtils.stringToCapitalised(t)}`;
+        const validationMethod = `is${this.stringToCapitalised(t)}`;
 
         if (validationMethod.match(/^(isArray|isBoolean|isNull|isNumber|isObject|isString|isString1|isTypeOf)$/)) {
           if (validationMethod === 'isTypeOf') {

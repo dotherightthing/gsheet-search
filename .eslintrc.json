@@ -19,6 +19,7 @@
     "SharedArrayBuffer": "readonly",
     "SpreadsheetApp": "readonly",
     "Utilities": "readonly",
+    "Gs": "readonly",
     "GsApp": "readonly",
     "GsCache": "readonly",
     "GsPage": "readonly",

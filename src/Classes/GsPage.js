@@ -1,7 +1,7 @@
 /**
  * @file GsPage.js
  */
-class GsPage {
+class GsPage extends Gs {
   /**
    * @class
    * @summary Properties and methods relating to the HTML templating.
@@ -16,8 +16,7 @@ class GsPage {
    * @param {string} config.tplFile          - HTML template file.
    */
   constructor(config = {}) {
-    // instantiate required classes, optionally passing on the config object
-    this.gsValidateInstance = new GsValidate();
+    super();
 
     // select the relevant arguments from the config object passed in
     this.imageFavicon = config.imageFavicon;

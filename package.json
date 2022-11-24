@@ -62,7 +62,6 @@
         "GsUi.js",
         "GsUiCss.js",
         "GsUiTypeahead.js",
-        "GsUtils.js",
         "GsValidate.js"
       ]
     }

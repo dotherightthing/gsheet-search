@@ -1,7 +1,7 @@
 /**
  * @file GsSheet.js
  */
-class GsSheet {
+class GsSheet extends Gs {
   /**
    * @class
    * @summary Properties and methods relating to querying of the spreadsheet.
@@ -9,8 +9,7 @@ class GsSheet {
    * @param {Array}  config.namedRangeItems - Name/description/validation of the named ranges set in the spreadsheet (this is an array of objects).
    */
   constructor(config = {}) {
-    // instantiate required classes, optionally passing on the config object
-    this.gsValidateInstance = new GsValidate();
+    super();
 
     // is there a better way to pass this to sheetToJSON?
     this.config = config;
@@ -32,19 +31,6 @@ class GsSheet {
 
   set config(config) {
     this._config = this.gsValidateInstance.validate(config, 'object', 'GsSheet.config');
-  }
-
-  /**
-   * gsValidateInstance
-   *
-   * @type {object}
-   */
-  get gsValidateInstance() {
-    return this._gsValidateInstance;
-  }
-
-  set gsValidateInstance(gsValidateInstance) {
-    this._gsValidateInstance = gsValidateInstance;
   }
 
   /**

@@ -1,7 +1,7 @@
 /**
  * @file GsUtils.js
  */
-class GsUtils {
+class GsUtils extends Gs {
   /**
    * @class
    * @summary Utility methods.
@@ -11,6 +11,8 @@ class GsUtils {
    * @param {object} config.scriptIds      - IDs of the various Apps Scripts.
    */
   constructor(config = {}) {
+    super();
+
     // select the relevant arguments from the config object passed in
     this.deploymentIds = config.deploymentIds;
     this.scriptIds = config.scriptIds;
@@ -166,29 +168,6 @@ class GsUtils {
 
     // return an object for use on the frontend
     return obj;
-  }
-
-  /**
-   * getIndefiniteArticle
-   *
-   * @summary Get the appropriate indefinite article for the specified string
-   * @memberof GsUtils
-   * @static
-   * @param {string} str - String
-   * @returns {string} indefiniteArticle
-   * @see {@link https://github.com/dotherightthing/kaicycle-run-mobile-tests}
-   */
-  static getIndefiniteArticle(str) {
-    const firstLetter = str.slice(0, 1).toLowerCase();
-    const strLower = str.toLowerCase();
-
-    let art = (firstLetter.match(/^(a|e|i|o|u)$/)) ? 'an' : 'a';
-
-    if (strLower.match(/^(null|undefined)$/)) {
-      art = '';
-    }
-
-    return art;
   }
 
   /**

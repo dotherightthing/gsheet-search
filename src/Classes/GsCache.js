@@ -1,7 +1,7 @@
 /**
  * @file GsCache.js
  */
-class GsCache { // eslint-disable-line no-unused-vars
+class GsCache extends Gs { // eslint-disable-line no-unused-vars
   /**
    * @class
    * @summary Temporarily cache results that take time to fetch/compute (memoization).
@@ -12,8 +12,7 @@ class GsCache { // eslint-disable-line no-unused-vars
    * @see {@link https://developers.google.com/apps-script/guides/services/quotas}
    */
   constructor(config = {}) {
-    // instantiate required classes, optionally passing on the config object
-    this.gsValidateInstance = new GsValidate();
+    super();
 
     // select the relevant arguments from the config object passed in
     this.debug = config.debug;
@@ -32,19 +31,6 @@ class GsCache { // eslint-disable-line no-unused-vars
 
   set debug(debug) {
     this._debug = this.gsValidateInstance.validate(debug, 'boolean', 'GsCache.debug');
-  }
-
-  /**
-   * gsValidateInstance
-   *
-   * @type {object}
-   */
-  get gsValidateInstance() {
-    return this._gsValidateInstance;
-  }
-
-  set gsValidateInstance(gsValidateInstance) {
-    this._gsValidateInstance = gsValidateInstance;
   }
 
   /**
