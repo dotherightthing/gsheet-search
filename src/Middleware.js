@@ -6,12 +6,17 @@
  */
 
 /**
- * krmWriteToSheetFromRunFormObject
+ * gsSheetToJSON
  *
  * @summary Calls serverside function from clientside function (GsUiTypeahead.handleLoadClick)
- * @param {object} spreadsheet Spreadsheet
+ * @param {object} config Config
+ * @param {string} sheetName Sheet name
  * @returns {*} Sheet as JSON
+ * @todo This needs to be called differently when the app is consumed as a library
  */
-function gsSheetToJSON(spreadsheet) {
-  return GsSheet.sheetToJSON(spreadsheet);
+function gsSheetToJSON(config, sheetName) {
+  // instantiate required classes, optionally passing on the config object
+  const gsSheetInstance = new GsSheet(config);
+
+  return gsSheetInstance.sheetToJSON(sheetName);
 }

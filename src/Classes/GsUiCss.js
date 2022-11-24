@@ -12,7 +12,7 @@ class GsUiCss extends GsUi {
   constructor(config = {}) {
     super();
 
-    // accepts an object of named arguments
+    // select the relevant arguments from the config object passed in
     this.fixedPositionIds = config.fixedPositionIds;
 
     // subscribe to other module's events
@@ -38,7 +38,7 @@ class GsUiCss extends GsUi {
   }
 
   set fixedPositionIds(fixedPositionIds) {
-    this._fixedPositionIds = gsValidateInstance.validate(fixedPositionIds, 'Array', 'GsUiCss.fixedPositionIds');
+    this._fixedPositionIds = this.gsValidateInstance.validate(fixedPositionIds, 'Array', 'GsUiCss.fixedPositionIds');
   }
 
   /* Instance methods */

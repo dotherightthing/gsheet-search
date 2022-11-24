@@ -17,7 +17,10 @@ class GsUiTypeahead extends GsUi {
   constructor(config = {}) {
     super();
 
-    // accepts an object of named arguments
+    // is there a better way to pass this to loadData?
+    this.config = config;
+
+    // select the relevant arguments from the config object passed in
     this.filterClass = config.filterClass;
     this.filtersContainerId = config.filtersContainerId;
     this.filtersFocusTypeahead = config.filtersFocusTypeahead;
@@ -35,6 +38,19 @@ class GsUiTypeahead extends GsUi {
   /* Getters and Setters */
 
   /**
+   * config
+   *
+   * @type {object}
+   */
+  get config() {
+    return this._config;
+  }
+
+  set config(config) {
+    this._config = this.gsValidateInstance.validate(config, 'object', 'GsUiTypeahead.config');
+  }
+
+  /**
    * dataTokenIdentifier
    *
    * @type {string}
@@ -44,11 +60,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set dataTokenIdentifier(dataTokenIdentifier) {
-    if (dataTokenIdentifier.trim().length > 0) {
-      this._dataTokenIdentifier = dataTokenIdentifier;
-    } else {
-      throw new Error('GsUiTypeahead.dataTokenIdentifier cannot be empty');
-    }
+    this._dataTokenIdentifier = this.gsValidateInstance.validate(dataTokenIdentifier, 'string1', 'GsUiTypeahead.dataTokenIdentifier');
   }
 
   /**
@@ -61,11 +73,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set dataTokens(dataTokens) {
-    if (Array.isArray(dataTokens)) {
-      this._dataTokens = dataTokens;
-    } else {
-      throw new Error('GsUiTypeahead.dataTokens must be an Array');
-    }
+    this._dataTokens = this.gsValidateInstance.validate(dataTokens, 'Array', 'GsUiTypeahead.dataTokens');
   }
 
   /**
@@ -78,11 +86,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set filterClass(filterClass) {
-    if (filterClass.trim().length > 0) {
-      this._filterClass = filterClass;
-    } else {
-      throw new Error('GsUiTypeahead.filterClass cannot be empty');
-    }
+    this._filterClass = this.gsValidateInstance.validate(filterClass, 'string1', 'GsUiTypeahead.filterClass');
   }
 
   /**
@@ -95,11 +99,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set filtersContainerId(filtersContainerId) {
-    if (filtersContainerId.trim().length > 0) {
-      this._filtersContainerId = filtersContainerId;
-    } else {
-      throw new Error('GsUiTypeahead.filtersContainerId cannot be empty');
-    }
+    this._filtersContainerId = this.gsValidateInstance.validate(filtersContainerId, 'string1', 'GsUiTypeahead.filtersContainerId');
   }
 
   /**
@@ -112,11 +112,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set filtersFocusTypeahead(filtersFocusTypeahead) {
-    if (typeof filtersFocusTypeahead === 'boolean') {
-      this._filtersFocusTypeahead = filtersFocusTypeahead;
-    } else {
-      throw new Error('GsUiTypeahead.filtersFocusTypeahead must be a boolean');
-    }
+    this._filtersFocusTypeahead = this.gsValidateInstance.validate(filtersFocusTypeahead, 'boolean', 'GsUiTypeahead.filtersFocusTypeahead');
   }
 
   /**
@@ -129,11 +125,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set formId(formId) {
-    if (formId.trim().length > 0) {
-      this._formId = formId;
-    } else {
-      throw new Error('GsUiTypeahead.formId cannot be empty');
-    }
+    this._formId = this.gsValidateInstance.validate(formId, 'string1', 'GsUiTypeahead.formId');
   }
 
   /**
@@ -146,11 +138,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set radiosContainerId(radiosContainerId) {
-    if (radiosContainerId.trim().length > 0) {
-      this._radiosContainerId = radiosContainerId;
-    } else {
-      throw new Error('GsUiTypeahead.radiosContainerId cannot be empty');
-    }
+    this._radiosContainerId = this.gsValidateInstance.validate(radiosContainerId, 'string1', 'GsUiTypeahead.radiosContainerId');
   }
 
   /**
@@ -163,11 +151,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set spreadsheets(spreadsheets) {
-    if (Array.isArray(spreadsheets)) {
-      this._spreadsheets = spreadsheets;
-    } else {
-      throw new Error('GsUiTypeahead.spreadsheets must be an Array');
-    }
+    this._spreadsheets = this.gsValidateInstance.validate(spreadsheets, 'Array', 'GsUiTypeahead.spreadsheets');
   }
 
   /**
@@ -180,11 +164,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set storedData(storedData) {
-    if (Array.isArray(storedData)) {
-      this._storedData = storedData;
-    } else {
-      throw new Error('GsUiTypeahead.storedData must be an Array');
-    }
+    this._storedData = this.gsValidateInstance.validate(storedData, 'Array', 'GsUiTypeahead.storedData');
   }
 
   /**
@@ -197,11 +177,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set typeaheadId(typeaheadId) {
-    if (typeaheadId.trim().length > 0) {
-      this._typeaheadId = typeaheadId;
-    } else {
-      throw new Error('GsUiTypeahead.typeaheadId cannot be empty');
-    }
+    this._typeaheadId = this.gsValidateInstance.validate(typeaheadId, 'string1', 'GsUiTypeahead.typeaheadId');
   }
 
   /**
@@ -258,16 +234,9 @@ class GsUiTypeahead extends GsUi {
     if (name === 'dataSource') {
       const {
         sheetName,
-        spreadsheetId,
       } = changedEl.dataset;
 
-      google.script.run
-        .withSuccessHandler(this.initTypeahead)
-        .withFailureHandler(this.handleError)
-        .gsSheetToJSON({
-          id: spreadsheetId,
-          sheet: sheetName,
-        });
+      this.loadData(sheetName);
     } else if (type === 'checkbox') {
       this.handleFilterChange();
     }
@@ -335,13 +304,12 @@ class GsUiTypeahead extends GsUi {
 
     spreadsheets.forEach((spreadsheet, i) => {
       const {
-        id: spreadsheetId,
         sheet: sheetName,
       } = spreadsheet;
 
       html += '<div class="radio">';
-      html += `<input type="radio" class="source" name="dataSource" id="spreadsheet-${i}" value="spreadsheet-${i}" data-sheet-name="${sheetName}" data-spreadsheet-id="${spreadsheetId}">`;
-      html += `<label for="spreadsheet-${i}">${sheetName}</label>`;
+      html += `<input type="radio" class="source" name="dataSource" id="sheet-${i}" value="sheet-${i}" data-sheet-name="${sheetName}">`;
+      html += `<label for="sheet-${i}">${sheetName}</label>`;
       html += '</div>';
     });
 
@@ -349,7 +317,7 @@ class GsUiTypeahead extends GsUi {
 
     formEl.addEventListener('change', this.handleChange.bind(this));
 
-    document.getElementById('spreadsheet-0').click();
+    document.getElementById('sheet-0').click();
   }
 
   /**
@@ -445,6 +413,17 @@ class GsUiTypeahead extends GsUi {
       typeaheadInstance.destroy();
       _this.typeaheadInstance = null;
     }
+
+    /*
+    TODO: replace
+            business,
+            notes,
+            level,
+            no,
+            pod,
+            street,
+    with datatokens
+    */
 
     const typeaheadConfig = {
       input: document.getElementById(typeaheadId), // referencing a var here failed every second time
@@ -567,5 +546,25 @@ class GsUiTypeahead extends GsUi {
     const replacementPartsStr = replacementParts.join('');
 
     return replacementPartsStr;
+  }
+
+  /**
+   * loadData
+   *
+   * @summary Call the serverside function GsSheet.sheetToJSON via the middleware function gsSheetToJSON
+   * @memberof GsUiTypeahead
+   * @param {string} sheetName Sheet name
+   * @see {@link https://en.wikipedia.org/wiki/Telephone_numbers_in_New_Zealand}
+   * @todo If (standalone) - could have a generic callback function and the method as an argument, so that the consuming project would only need to have a single workaround function
+   */
+  loadData(sheetName) {
+    const {
+      config,
+    } = this;
+
+    google.script.run
+      .withSuccessHandler(this.initTypeahead)
+      .withFailureHandler(this.handleError)
+      .gsSheetToJSON(config, sheetName);
   }
 }

@@ -27,6 +27,27 @@ The web app reads and writes from a Google Sheet. Google Apps Script offers the 
 
 This script is deployed as a 'standalone' project to ensure that integration and testing yields predictable results across both the original and any cloned/test spreadsheets.
 
+## Architecture
+
+This project us based on the `krm` project:
+
+* that project is not used as a library except for unit testing
+* a global variable is directly assigned to the app config
+* other global variables are directly assigned to class instances
+* all of these globals can be referenced anywhere
+
+This project differs in the following ways:
+
+* the project can be used as a library
+* presumably the library loads, and then the host project runs its code
+* so the host project can't set globals for use by the library
+* and it would be intimidating and error prone to expect non-devs to do the instantiation inside the host project
+* so the app config is passed into the app and this is the only way the app can see it
+* so therefore the class instances would also need to be passed in
+* or global settings managed in a different way, e.g. script/document properties
+* currently this is resolved by instantiating required classes inside constructors
+* configuring them with the config object passed to the constructor
+
 ## Developing the app
 
 ### Prerequisites
@@ -165,9 +186,31 @@ The [MAN](MAN.md)ual is generated from JSDoc comments in the sourcecode (*Local 
 
 ### 1. Set up your spreadsheet
 
-1. In Google Sheets, set the `GsSearchResult` named range to the header of the column you wish to use for search results:
-   * Select Cell > Data > Named Ranges > "GsSearchResult" > Done
-2. Link to the source spreadsheets via the `spreadsheets` array in `Init.js.html`
+Example spreadsheet:
+
+| Business    | Address        | Phone       |
+|-------------|----------------|-------------|
+| AB Creative | 12 Main St     | 04 123 4567 |
+| DEF Jams    | 345 The Parade | 07 891 2345 |
+
+#### 1a. Specify the `GsSearchHeaders`
+
+1. In Google Sheets, select all cells in whichever row contains your column headers. These columns will be used to provide search data and search result filtering.
+2. Select `Data > Named Ranges > "GsSearchHeaders" > Done`
+
+In the example above you would select the cells containing `Business`, `Address` and `Phone`. `Phone` will also be our `GsResultHeader`, but the app will automatically exclude this column from the search data.
+
+#### 1b. Specify the `GsResultHeader`
+
+1. In Google Sheets, select only one column in whichever row contains your column headers. This column will be used to provide search results.
+2. Select `Data > Named Ranges > "GsResultHeader" > Done`
+
+In the example above you would select the cell containing `Phone`. This would allow you to search by `Business` or `Address`, in order to find the corresponding `Phone` number.
+
+#### 1c. Link the spreadsheet to the app
+
+1. Open the Apps Script editor
+2. Update the `spreadsheets` array in `Init.js.html`
 
 ### 2. Share the spreadsheet with any editors and app users
 

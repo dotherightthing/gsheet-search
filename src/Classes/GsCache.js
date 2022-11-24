@@ -12,7 +12,10 @@ class GsCache { // eslint-disable-line no-unused-vars
    * @see {@link https://developers.google.com/apps-script/guides/services/quotas}
    */
   constructor(config = {}) {
-    // accepts an object of named arguments
+    // instantiate required classes, optionally passing on the config object
+    this.gsValidateInstance = new GsValidate();
+
+    // select the relevant arguments from the config object passed in
     this.debug = config.debug;
   }
 
@@ -28,7 +31,20 @@ class GsCache { // eslint-disable-line no-unused-vars
   }
 
   set debug(debug) {
-    this._debug = GsUtils.validate(debug, 'boolean', 'GsCache.debug');
+    this._debug = this.gsValidateInstance.validate(debug, 'boolean', 'GsCache.debug');
+  }
+
+  /**
+   * gsValidateInstance
+   *
+   * @type {object}
+   */
+  get gsValidateInstance() {
+    return this._gsValidateInstance;
+  }
+
+  set gsValidateInstance(gsValidateInstance) {
+    this._gsValidateInstance = gsValidateInstance;
   }
 
   /**
@@ -46,6 +62,7 @@ class GsCache { // eslint-disable-line no-unused-vars
    * @returns {string} Success message
    * @static
    * @todo Only delete properties which start with '_cache', to allow config to live here too
+   * @todo getDocumentProperties might work better for spreadsheet specific properties
    */
   static clearCache() {
     const scriptProperties = PropertiesService.getScriptProperties();
@@ -63,9 +80,10 @@ class GsCache { // eslint-disable-line no-unused-vars
    * @static
    * @param {string} key Unique cache key
    * @returns {object} Cache value
+   * @todo Cannot destructure property 'debug' of 'gsCacheInstance' as it is undefined.
    */
   static getCacheItem(key) {
-    const { debug } = gsCacheInstance;
+    // const { debug } = gsCacheInstance;
 
     // console.log('getCacheItem %s', key);
     let value = null;
@@ -75,9 +93,9 @@ class GsCache { // eslint-disable-line no-unused-vars
     if (stored !== null) {
       value = JSON.parse(stored);
 
-      if (debug) {
-        console.log('Read script property %s as %s', key, value); // eslint-disable-line no-console
-      }
+      // if (debug) {
+      //   console.log('Read script property %s as %s', key, value); // eslint-disable-line no-console
+      // }
     }
 
     return value;
@@ -116,13 +134,13 @@ class GsCache { // eslint-disable-line no-unused-vars
    * @param {object} value Cache value
    */
   static setCacheItem(key, value) {
-    const { debug } = gsCacheInstance;
+    // const { debug } = gsCacheInstance; // TypeError: Cannot destructure property 'debug' of 'gsCacheInstance' as it is undefined.
     const scriptProperties = PropertiesService.getScriptProperties();
 
     scriptProperties.setProperty(key, JSON.stringify(value));
 
-    if (debug) {
-      console.log('Write script property %s as %s', key, value); // eslint-disable-line no-console
-    }
+    // if (debug) {
+    //   console.log('Write script property %s as %s', key, value); // eslint-disable-line no-console
+    // }
   }
 }

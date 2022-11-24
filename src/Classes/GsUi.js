@@ -8,6 +8,9 @@ class GsUi {
    * @public
    */
   constructor() {
+    // instantiate required classes, optionally passing on the config object
+    this.gsValidateInstance = new GsValidate();
+
     // private settings
     this.focusableSelector = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex="0"]:not(.dialog-tabtrap)';
 

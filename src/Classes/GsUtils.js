@@ -11,7 +11,7 @@ class GsUtils {
    * @param {object} config.scriptIds      - IDs of the various Apps Scripts.
    */
   constructor(config = {}) {
-    // accepts an object of named arguments
+    // select the relevant arguments from the config object passed in
     this.deploymentIds = config.deploymentIds;
     this.scriptIds = config.scriptIds;
   }
@@ -169,6 +169,29 @@ class GsUtils {
   }
 
   /**
+   * getIndefiniteArticle
+   *
+   * @summary Get the appropriate indefinite article for the specified string
+   * @memberof GsUtils
+   * @static
+   * @param {string} str - String
+   * @returns {string} indefiniteArticle
+   * @see {@link https://github.com/dotherightthing/kaicycle-run-mobile-tests}
+   */
+  static getIndefiniteArticle(str) {
+    const firstLetter = str.slice(0, 1).toLowerCase();
+    const strLower = str.toLowerCase();
+
+    let art = (firstLetter.match(/^(a|e|i|o|u)$/)) ? 'an' : 'a';
+
+    if (strLower.match(/^(null|undefined)$/)) {
+      art = '';
+    }
+
+    return art;
+  }
+
+  /**
    * objectToClassInstance
    *
    * @summary Caching an instance converts it into an object. Convert it back into an instance of a class.
@@ -259,96 +282,5 @@ class GsUtils {
     }
 
     return safeStr;
-  }
-
-  /**
-   * validate
-   *
-   * @summary Validate a value against a type.
-   * @memberof GsUtils
-   * @static
-   * @param {*} value - Value to validate
-   * @param {string} type - Expected type
-   * @param {string} identifier - Label to use in error message
-   * @param {boolean} condition - Validate if condition is true
-   * @returns {*} value
-   * @todo Test
-   * @todo Create KrmValidate class, split out individual tests to make DRY, add GAS validation, add correct prefix when multiple types
-   */
-  static validate(value, type, identifier, condition = true) {
-    if (condition) {
-      const types = type.split('|');
-      let valid = false;
-
-      // e.g. 'number|string|boolean'
-      if (types.length > 1) {
-        // value is valid if any type is valid
-        types.every((t) => {
-          if (t === 'Array') {
-            if (Array.isArray(value)) {
-              valid = true;
-              return false; // stop looping
-            }
-          } else if (t === 'null') {
-            if (value === null) {
-              valid = true;
-              return false; // stop looping
-            }
-          } else if (t === 'number') {
-            if (!Number.isNaN(value)) {
-              valid = true;
-              return false; // stop looping
-            }
-          } else if (t === 'object') {
-            if (Object.prototype.toString.call(value) === '[object Object]') {
-              valid = true;
-              return false; // stop looping
-            }
-          } else if (t === 'string1') {
-            if (value.trim().length > 0) {
-              valid = true;
-              return false; // stop looping
-            }
-          } else if (typeof value === t) {
-            valid = true;
-            return false; // stop looping
-          }
-
-          return true; // continue looping
-        });
-
-        if (!valid) {
-          throw new Error(`${identifier} must be a ${types.join(' or a ')}, not a ${typeof value}`);
-        }
-      } else if (type === 'Array') {
-        if (!Array.isArray(value)) {
-          throw new Error(`${identifier} must be an ${type}, not a ${typeof value}`);
-        }
-      } else if (type === 'boolean') {
-        if (typeof value !== 'boolean') {
-          throw new Error(`${identifier} must be a ${type}, not a ${typeof value}`);
-        }
-      } else if (type === 'number') {
-        if (Number.isNaN(value)) {
-          throw new Error(`${identifier} must be a ${type}, not a ${typeof value}`);
-        }
-      } else if (type === 'object') {
-        if (Object.prototype.toString.call(value) !== '[object Object]') {
-          throw new Error(`${identifier} must be an ${type}, not a ${typeof value}`);
-        }
-      } else if (type === 'string') {
-        if (typeof value !== 'string') {
-          throw new Error(`${identifier} must be a ${type}, not a ${typeof value}`);
-        }
-      } else if (type === 'string1') {
-        if (value.trim().length < 1) {
-          throw new Error(`${identifier} cannot be empty`);
-        }
-      } else {
-        throw new Error(`GsUtils.validate does not support type ${type}`);
-      }
-    }
-
-    return value;
   }
 }

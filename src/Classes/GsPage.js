@@ -11,17 +11,24 @@ class GsPage {
    * @param {string} config.imageLogo        - Image displayed at the bottom of the page and in the background.
    * @param {string} config.organisationName - Web browser page title.
    * @param {string} config.pageTitle        - Web browser page title.
+   * @param {string} config.sheetResultHeader - Column headers to use for results.
+   * @param {string} config.sheetSearchHeaders - Column headers to search and filter by.
    * @param {string} config.tplFile          - HTML template file.
    */
   constructor(config = {}) {
-    // accepts an object of named arguments
+    // instantiate required classes, optionally passing on the config object
+    this.gsValidateInstance = new GsValidate();
+
+    // select the relevant arguments from the config object passed in
     this.imageFavicon = config.imageFavicon;
     this.imageLogo = config.imageLogo;
     this.organisationName = config.organisationName;
     this.pageTitle = config.pageTitle;
+    this.sheetResultHeader = config.sheetResultHeader;
+    this.sheetSearchHeaders = config.sheetSearchHeaders;
     this.tplFile = config.tplFile;
 
-    this.template = this.createHtmlTemplate();
+    this.template = this.createHtmlTemplate(config);
   }
 
   /* Setters and Getters */
@@ -36,7 +43,7 @@ class GsPage {
   }
 
   set imageFavicon(imageFavicon) {
-    this._imageFavicon = GsUtils.validate(imageFavicon, 'string1', 'GsPage.imageFavicon');
+    this._imageFavicon = this.gsValidateInstance.validate(imageFavicon, 'string1', 'GsPage.imageFavicon');
   }
 
   /**
@@ -49,7 +56,7 @@ class GsPage {
   }
 
   set imageLogo(imageLogo) {
-    this._imageLogo = GsUtils.validate(imageLogo, 'string1', 'GsPage.imageLogo');
+    this._imageLogo = this.gsValidateInstance.validate(imageLogo, 'string1', 'GsPage.imageLogo');
   }
 
   /**
@@ -62,7 +69,7 @@ class GsPage {
   }
 
   set organisationName(organisationName) {
-    this._organisationName = GsUtils.validate(organisationName, 'string1', 'GsPage.organisationName');
+    this._organisationName = this.gsValidateInstance.validate(organisationName, 'string1', 'GsPage.organisationName');
   }
 
   /**
@@ -75,7 +82,7 @@ class GsPage {
   }
 
   set pageTitle(pageTitle) {
-    this._pageTitle = GsUtils.validate(pageTitle, 'string1', 'GsPage.pageTitle');
+    this._pageTitle = this.gsValidateInstance.validate(pageTitle, 'string1', 'GsPage.pageTitle');
   }
 
   /**
@@ -88,7 +95,7 @@ class GsPage {
   }
 
   set tplFile(tplFile) {
-    this._tplFile = GsUtils.validate(tplFile, 'string1', 'GsPage.tplFile');
+    this._tplFile = this.gsValidateInstance.validate(tplFile, 'string1', 'GsPage.tplFile');
   }
 
   /* Instance methods */
@@ -135,12 +142,13 @@ class GsPage {
    *
    * @summary Generates an HtmlTemplate object from the HTML file and the supplied template variables
    * @memberof GsPage
+   * @param {object} config Config
    * @returns {object} provided page in the urlquery '?page=[PAGEID]' or main index page
    * @see {@link https://developers.google.com/apps-script/guides/html/templates#code.gs_3}
    * @see {@link https://developers.google.com/apps-script/reference/html/html-template}
    * @see {@link https://www.youtube.com/watch?v=VyNJtjH84Aw}
    */
-  createHtmlTemplate() {
+  createHtmlTemplate(config) {
     const {
       imageLogo,
       organisationName,
@@ -153,6 +161,7 @@ class GsPage {
 
     // create variables object
     const tplVariables = {
+      tplConfig: JSON.stringify(config),
       tplCompanyLogo: imageLogo,
       tplCompanyName: organisationName,
       tplPageTitle: pageTitle,
