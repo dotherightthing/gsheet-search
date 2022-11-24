@@ -30,7 +30,9 @@ Variables
 
   --bg-ui: rgb(var(--rgb-lightergrey), .8);
   --bg-non-ui: rgb(var(--rgb-lightergrey));
-  --bg-tag-person: rgba(var(--rgb-lightergrey), .5);
+  --bg-address: rgba(var(--rgb-lightergrey), .5);
+  --bg-notes: rgba(255, 192, 203, .5);
+  --bg-person: rgba(253, 235, 92, 1);
 
   --bg-brand-light: 0, 212, 255;
   --bg-brand-light-1: rgba(var(--bg-brand-light), 1);
@@ -355,11 +357,16 @@ form input[type='reset'] {
 }
 
 .text-address {
-  background-color: var(--bg-tag-person);
+  background-color: var(--bg-address);
 }
 
 .text-business {
   background-color: var(--bg-brand-light-3);
+}
+
+.text-notes {
+  background-color: var(--bg-notes);
+  font-size: .9em;
 }
 
 .text-notes a {
@@ -371,7 +378,7 @@ form input[type='reset'] {
 }
 
 .text-person {
-  background-color: rgba(253, 235, 92, 1);
+  background-color: var(--bg-person);
   text-transform: uppercase;
   font-size: .9em;
 }
