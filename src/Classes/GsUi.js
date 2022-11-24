@@ -36,6 +36,19 @@ class GsUi {
     this._focusableSelector = gsValidateInstance.validate(focusableSelector, 'string1', 'GsUi.focusableSelector');
   }
 
+  /**
+   * gsValidateInstance
+   *
+   * @type {object}
+   */
+  get gsValidateInstance() {
+    return this._gsValidateInstance;
+  }
+
+  set gsValidateInstance(gsValidateInstance) {
+    this._gsValidateInstance = gsValidateInstance;
+  }
+
   /* Instance methods */
 
   /**
