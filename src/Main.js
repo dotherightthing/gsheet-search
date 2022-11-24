@@ -19,7 +19,7 @@ const gsConfig = {
   },
   imageFavicon: 'https://images.squarespace-cdn.com/content/v1/5509fa79e4b068c780a986a4/1439431242134-20WAGLYZ8SPU3VYP8K0E/favicon.png', // TODO use script property
   imageLogo: 'http://images.squarespace-cdn.com/content/v1/5509fa79e4b068c780a986a4/1499595271907-XVPJW6WB8ZGN618V1154/layer3.png?format=500w', // TODO use script property
-  namedRangeItems: [ // TODO hook up
+  namedRangeItems: [
     {
       name: 'GsResultHeader',
       description: 'This column will be used to provide search results.',
