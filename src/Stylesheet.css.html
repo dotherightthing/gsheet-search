@@ -140,12 +140,19 @@ Grids
   row-gap: var(--gutter-quarter);
 }
 
-.grid-pods {
+.grid-list {
   display: grid;
   grid-area: pods;
   grid-template-columns: 1fr 1fr;
   column-gap: var(--gutter-quarter);
   row-gap: var(--gutter-quarter);
+}
+
+.grid-list,
+.grid-list > * {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 /* ----------------------------------------
@@ -167,44 +174,6 @@ body {
 }
 
 /* ----------------------------------------
-.data-filters
--------------------------------------- */
-
-.data-filters {
-  margin-bottom: var(--gutter);
-}
-
-/* ----------------------------------------
-.data-sources
--------------------------------------- */
-
-.data-sources {
-  margin-bottom: var(--gutter);
-}
-
-/* ----------------------------------------
-#footer (pinned)
--------------------------------------- */
-
-footer {
-  position: fixed;
-  bottom: 0;
-  z-index: var(--z-index-footer-footer);
-  width: 100%;
-}
-
-.footer-version {
-  background-color: var(--bg-brand-mid);
-  color: var(--text-light);
-  text-align: center;
-  text-transform: uppercase;
-  font-size: .7rem;
-  padding: var(--gutter-half) 0 var(--gutter);
-  border-top: 1px dotted var(--bg-brand-dark);
-  margin: 0 auto;
-}
-
-/* ----------------------------------------
 form
 -------------------------------------- */
 
@@ -218,6 +187,7 @@ form {
 fieldset {
   padding: 0;
   border: 0;
+  margin-bottom: calc(1.5 * var(--gutter));
 }
 
 form input#typeahead {
@@ -273,9 +243,9 @@ form input[type='reset'] {
 .tt-suggestion {
   display: grid;
   grid-template-areas:
-    "business address"
-    "pods pods"
-    "notes notes"
+    "a b"
+    "results results"
+    "c c"
     "divider divider";
   grid-template-columns: 1fr 1fr;
   grid-gap: var(--gutter-quarter);
@@ -295,20 +265,45 @@ form input[type='reset'] {
   margin: var(--gutter-quarter) 0;
 }
 
-.tt-suggestion > .text-business {
-  grid-area: business;
+.tt-suggestion a {
+  text-decoration: underline;
 }
 
-.tt-suggestion > .text-address {
-  grid-area: address;
+.tt-suggestion .text {
+  text-transform: capitalize;
+  padding: 0 var(--gutter-quarter);
 }
 
-.tt-suggestion > .text-notes {
-  grid-area: notes;
+.tt-suggestion > .text-a {
+  grid-area: a;
+  background-color: var(--bg-brand-light-3);
 }
 
-.tt-suggestion > .text-pods {
-  grid-area: pods;
+.tt-suggestion > .text-b {
+  grid-area: b;
+  background-color: var(--bg-address);
+}
+
+.tt-suggestion > .text-c {
+  grid-area: c;
+  background-color: var(--bg-notes);
+  font-size: .9em;
+}
+
+/* a comma separated result in transformed to .tt-suggestion > .text-results > .text-result */
+.tt-suggestion > .text-results {
+  grid-area: results;
+  padding: 0;
+}
+
+.tt-suggestion > .text-result {
+  grid-area: results;
+}
+
+.tt-suggestion .text-result {
+  background-color: var(--bg-person);
+  text-transform: uppercase;
+  font-size: .9em;
 }
 
 .legend {
@@ -323,64 +318,85 @@ form input[type='reset'] {
   background-color: var(--bg-control-light);
 }
 
+.checkbox,
+.radio {
+  position: relative;
+  overflow: hidden;
+}
+
+.checkbox > input,
+.radio > input {
+  -webkit-appearance: none;
+  appearance: none;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0; /* prevent rounded triangle in Safari iOS */
+  margin: 0;
+
+  /* triangle */
+  -webkit-clip-path: polygon(100% 33%, 0% 100%, 100% 100%);
+  clip-path: polygon(100% 33%, 0% 100%, 100% 100%);
+}
+
+.checkbox > label,
+.radio > label {
+  display: block;
+  line-height: 1;
+  padding: var(--gutter-quarter) 2.5rem var(--gutter-half) var(--gutter-quarter);
+}
+
+.checkbox > input {
+  background-color: rgba(255, 0, 0, .75);
+}
+
+.radio > input {
+  background-color: rgba(255, 255, 255, .5);
+}
+
+.checkbox > input:checked,
+.radio > input:checked {
+  background-color: rgba(0, 50, 0, .75);
+}
+
 /* ----------------------------------------
-.logo
+#footer (pinned)
 -------------------------------------- */
 
-.logo {
-  position: absolute;
-  top: .8rem;
-  right: 1rem;
-  width: 6rem;
-  height: auto;
-  margin: 0 auto;
+footer {
+  position: fixed;
+  bottom: 0;
+  z-index: var(--z-index-footer-footer);
+  transform: translateY(-6.7rem) rotate(-30deg);
+  display: grid;
+  grid-template-columns: auto 6rem;
+  column-gap: var(--gutter-half);
+  align-items: end;
+  width: calc(100% + 2rem);
+  margin: 0 -1rem;
   mix-blend-mode: screen;
 }
 
-.logo > img {
+.footer-version {
+  color: var(--bg-brand-mid);
+  text-transform: uppercase;
+  font-size: .7rem;
+}
+
+.footer-logo {
+  mix-blend-mode: screen;
+}
+
+.footer-logo > img {
   display: block;
   position: relative;
   width: 100%;
   background-color: rgb(var(--rgb-white));
   padding: .5rem;
   -webkit-filter: invert(100%);
-  filter: invert(100%);
-}
-
-/* ----------------------------------------
-.text
--------------------------------------- */
-
-.text {
-  text-transform: capitalize;
-  padding: 0 var(--gutter-quarter);
-}
-
-.text-address {
-  background-color: var(--bg-address);
-}
-
-.text-business {
-  background-color: var(--bg-brand-light-3);
-}
-
-.text-notes {
-  background-color: var(--bg-notes);
-  font-size: .9em;
-}
-
-.text-notes a {
-  text-decoration: underline;
-}
-
-.text-pods {
-  padding: 0;
-}
-
-.text-person {
-  background-color: var(--bg-person);
-  text-transform: uppercase;
-  font-size: .9em;
+  filter: invert(100%); /* source is blue on white */
 }
 
 </style>

@@ -11,7 +11,7 @@ class GsUiTypeahead extends GsUi {
    * @param {boolean} config.filtersFocusTypeahead - Whether clicking a filter should re-focus the typeahead input (in order to display the results)
    * @param {string}  config.formId                - ID selector used to target the parent form
    * @param {string}  config.radiosContainerId     - ID selector used to target the radios container
-   * @param {Array}   config.spreadsheets          - Array of objects
+   * @param {Array}   config.sheets                - Array of sheet config objects
    * @param {string}  config.typeaheadId           - ID selector used to target the parent form
    */
   constructor(config = {}) {
@@ -26,7 +26,7 @@ class GsUiTypeahead extends GsUi {
     this.filtersFocusTypeahead = config.filtersFocusTypeahead;
     this.formId = config.formId;
     this.radiosContainerId = config.radiosContainerId;
-    this.spreadsheets = config.spreadsheets;
+    this.sheets = config.sheets;
     this.typeaheadId = config.typeaheadId;
 
     // subscribe to other module's events
@@ -48,6 +48,45 @@ class GsUiTypeahead extends GsUi {
 
   set config(config) {
     this._config = this.gsValidateInstance.validate(config, 'object', 'GsUiTypeahead.config');
+  }
+
+  /**
+   * dataTokensDisplayGroupA
+   *
+   * @type {Array}
+   */
+  get dataTokensDisplayGroupA() {
+    return this._dataTokensDisplayGroupA;
+  }
+
+  set dataTokensDisplayGroupA(dataTokensDisplayGroupA) {
+    this._dataTokensDisplayGroupA = this.gsValidateInstance.validate(dataTokensDisplayGroupA, 'Array', 'GsUiTypeahead.dataTokensDisplayGroupA');
+  }
+
+  /**
+   * dataTokensDisplayGroupB
+   *
+   * @type {Array}
+   */
+  get dataTokensDisplayGroupB() {
+    return this._dataTokensDisplayGroupB;
+  }
+
+  set dataTokensDisplayGroupB(dataTokensDisplayGroupB) {
+    this._dataTokensDisplayGroupB = this.gsValidateInstance.validate(dataTokensDisplayGroupB, 'Array', 'GsUiTypeahead.dataTokensDisplayGroupB');
+  }
+
+  /**
+   * dataTokensDisplayGroupC
+   *
+   * @type {Array}
+   */
+  get dataTokensDisplayGroupC() {
+    return this._dataTokensDisplayGroupC;
+  }
+
+  set dataTokensDisplayGroupC(dataTokensDisplayGroupC) {
+    this._dataTokensDisplayGroupC = this.gsValidateInstance.validate(dataTokensDisplayGroupC, 'Array', 'GsUiTypeahead.dataTokensDisplayGroupC');
   }
 
   /**
@@ -142,16 +181,16 @@ class GsUiTypeahead extends GsUi {
   }
 
   /**
-   * spreadsheets
+   * sheets
    *
    * @type {Array}
    */
-  get spreadsheets() {
-    return this._spreadsheets;
+  get sheets() {
+    return this._sheets;
   }
 
-  set spreadsheets(spreadsheets) {
-    this._spreadsheets = this.gsValidateInstance.validate(spreadsheets, 'Array', 'GsUiTypeahead.spreadsheets');
+  set sheets(sheets) {
+    this._sheets = this.gsValidateInstance.validate(sheets, 'Array', 'GsUiTypeahead.sheets');
   }
 
   /**
@@ -216,6 +255,100 @@ class GsUiTypeahead extends GsUi {
   }
 
   /**
+   * getTemplateHtml
+   *
+   * @memberof GsUiTypeahead
+   * @param {object} dataItem - A single row of typeahead search results
+   * @param {string} dataTokenIdentifier - Spreadsheet header of the results column
+   * @param {Array} dataTokensDisplayGroupA - Spreadsheet headers in display group A
+   * @param {Array} dataTokensDisplayGroupB - Spreadsheet headers in display group B
+   * @param {Array} dataTokensDisplayGroupC - Spreadsheet headers in display group C
+   * @returns {string} templateHtml
+   * @todo key order differs from spreadsheet order: https://github.com/dotherightthing/gsheet-search/issues/8
+   */
+  getTemplateHtml(
+    dataItem,
+    dataTokenIdentifier,
+    dataTokensDisplayGroupA,
+    dataTokensDisplayGroupB,
+    dataTokensDisplayGroupC,
+  ) {
+    const gridAreaA = [];
+    const gridAreaB = [];
+    const gridAreaC = [];
+    let gridAreaResult = '';
+    let templateHtml = '';
+
+    const keys = Object.keys(dataItem);
+
+    // console.log('getTemplateHtml - dataItem', dataItem);
+    // console.log('getTemplateHtml - keys', keys);
+
+    /*
+    // TODO: dataItem and key orders both differ from the spreadsheet order:
+
+    0: "no"
+    1: "notes"
+    2: "business"
+    3: "pod"
+    4: "level"
+    5: "street"
+    6: "abbr"
+    */
+
+    keys.forEach((key) => {
+      const value = dataItem[key];
+
+      if (value !== '') {
+        // values not assigned to a display area are discarded
+        if (dataTokensDisplayGroupA.includes(key)) {
+          gridAreaA.push(value);
+        } else if (dataTokensDisplayGroupB.includes(key)) {
+          gridAreaB.push(value);
+        } else if (dataTokensDisplayGroupC.includes(key)) {
+          gridAreaC.push(value);
+        } else if (dataTokenIdentifier === key) {
+          gridAreaResult = value;
+        }
+      }
+    });
+
+    // format display groups
+
+    if (gridAreaA.length) {
+      templateHtml += `<div class="text text-a">${gridAreaA.join(' ')}</div>`;
+    }
+
+    if (gridAreaB.length) {
+      templateHtml += `<div class="text text-b">${gridAreaB.join(' ')}</div>`;
+    }
+
+    if (gridAreaC.length) {
+      templateHtml += `<div class="text text-c">${gridAreaC.join(' ')}</div>`;
+    }
+
+    // format results
+
+    const gridAreaResultCount = gridAreaResult.split(',').length; // TODO trim spaces around comma if necessary
+
+    if (gridAreaResultCount > 1) {
+      templateHtml += `<div class="text text-results">
+        <ul class="grid-list">
+          <li class="text text-result">
+            ${gridAreaResult.split(',').join('</li><li class="text text-result">')}
+          </li>
+        </ul>
+      </div>`;
+    } else {
+      templateHtml += `<div class="text text-result">${gridAreaResult}</div>`;
+    }
+
+    templateHtml = this.linkPhoneNumbers(templateHtml);
+
+    return templateHtml;
+  }
+
+  /**
    * handleChange
    *
    * @memberof GsUiTypeahead
@@ -233,10 +366,10 @@ class GsUiTypeahead extends GsUi {
 
     if (name === 'dataSource') {
       const {
-        sheetName,
+        sheetTitle,
       } = changedEl.dataset;
 
-      this.loadData(sheetName);
+      this.loadData(sheetTitle);
     } else if (type === 'checkbox') {
       this.handleFilterChange();
     }
@@ -263,7 +396,7 @@ class GsUiTypeahead extends GsUi {
     });
 
     const obj = {
-      dataTokens: checkedFilters,
+      dataTokens: checkedFilters, // order ok
     };
 
     this.initTypeahead(obj);
@@ -289,7 +422,7 @@ class GsUiTypeahead extends GsUi {
     const {
       formId,
       radiosContainerId,
-      spreadsheets,
+      sheets,
       typeaheadId,
     } = this;
 
@@ -302,14 +435,14 @@ class GsUiTypeahead extends GsUi {
       return;
     }
 
-    spreadsheets.forEach((spreadsheet, i) => {
+    sheets.forEach((sheet, i) => {
       const {
-        sheet: sheetName,
-      } = spreadsheet;
+        title: sheetTitle,
+      } = sheet;
 
       html += '<div class="radio">';
-      html += `<input type="radio" class="source" name="dataSource" id="sheet-${i}" value="sheet-${i}" data-sheet-name="${sheetName}">`;
-      html += `<label for="sheet-${i}">${sheetName}</label>`;
+      html += `<input type="radio" class="source" name="dataSource" id="sheet-${i}" value="sheet-${i}" data-sheet-title="${sheetTitle}">`;
+      html += `<label for="sheet-${i}">${sheetTitle}</label>`;
       html += '</div>';
     });
 
@@ -360,7 +493,9 @@ class GsUiTypeahead extends GsUi {
       data, // supplied by server, on spreadsheet change
       dataTokens, // supplied by server and filters, on filter change or spreadsheet change
       dataTokenIdentifier, // supplied by server, on spreadsheet change
-      sheetName,
+      dataTokensDisplayGroupA, // supplied by server, on spreadsheet change
+      dataTokensDisplayGroupB, // supplied by server, on spreadsheet change
+      dataTokensDisplayGroupC, // supplied by server, on spreadsheet change
     } = obj;
 
     let _this;
@@ -373,7 +508,6 @@ class GsUiTypeahead extends GsUi {
     }
 
     const {
-      linkPhoneNumbers,
       typeaheadId,
     } = _this;
 
@@ -382,11 +516,10 @@ class GsUiTypeahead extends GsUi {
     // data will only be supplied by server, and only on a change of data source (via the radio buttons)
     // so we don't do this if no data was supplied because then a change of dataTokens would delete some filter options
     if (typeof data !== 'undefined') {
-      // without this step Typeahead won't accept the array
-      _dataTokens = JSON.parse(JSON.stringify(dataTokens));
+      // console.log('data[0]', data[0]); // order bad: no, notes, pod, business, level, street, abbr
 
-      // sort tokens for consistent placement in the filters
-      _dataTokens = _dataTokens.sort();
+      // without this step Typeahead won't accept the array
+      _dataTokens = JSON.parse(JSON.stringify(dataTokens)); // order ok
 
       if (_this.filtersFocusTypeahead) {
         _this.focusTypeaheadOnInit();
@@ -395,11 +528,17 @@ class GsUiTypeahead extends GsUi {
       // store properties supplied by the server so they be reused
       // when only the dataTokens are updated by the checkbox filters
       _this.dataTokenIdentifier = dataTokenIdentifier;
+      _this.dataTokensDisplayGroupA = dataTokensDisplayGroupA;
+      _this.dataTokensDisplayGroupB = dataTokensDisplayGroupB;
+      _this.dataTokensDisplayGroupC = dataTokensDisplayGroupC;
       _this.storedData = JSON.parse(JSON.stringify(data));
-      _this.initFilters(_dataTokens);
+      _this.initFilters(_dataTokens); // order ok
     }
 
     const {
+      dataTokensDisplayGroupA: displayGroupA,
+      dataTokensDisplayGroupB: displayGroupB,
+      dataTokensDisplayGroupC: displayGroupC,
       dataTokenIdentifier: identifier,
       storedData,
       typeaheadInstance,
@@ -431,37 +570,14 @@ class GsUiTypeahead extends GsUi {
       autoSelect: false,
       highlight: true,
       templates: {
-        suggestion: (item) => {
-          let html = '';
-
-          // TODO add formatting functions to handle different kinds of data
-          // TODO support GsResultHeader1, GsResultHeader2, GsSearchHeaders1, GsSearchHeaders2, as there can't be two named ranges with the same name
-          if (sheetName === 'Names') {
-            const {
-              business,
-              // abbr,
-              pod,
-              level,
-              no,
-              street,
-              notes,
-            } = item;
-
-            const _business = business || '';
-            const pods = pod.split(', ');
-            const podsHtml = `<span class="text text-person">${pods.join('</span><span class="text text-person">')}</span>`;
-            const _level = item.level ? `${level}/` : '';
-            const _no = no || '';
-            const _street = street || '';
-            const _notes = notes ? `<div class="text text-notes">${linkPhoneNumbers(notes)}</div>` : '';
-
-            html = `<div class="text text-business">${_business}</div>
-            <div class="text text-address">${_level}${_no} ${_street}</div>
-            <div class="text text-pods">
-              <div class="grid-pods">${podsHtml}</div>
-            </div>
-            ${_notes}`;
-          }
+        suggestion: (dataItem) => {
+          const html = _this.getTemplateHtml(
+            dataItem,
+            identifier,
+            displayGroupA,
+            displayGroupB,
+            displayGroupC,
+          );
 
           return html;
         },
@@ -552,11 +668,11 @@ class GsUiTypeahead extends GsUi {
    *
    * @summary Call the serverside function GsSheet.sheetToJSON via the middleware function gsSheetToJSON
    * @memberof GsUiTypeahead
-   * @param {string} sheetName Sheet name
+   * @param {string} sheetTitle Sheet title
    * @see {@link https://en.wikipedia.org/wiki/Telephone_numbers_in_New_Zealand}
    * @todo If (standalone) - could have a generic callback function and the method as an argument, so that the consuming project would only need to have a single workaround function
    */
-  loadData(sheetName) {
+  loadData(sheetTitle) {
     const {
       config,
     } = this;
@@ -564,6 +680,6 @@ class GsUiTypeahead extends GsUi {
     google.script.run
       .withSuccessHandler(this.initTypeahead)
       .withFailureHandler(this.handleError)
-      .gsSheetToJSON(config, sheetName);
+      .gsSheetToJSON(config, sheetTitle);
   }
 }

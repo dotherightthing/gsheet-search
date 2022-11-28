@@ -19,32 +19,26 @@ const gsConfig = {
   },
   imageFavicon: 'https://images.squarespace-cdn.com/content/v1/5509fa79e4b068c780a986a4/1439431242134-20WAGLYZ8SPU3VYP8K0E/favicon.png', // TODO use script property
   imageLogo: 'http://images.squarespace-cdn.com/content/v1/5509fa79e4b068c780a986a4/1499595271907-XVPJW6WB8ZGN618V1154/layer3.png?format=500w', // TODO use script property
-  namedRangeItems: [
-    {
-      name: 'GsResultHeader',
-      description: 'This column will be used to provide search results.',
-    },
-    {
-      name: 'GsSearchHeaders',
-      description: 'These columns will be used to provide search data and search result filtering.',
-    },
-  ],
   organisationName: 'Nocar Cargo', // TODO use script property
   pageTitle: 'Gsheet Search', // TODO use spreadsheet title
   scriptIds: {
     app: '1_5vomwUsWKlMA07DtaWmGBJlup7M-kCIhcnVhH4PdLf_pgGNmqPTxoHj', // TODO redundant
   },
-  sheetName: 'Names', // TODO get all sheets from spreadsheet
-  spreadsheets: [
+  sheets: [
     {
-      id: '1n4QOxfS3hDe3v9KKZt3HObIQZpQnk2sKT-GFcMXHjOc',
-      sheet: 'Names',
+      title: 'Names',
+      namedRangePrefix: 'GsSheet1',
     },
-    // {
-    //   id: '1n4QOxfS3hDe3v9KKZt3HObIQZpQnk2sKT-GFcMXHjOc',
-    //   sheet: 'Door codes (imp)',
-    // },
+    {
+      title: 'Door codes',
+      namedRangePrefix: 'GsSheet2',
+    },
+    {
+      title: 'Terms of service',
+      namedRangePrefix: 'GsSheet3',
+    },
   ],
+  spreadsheetId: '1n4QOxfS3hDe3v9KKZt3HObIQZpQnk2sKT-GFcMXHjOc',
   tplFile: 'Search', // TODO hardcode
   fixedPositionIds: [ 'footer' ],
   formId: 'search',

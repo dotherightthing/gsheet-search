@@ -8,10 +8,6 @@
     }); ?>
   </head>
   <body>
-    <h1 class="logo">
-      <img src="<?= tplCompanyLogo ?>" alt="<?= tplCompanyName ?>">
-    </h1>
-
     <form id="search">
       <fieldset class="data-sources grid grid-1-1-1" id="data-sources"></fieldset>
       <fieldset class="data-filters grid grid-1-1-1" id="data-filters"></fieldset>
@@ -27,9 +23,10 @@
     <!-- start footer -->
     <footer id="footer">
       <div class="footer-version">
-        <div class="wrapper">
-          <?= tplPageTitle ?> v0.0.0
-        </div>
+        <?= tplPageTitle ?> v0.0.0
+      </div>
+      <div class="footer-logo">
+        <img src="<?= tplCompanyLogo ?>" alt="<?= tplCompanyName ?>">
       </div>
     </footer>
     <!-- end footer -->

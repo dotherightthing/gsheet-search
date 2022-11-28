@@ -193,24 +193,41 @@ Example spreadsheet:
 | AB Creative | 12 Main St     | 04 123 4567 |
 | DEF Jams    | 345 The Parade | 07 891 2345 |
 
-#### 1a. Specify the `GsSearchHeaders`
+Note: If you multiple sheets, use the `namedRangePrefix` option in the `sheets` array to use differentiate named ranges on additional sheets. For example, `GsSheet1...` could reference your first sheet, and `GsSheet2...` your second. The examples below use a prefix of `GsSheet1` to indicate the first sheet.
+
+#### 1a. Specify `GsSheet1Search`
 
 1. In Google Sheets, select all cells in whichever row contains your column headers. These columns will be used to provide search data and search result filtering.
-2. Select `Data > Named Ranges > "GsSearchHeaders" > Done`
+2. Select `Data > Named Ranges > "GsSheet1Search" > Done`
 
 In the example above you would select the cells containing `Business`, `Address` and `Phone`. `Phone` will also be our `GsResultHeader`, but the app will automatically exclude this column from the search data.
 
-#### 1b. Specify the `GsResultHeader`
+#### 1b. Specify the `GsSheet1Result`
 
-1. In Google Sheets, select only one column in whichever row contains your column headers. This column will be used to provide search results.
-2. Select `Data > Named Ranges > "GsResultHeader" > Done`
+1. In Google Sheets, select only one column in whichever row contains your column headers. This column will be used to provide search results. This columns will also appear in grid area `result` (or `results`) of the layout.
+2. Select `Data > Named Ranges > "GsSheet1Result" > Done`
 
 In the example above you would select the cell containing `Phone`. This would allow you to search by `Business` or `Address`, in order to find the corresponding `Phone` number.
 
-#### 1c. Link the spreadsheet to the app
+#### 1c. Specify `GsSheet1DisplayGroupA`
+
+1. In Google Sheets, select one or more column in whichever row contains your column headers. These columns will appear in grid area `a` of the layout.
+2. Select `Data > Named Ranges > "GsSheet1DisplayGroupA" > Done`
+
+#### 1d. Specify `GsSheet1DisplayGroupB`
+
+1. In Google Sheets, select one or more column in whichever row contains your column headers. These columns will appear in grid area `b` of the layout.
+2. Select `Data > Named Ranges > "GsSheet1DisplayGroupB" > Done`
+
+#### 1e. Specify `GsSheet1DisplayGroupC`
+
+1. In Google Sheets, select one or more column in whichever row contains your column headers. These columns will appear in grid area `c` of the layout.
+2. Select `Data > Named Ranges > "GsSheet1DisplayGroupC" > Done`
+
+#### 1f. Link the spreadsheet to the app
 
 1. Open the Apps Script editor
-2. Update the `spreadsheets` array in `Init.js.html`
+2. Update the `spreadsheetId` value and `sheets` array in `Init.js.html`
 
 ### 2. Share the spreadsheet with any editors and app users
 

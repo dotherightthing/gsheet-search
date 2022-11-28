@@ -5,8 +5,9 @@ class GsSheet extends Gs {
   /**
    * @class
    * @summary Properties and methods relating to querying of the spreadsheet.
-   * @param {object} config                 - Module configuration.
-   * @param {Array}  config.namedRangeItems - Name/description/validation of the named ranges set in the spreadsheet (this is an array of objects).
+   * @param {object} config               - Module configuration.
+   * @param {Array}  config.sheets        - Properties relating to a sheet within a spreadsheet
+   * @param {string} config.spreadsheetId - ID of a spreadsheet which contains sheets
    */
   constructor(config = {}) {
     super();
@@ -15,7 +16,8 @@ class GsSheet extends Gs {
     this.config = config;
 
     // select the relevant arguments from the config object passed in
-    this.namedRangeItems = config.namedRangeItems;
+    this.sheets = config.sheets;
+    this.spreadsheetId = config.spreadsheetId;
   }
 
   /* Setters and Getters */
@@ -34,77 +36,46 @@ class GsSheet extends Gs {
   }
 
   /**
-   * namedRangeItems
+   * sheets
    *
    * @type {Array}
    */
-  get namedRangeItems() {
-    return this._namedRangeItems;
+  get sheets() {
+    return this._sheets;
   }
 
-  set namedRangeItems(namedRangeItems) {
-    this._namedRangeItems = this.gsValidateInstance.validate(namedRangeItems, 'Array', 'GsSheet.namedRangeItems');
+  set sheets(sheets) {
+    this._sheets = this.gsValidateInstance.validate(sheets, 'Array', 'GsSheet.sheets');
+  }
+
+  /**
+   * spreadsheetId
+   *
+   * @type {string}
+   */
+  get spreadsheetId() {
+    return this._spreadsheetId;
+  }
+
+  set spreadsheetId(spreadsheetId) {
+    this._spreadsheetId = this.gsValidateInstance.validate(spreadsheetId, 'string1', 'GsSheet.spreadsheetId');
   }
 
   /* Instance methods */
 
   /**
-   * getAllNamedRangeValues
-   *
-   * @summary Retrieve, validate and cache all named ranges upfront, to mitigate app failure due to bad input.
-   * @memberof GsSheet
-   * @returns {object} namedRangeValues
-   * @see {@link https://stackoverflow.com/questions/35288998/how-to-remove-data-validations}
-   */
-  getAllNamedRangeValues() {
-    const {
-      namedRangeItems,
-    } = this;
-
-    const cacheKey = '_named-range-values';
-    let namedRangeValues = GsCache.getCacheItem(cacheKey);
-
-    if ((typeof namedRangeValues === 'object') && (namedRangeValues !== null)) {
-      if (Object.keys(namedRangeValues).length === namedRangeItems.length) {
-        return namedRangeValues;
-      }
-    }
-
-    namedRangeValues = {};
-
-    namedRangeItems.forEach((namedRangeName) => {
-      const {
-        name,
-        description,
-      } = namedRangeName;
-
-      let val = this.getNamedRangeValues(name);
-
-      if (!Array.isArray(val)) {
-        val = val[0]; // eslint-disable-line prefer-destructuring
-      }
-
-      if (val.length < 1) {
-        throw new Error(`Gsheet Search cannot find the named range ${name} (${description})`);
-      }
-
-      namedRangeValues[name] = val;
-    });
-
-    GsCache.setCacheItem(cacheKey, namedRangeValues);
-
-    return namedRangeValues;
-  }
-
-  /**
    * getNamedRange
    *
+   * @summary Get the range (on any sheet) referenced to by a named range in a spreadsheet.
    * @memberof GsSheet
-   * @param {string} spreadsheetId Spreadsheet ID
    * @param {string} name Name
    * @returns {Range} namedRange
    */
-  getNamedRange(spreadsheetId, name) {
+  getNamedRange(name) {
+    const {
+      spreadsheetId,
+    } = this;
+
     let namedRange = {};
     const ss = SpreadsheetApp.openById(spreadsheetId);
     const namedRanges = ss.getNamedRanges();
@@ -124,31 +95,23 @@ class GsSheet extends Gs {
    *
    * @summary Convert spreadsheet to a JSON representation
    * @memberof GsSheet
-   * @param {string} sheetName Sheet name
+   * @param {string} sheetTitle Sheet title
    * @returns {object} Sheet
    */
-  sheetToJSON(sheetName) {
+  sheetToJSON(sheetTitle) {
     const {
-      config,
+      sheets,
+      spreadsheetId,
     } = this;
-
-    const {
-      spreadsheets,
-    } = config;
-
-    const {
-      id: spreadsheetId,
-    } = spreadsheets[0];
 
     // read from cache if there
 
-    const cacheKey = `_json-${spreadsheetId}-${sheetName}`;
+    const sheetTitleSafe = GsUtils.stringToId(sheetTitle);
+    const cacheKey = `_json-${sheetTitleSafe}-${spreadsheetId}`;
     let json = GsCache.getCacheItem(cacheKey);
 
     // TypeError: GsValidate.isObject is not a function
-    // if (GsValidate.isObject(json)) {
-    //   return json;
-    // }
+    // if (GsValidate.isObject(json)) { ... }
 
     if (Object.prototype.toString.call(json) === '[object Object]') {
       return json;
@@ -156,26 +119,36 @@ class GsSheet extends Gs {
 
     // else create then write to cache
 
-    const sheet = GsSheet.getSheet(spreadsheetId, sheetName);
+    const sheetObj = sheets.filter((sheet) => (sheet.title === sheetTitle));
+
+    if (typeof sheetObj === 'undefined') {
+      throw new Error(`sheets object does not contain an entry with title "${sheetTitle}"`);
+    }
 
     const {
-      GsResultHeader,
-      GsSearchHeaders,
-    } = this.getAllNamedRangeValues();
+      namedRangePrefix,
+    } = sheetObj[0];
 
-    const searchHeadersRange = this.getNamedRange(spreadsheetId, 'GsSearchHeaders');
-    const dataRowStart = searchHeadersRange.getRow() + 1;
-    const dataColStart = searchHeadersRange.getColumn();
-    const dataColEnd = searchHeadersRange.getLastColumn();
+    // an admin dialog would be best, but for now we'll use named ranges
+
+    const searchRange = this.getNamedRange(`${namedRangePrefix}Search`);
+    const sheet = GsSheet.getSheet(spreadsheetId, sheetTitle);
+
+    const dataRowStart = searchRange.getRow() + 1;
+    const dataColStart = searchRange.getColumn();
+    const dataColEnd = searchRange.getLastColumn();
     const dataRowEnd = sheet.getLastRow() - 1;
+
+    let dataTokens = this.getNamedRangeValues(`${namedRangePrefix}Search`).map((val) => GsUtils.stringToId(val));
+    const dataTokensDisplayGroupA = this.getNamedRangeValues(`${namedRangePrefix}DisplayGroupA`).map((val) => GsUtils.stringToId(val));
+    const dataTokensDisplayGroupB = this.getNamedRangeValues(`${namedRangePrefix}DisplayGroupB`).map((val) => GsUtils.stringToId(val));
+    const dataTokensDisplayGroupC = this.getNamedRangeValues(`${namedRangePrefix}DisplayGroupC`).map((val) => GsUtils.stringToId(val));
+    const dataTokenIdentifier = this.getNamedRangeValues(`${namedRangePrefix}Result`).map((val) => GsUtils.stringToId(val))[0];
 
     // getRange(row, column, number of rows, number of columns)
     const dataRows = sheet.getRange(dataRowStart, dataColStart, dataRowEnd, dataColEnd);
     const dataRowValues = dataRows.getValues(); // arrays, each one represents a row of columns
     const data = [];
-
-    const dataTokenIdentifier = GsUtils.stringToId(GsResultHeader[0]);
-    let dataTokens = GsSearchHeaders.map((val) => GsUtils.stringToId(val));
 
     // generate the complete data set
     dataRowValues.forEach((rowArray) => {
@@ -192,24 +165,17 @@ class GsSheet extends Gs {
     // exclude the results column from the searchable columns
     dataTokens = dataTokens.filter((val) => (val !== dataTokenIdentifier));
 
-    // const data = [
-    //   {
-    //     business: 'Acme & Co',
-    //     address: '123 Main St',
-    //     phone: 44 555 6666
-    //     notes: 'Closed on Fridays'
-    //   },
-    // ];
-
     json = {
-      data,
-      dataTokens,
-      dataTokenIdentifier,
-      sheetName,
+      data, // [ { header1: 'row1Value', header2: 'row1Value', header3: 'row1Value', header4: 'row1Value', header5: 'row1Value' }, { header1: 'row2Value', ... } ]
+      dataTokens, // [ 'header1', 'header2', 'header3', 'header4', 'header5' ] - order ok
+      dataTokenIdentifier, // 'header2'
+      dataTokensDisplayGroupA, // [ 'header1' ]
+      dataTokensDisplayGroupB, // [ 'header3', 'header4' ]
+      dataTokensDisplayGroupC, // [ 'header5' ]
     };
 
     if (Object.prototype.toString.call(json) === '[object Object]') {
-      GsCache.setCacheItem(cacheKey, json);
+      GsCache.setCacheItem(cacheKey, json); // order ok when inspected in Script Properties
     }
 
     return json;
@@ -224,23 +190,10 @@ class GsSheet extends Gs {
    * @returns {Array} namedRangeValues
    */
   getNamedRangeValues(name, onlyFirst = false) {
-    const {
-      config,
-    } = this;
-
-    const {
-      spreadsheets,
-    } = config;
-
-    const {
-      id: spreadsheetId,
-    } = spreadsheets[0];
-
-    const namedRange = this.getNamedRange(spreadsheetId, name);
-
+    const namedRange = this.getNamedRange(name);
     let namedRangeValues = [];
 
-    if (namedRange) {
+    if (typeof namedRange.getValues === 'function') {
       namedRangeValues = namedRange.getValues().flat(); // eslint-disable-line prefer-destructuring
       namedRangeValues = namedRangeValues.filter((rangeItem) => rangeItem !== '');
     }
@@ -255,14 +208,14 @@ class GsSheet extends Gs {
    * @memberof GsSheet
    * @static
    * @param {string} spreadsheetId Spreadsheet ID
-   * @param {string} sheetName Sheet name
+   * @param {string} sheetTitle Sheet name
    * @returns {object} Sheet
    */
-  static getSheet(spreadsheetId, sheetName) {
+  static getSheet(spreadsheetId, sheetTitle) {
     let sheet = null;
 
     try {
-      sheet = SpreadsheetApp.openById(spreadsheetId).getSheetByName(sheetName);
+      sheet = SpreadsheetApp.openById(spreadsheetId).getSheetByName(sheetTitle);
     } catch (error) {
       console.error(error); // eslint-disable-line no-console
     }
