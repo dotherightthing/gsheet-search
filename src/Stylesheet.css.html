@@ -161,7 +161,7 @@ body
 
 body {
   min-height: 100vh;
-  background: linear-gradient(-30deg, var(--bg-brand-mid) 0%, var(--bg-brand-mid) 26%, var(--bg-brand-light-1) 26%, var(--bg-brand-light-1) 100%);
+  background: var(--bg-brand-light-1);
   color: var(--text-dark);
   font-family: var(--font-sans-serif-brand);
   /* allow for elements with fixed position */
@@ -171,6 +171,7 @@ body {
   /* Disable pull-to-refresh and overscroll glow effect, retain swipe navigation */
   /* See: https://developer.chrome.com/blog/overscroll-behavior/ */
   overscroll-behavior-y: none;
+  overflow: hidden; /* suppress scroll bars from rotated footer */
 }
 
 /* ----------------------------------------
@@ -366,17 +367,21 @@ form input[type='reset'] {
 -------------------------------------- */
 
 footer {
-  position: fixed;
-  bottom: 0;
-  z-index: var(--z-index-footer-footer);
-  transform: translateY(-6.7rem) rotate(-30deg);
+  position: fixed; /* fixed also ok */
+  right: 0;
+  bottom: -20vw;
+  left: 0;
+  /* z-index: var(--z-index-footer-footer); */
+  transform: rotate(-30deg);
   display: grid;
   grid-template-columns: auto 6rem;
   column-gap: var(--gutter-half);
   align-items: end;
-  width: calc(100% + 2rem);
-  margin: 0 -1rem;
-  mix-blend-mode: screen;
+  width: 117vw;
+  padding: 0 4vw 0 25vw;
+  border-bottom: 40vw solid var(--bg-brand-mid);
+  margin: 0;
+  mix-blend-mode: luminosity; /* darken, multiply, luminosity */
 }
 
 .footer-version {
@@ -385,18 +390,14 @@ footer {
   font-size: .7rem;
 }
 
-.footer-logo {
-  mix-blend-mode: screen;
-}
-
 .footer-logo > img {
   display: block;
   position: relative;
   width: 100%;
   background-color: rgb(var(--rgb-white));
   padding: .5rem;
-  -webkit-filter: invert(100%);
-  filter: invert(100%); /* source is blue on white */
+  /* -webkit-filter: invert(100%); */
+  /* filter: invert(100%); source is blue on white */
 }
 
 </style>
