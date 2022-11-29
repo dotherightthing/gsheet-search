@@ -42,6 +42,12 @@ Variables
   --bg-brand-dark: rgba(2, 0, 36, 1);
   --bg-control-light: rgba(var(--rgb-white), .5);
 
+  --checkedbox-checked: rgba(0, 50, 0, .75);
+  --checkedbox-unchecked: rgba(255, 0, 0, .75);
+
+  --radio-checked: rgba(0, 50, 0, .75);
+  --radio-unchecked: rgba(255, 255, 255, .5);
+
   --gutter: .75rem;
   --gutter-half: calc(var(--gutter) / 2);
   --gutter-quarter: calc(var(--gutter) / 4);
@@ -350,16 +356,19 @@ form input[type='reset'] {
 }
 
 .checkbox > input {
-  background-color: rgba(255, 0, 0, .75);
+  background-color: var(--checkedbox-unchecked);
 }
 
 .radio > input {
-  background-color: rgba(255, 255, 255, .5);
+  background-color: var(--radio-unchecked);
 }
 
-.checkbox > input:checked,
+.checkbox > input:checked {
+  background-color: var(--checkedbox-checked);
+}
+
 .radio > input:checked {
-  background-color: rgba(0, 50, 0, .75);
+  background-color: var(--radio-checked);
 }
 
 /* ----------------------------------------
