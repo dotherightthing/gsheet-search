@@ -67,7 +67,6 @@
   "dependencies": {
     "eslint-plugin-jsdoc": "^39.6.2",
     "pubsub.js": "^1.5.2",
-    "serve": "^14.1.1",
     "typeahead-standalone": "^4.13.0"
   }
 }
