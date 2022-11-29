@@ -8,14 +8,12 @@ class GsUtils extends Gs {
    * @public
    * @param {object} config                - Module configuration.
    * @param {object} config.deploymentIds  - Deployment IDs of this standalone project.
-   * @param {object} config.scriptIds      - IDs of the various Apps Scripts.
    */
   constructor(config = {}) {
     super();
 
     // select the relevant arguments from the config object passed in
     this.deploymentIds = config.deploymentIds;
-    this.scriptIds = config.scriptIds;
   }
 
   /* Setters and Getters */
@@ -37,89 +35,7 @@ class GsUtils extends Gs {
     this._deploymentIds = { ...ids };
   }
 
-  /**
-   * scriptIds
-   *
-   * @type {object}
-   */
-  get scriptIds() {
-    return this._scriptIds;
-  }
-
-  set scriptIds(ids) {
-    if (Object.prototype.toString.call(ids) !== '[object Object]') {
-      throw new Error('GsUtils.scriptIds must be an object');
-    }
-
-    this._scriptIds = { ...ids };
-  }
-
   /* Instance methods */
-
-  /**
-   * getEnv
-   *
-   * @summary Get environment variables.
-   * @memberof GsUtils
-   * @returns {object} Environment variables
-   */
-  getEnv() {
-    const {
-      deploymentIds,
-      scriptIds,
-    } = this;
-
-    const {
-      appsScriptEditor: appsScriptEditorDeploymentId,
-      head: headDeploymentId,
-      pub: pubDeploymentId,
-    } = deploymentIds;
-
-    const {
-      app: appScriptId,
-      unitTests: unitTestsScriptId,
-      masterSpreadsheet: masterSpreadsheetScriptId,
-    } = scriptIds;
-
-    const env = {};
-    let scriptId = '';
-    let scriptUrl = '';
-
-    try {
-      scriptId = ScriptApp.getScriptId();
-      scriptUrl = ScriptApp.getService().getUrl();
-    } catch (error) {
-      console.error(error); // eslint-disable-line no-console
-    }
-
-    if (scriptId.indexOf(masterSpreadsheetScriptId) !== -1) {
-      // spreadsheet onOpen/onEdit triggers
-      env.deployment = null;
-      env.deploymentAbbr = null;
-      env.deploymenttId = null;
-    } else if (scriptId.indexOf(appScriptId) !== -1) {
-      // mobile app
-      if (scriptUrl.indexOf(headDeploymentId) !== -1) {
-        env.deployment = 'TEST Build';
-        env.deploymentAbbr = 'DEV';
-        env.deploymenttId = headDeploymentId;
-      } else if (scriptUrl.indexOf(pubDeploymentId) !== -1) {
-        env.deployment = 'STABLE Build';
-        env.deploymentAbbr = 'STABLE';
-        env.deploymenttId = pubDeploymentId;
-      } else if (scriptUrl.indexOf(appsScriptEditorDeploymentId) !== -1) {
-        env.deployment = 'TEST Build';
-        env.deploymentAbbr = 'DEV';
-        env.deploymenttId = headDeploymentId;
-      }
-    } else if (scriptId.indexOf(unitTestsScriptId) !== -1) {
-      env.deployment = 'TEST Build';
-      env.deploymentAbbr = 'DEV';
-      env.deploymenttId = headDeploymentId;
-    }
-
-    return env;
-  }
 
   /* Static methods */
 

@@ -11,19 +11,13 @@
 let standalone = true;
 
 const gsConfig = {
-  debug: false,
   deploymentIds: {
-    appsScriptEditor: '1_5vomwUsWKlMA07DtaWmGBJlup7M-kCIhcnVhH4PdLf_pgGNmqPTxoHj', // TODO redundant
     head: 'AKfycbxDAU1hFDr2beTfsx9TkcIBqoUkIbfCgoKsCdDYsxwc', // TODO use script property
-    // pub: '',
   },
   imageFavicon: 'https://images.squarespace-cdn.com/content/v1/5509fa79e4b068c780a986a4/1439431242134-20WAGLYZ8SPU3VYP8K0E/favicon.png', // TODO use script property
   imageLogo: 'http://images.squarespace-cdn.com/content/v1/5509fa79e4b068c780a986a4/1499595271907-XVPJW6WB8ZGN618V1154/layer3.png?format=500w', // TODO use script property
   organisationName: 'Nocar Cargo', // TODO use script property
   pageTitle: 'Gsheet Search', // TODO use spreadsheet title
-  scriptIds: {
-    app: '1_5vomwUsWKlMA07DtaWmGBJlup7M-kCIhcnVhH4PdLf_pgGNmqPTxoHj', // TODO redundant
-  },
   sheets: [
     {
       title: 'Names',
@@ -39,14 +33,7 @@ const gsConfig = {
     },
   ],
   spreadsheetId: '1n4QOxfS3hDe3v9KKZt3HObIQZpQnk2sKT-GFcMXHjOc',
-  tplFile: 'Search', // TODO hardcode
-  fixedPositionIds: [ 'footer' ],
-  formId: 'search',
-  radiosContainerId: 'data-sources',
-  filterClass: 'filter',
-  filtersContainerId: 'data-filters',
   filtersFocusTypeahead: true,
-  typeaheadId: 'typeahead',
 };
 
 // functions
@@ -67,6 +54,16 @@ function doGet(config) {
     // used as a library, config is passed in
     standalone = false;
   }
+
+  // hardcoded developer-only properties
+  config.debug = false;
+  config.fixedPositionIds = [];
+  config.formId = 'search';
+  config.radiosContainerId = 'data-sources';
+  config.filterClass = 'filter';
+  config.filtersContainerId = 'data-filters';
+  config.typeaheadId = 'typeahead';
+  config.tplFile = 'Search';
 
   console.log('Gsheet Search loaded as standalone: ', standalone, ', with config: ', config);
 

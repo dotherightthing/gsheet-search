@@ -6,14 +6,14 @@ class GsPage extends Gs {
    * @class
    * @summary Properties and methods relating to the HTML templating.
    * @public
-   * @param {object} config                  - Module configuration.
-   * @param {string} config.imageFavicon     - Image displayed when the page is bookmarked.
-   * @param {string} config.imageLogo        - Image displayed at the bottom of the page and in the background.
-   * @param {string} config.organisationName - Web browser page title.
-   * @param {string} config.pageTitle        - Web browser page title.
-   * @param {string} config.sheetResultHeader - Column headers to use for results.
+   * @param {object} config                    - Module configuration.
+   * @param {string} config.imageFavicon       - Image displayed when the page is bookmarked.
+   * @param {string} config.imageLogo          - Image displayed at the bottom of the page and in the background.
+   * @param {string} config.organisationName   - Web browser page title.
+   * @param {string} config.pageTitle          - Web browser page title.
+   * @param {string} config.sheetResultHeader  - Column headers to use for results.
    * @param {string} config.sheetSearchHeaders - Column headers to search and filter by.
-   * @param {string} config.tplFile          - HTML template file.
+   * @param {string} config.tplFile            - HTML template file.
    */
   constructor(config = {}) {
     super();
