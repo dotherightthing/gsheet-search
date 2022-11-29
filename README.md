@@ -21,36 +21,33 @@ The web app reads and writes from a Google Sheet. The good functioning of the ap
 
 This script is deployed as a 'standalone' project to allow it to be used as a library with minimal coding.
 
+## Credits
+
+<https://everythingbusytown.fandom.com/wiki/List_of_Busytown_characters>
+
 ---
 
 ## Using the app
 
 ### 1. Create or configure your spreadsheet
 
-Example spreadsheet:
-
-| Business    | Address        | Phone       |
-|-------------|----------------|-------------|
-| AB Creative | 12 Main St     | 04 123 4567 |
-| DEF Jams    | 345 The Parade | 07 891 2345 |
+Demo spreadsheet: <https://docs.google.com/spreadsheets/d/1DBYIoppZpZ1db6Vvg2LTm3zKvMnq0bEKOzEKGFcEvk4/edit?usp=sharing>
 
 ### 2. Add named ranges to your spreadsheet
 
-Note: If you multiple sheets, use the `namedRangePrefix` option in the `sheets` array to use differentiate named ranges on additional sheets. For example, `GsSheet1...` could reference your first sheet, and `GsSheet2...` your second. The examples below use a prefix of `GsSheet1` to indicate the first sheet.
+Note: If you multiple sheets, use the `namedRangePrefix` option in the `sheets` array to differentiate named ranges on additional sheets. For example, `GsSheet1...` could reference your first sheet, `GsSheet2...` your second, and so on. The examples below use a prefix of `GsSheet1` to indicate the first sheet.
 
 #### `GsSheet1Result`
 
 1. In Google Sheets, select only one column in whichever row contains your column headers. This column will be used to provide search results. This columns will also appear in grid area `result` (or `results`) of the layout.
 2. Select *Data > Named Ranges > "GsSheet1Result" > Done*
 
-In the example above you would select the cell containing *Phone*. This would allow you to search by *Business* or *Address*, in order to find the corresponding *Phone* number.
-
 #### `GsSheet1Search`
 
 1. In Google Sheets, select all cells in whichever row contains your column headers. These columns will be used to provide search data and search result filtering.
 2. Select *Data > Named Ranges > "GsSheet1Search" > Done*
 
-In the example above you would select the cells containing *Business*, *Address* and *Phone*. *Phone* will also be our `GsSheet1Result`, but the app will automatically exclude this column from the search data.
+Note: the app will automatically exclude `GsSheet1Result` from the search data.
 
 #### `GsSheet1DisplayGroupA`
 
@@ -69,7 +66,7 @@ In the example above you would select the cells containing *Business*, *Address*
 
 ### 3. Create an Apps Script project to host the code
 
-1. Open the Google Sheet you want to be able to search
+1. Open the Google Sheet you'd like to be able to search
 2. Select *Extensions > Apps Script* to open the Apps Script editor
 3. Click on *Untitled project* and change the name to *Gsheet Search*, or something memorable
 4. Select *Editor > Libraries > Add a Library* (+ icon) *> Script ID > `1_5vomwUsWKlMA07DtaWmGBJlup7M-kCIhcnVhH4PdLf_pgGNmqPTxoHj` > Add*
@@ -80,8 +77,8 @@ In the example above you would select the cells containing *Business*, *Address*
 ### 4. Configure the web app
 
 1. Open the Apps Script editor
-2. Paste in the contents of *demo/Code.js*
-3. Edit the contents to suit your spreadsheet
+2. Paste in the contents of [demo/Code.js](https://raw.githubusercontent.com/dotherightthing/gsheet-search/main/demo/Code.js)
+3. Edit `gsConfig` to suit your spreadsheet
 
 ### 5. Share the spreadsheet with any editors and app users
 
