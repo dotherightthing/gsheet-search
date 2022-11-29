@@ -264,7 +264,6 @@ class GsUiTypeahead extends GsUi {
    * @param {Array} dataTokensDisplayGroupB - Spreadsheet headers in display group B
    * @param {Array} dataTokensDisplayGroupC - Spreadsheet headers in display group C
    * @returns {string} templateHtml
-   * @todo key order differs from spreadsheet order: https://github.com/dotherightthing/gsheet-search/issues/8
    */
   getTemplateHtml(
     dataItem,
@@ -279,39 +278,29 @@ class GsUiTypeahead extends GsUi {
     let gridAreaResult = '';
     let templateHtml = '';
 
-    const keys = Object.keys(dataItem);
+    // values not assigned to a display area are discarded
 
-    // console.log('getTemplateHtml - dataItem', dataItem);
-    // console.log('getTemplateHtml - keys', keys);
+    const displayGroupMap = new Map([
+      [ 'A', [ dataTokensDisplayGroupA, gridAreaA ] ],
+      [ 'B', [ dataTokensDisplayGroupB, gridAreaB ] ],
+      [ 'C', [ dataTokensDisplayGroupC, gridAreaC ] ],
+    ]);
 
-    /*
-    // TODO: dataItem and key orders both differ from the spreadsheet order:
+    const displayGroups = [ 'A', 'B', 'C' ];
 
-    0: "no"
-    1: "notes"
-    2: "business"
-    3: "pod"
-    4: "level"
-    5: "street"
-    6: "abbr"
-    */
+    displayGroups.forEach((displayGroup) => {
+      const displayGroupArrays = displayGroupMap.get(displayGroup);
 
-    keys.forEach((key) => {
-      const value = dataItem[key];
+      displayGroupArrays[0].forEach((dataToken) => {
+        const value = dataItem[dataToken];
 
-      if (value !== '') {
-        // values not assigned to a display area are discarded
-        if (dataTokensDisplayGroupA.includes(key)) {
-          gridAreaA.push(value);
-        } else if (dataTokensDisplayGroupB.includes(key)) {
-          gridAreaB.push(value);
-        } else if (dataTokensDisplayGroupC.includes(key)) {
-          gridAreaC.push(value);
-        } else if (dataTokenIdentifier === key) {
-          gridAreaResult = value;
+        if (value !== '') {
+          displayGroupArrays[1].push(value);
         }
-      }
+      });
     });
+
+    gridAreaResult = dataItem[dataTokenIdentifier];
 
     // format display groups
 
@@ -396,7 +385,7 @@ class GsUiTypeahead extends GsUi {
     });
 
     const obj = {
-      dataTokens: checkedFilters, // order ok
+      dataTokens: checkedFilters,
     };
 
     this.initTypeahead(obj);
@@ -516,10 +505,8 @@ class GsUiTypeahead extends GsUi {
     // data will only be supplied by server, and only on a change of data source (via the radio buttons)
     // so we don't do this if no data was supplied because then a change of dataTokens would delete some filter options
     if (typeof data !== 'undefined') {
-      // console.log('data[0]', data[0]); // order bad: no, notes, pod, business, level, street, abbr
-
       // without this step Typeahead won't accept the array
-      _dataTokens = JSON.parse(JSON.stringify(dataTokens)); // order ok
+      _dataTokens = JSON.parse(JSON.stringify(dataTokens));
 
       if (_this.filtersFocusTypeahead) {
         _this.focusTypeaheadOnInit();
@@ -532,7 +519,7 @@ class GsUiTypeahead extends GsUi {
       _this.dataTokensDisplayGroupB = dataTokensDisplayGroupB;
       _this.dataTokensDisplayGroupC = dataTokensDisplayGroupC;
       _this.storedData = JSON.parse(JSON.stringify(data));
-      _this.initFilters(_dataTokens); // order ok
+      _this.initFilters(_dataTokens);
     }
 
     const {

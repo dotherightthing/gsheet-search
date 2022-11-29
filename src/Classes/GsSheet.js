@@ -175,7 +175,7 @@ class GsSheet extends Gs {
     };
 
     if (Object.prototype.toString.call(json) === '[object Object]') {
-      GsCache.setCacheItem(cacheKey, json); // order ok when inspected in Script Properties
+      GsCache.setCacheItem(cacheKey, json);
     }
 
     return json;
