@@ -208,7 +208,7 @@ class GsSheet extends Gs {
    * @memberof GsSheet
    * @static
    * @param {string} spreadsheetId Spreadsheet ID
-   * @param {string} sheetTitle Sheet name
+   * @param {string} sheetTitle Sheet title
    * @returns {object} Sheet
    */
   static getSheet(spreadsheetId, sheetTitle) {

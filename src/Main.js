@@ -11,9 +11,9 @@
 let standalone = true;
 
 const gsConfig = {
-  imageLogo: 'http://images.squarespace-cdn.com/content/v1/5509fa79e4b068c780a986a4/1499595271907-XVPJW6WB8ZGN618V1154/layer3.png?format=500w', // TODO use script property
-  organisationName: 'Nocar Cargo', // TODO use script property
-  pageTitle: 'Gsheet Search', // TODO use spreadsheet title
+  imageLogo: 'http://images.squarespace-cdn.com/content/v1/5509fa79e4b068c780a986a4/1499595271907-XVPJW6WB8ZGN618V1154/layer3.png?format=500w',
+  organisationName: 'Nocar Cargo',
+  pageTitle: 'Gsheet Search',
   sheets: [
     {
       title: 'Names',
@@ -45,6 +45,7 @@ function doGet(config) {
   // when consumed as a library, an object is passed to this function
   // when tested directly, the default object is passed
   if (Object.prototype.hasOwnProperty.call(config, 'queryString')) { // default object
+    // eslint-disable-next-line no-param-reassign
     config = gsConfig; // app config
   } else {
     // used as a library, config is passed in
@@ -61,6 +62,7 @@ function doGet(config) {
   config.typeaheadId = 'typeahead';
   config.tplFile = 'Search';
 
+  // eslint-disable-next-line no-console
   console.log('Gsheet Search loaded as standalone: ', standalone, ', with config: ', config);
 
   const page = new GsPage(config);

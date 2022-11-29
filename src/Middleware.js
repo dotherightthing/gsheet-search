@@ -10,8 +10,8 @@
  *
  * @summary Calls serverside function from clientside function (GsUiTypeahead.handleLoadClick)
  * @param {object} config Config
- * @param {string} sheetTitle Sheet name
- * @returns {*} Sheet as JSON
+ * @param {string} sheetTitle Sheet title
+ * @returns {object} Sheet as JSON
  * @todo This needs to be called differently when the app is consumed as a library
  */
 function gsSheetToJSON(config, sheetTitle) {

@@ -24,6 +24,7 @@
     "GsCache": "readonly",
     "GsPage": "readonly",
     "GsSheet": "readonly",
+    "GsheetSearch": "readonly",
     "GsUtils": "readonly",
     "GsValidate": "readonly",
     "gsValidateInstance": "readonly",
