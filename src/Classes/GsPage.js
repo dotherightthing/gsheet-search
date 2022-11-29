@@ -7,7 +7,6 @@ class GsPage extends Gs {
    * @summary Properties and methods relating to the HTML templating.
    * @public
    * @param {object} config                    - Module configuration.
-   * @param {string} config.imageFavicon       - Image displayed when the page is bookmarked.
    * @param {string} config.imageLogo          - Image displayed at the bottom of the page and in the background.
    * @param {string} config.organisationName   - Web browser page title.
    * @param {string} config.pageTitle          - Web browser page title.
@@ -19,7 +18,6 @@ class GsPage extends Gs {
     super();
 
     // select the relevant arguments from the config object passed in
-    this.imageFavicon = config.imageFavicon;
     this.imageLogo = config.imageLogo;
     this.organisationName = config.organisationName;
     this.pageTitle = config.pageTitle;
@@ -31,19 +29,6 @@ class GsPage extends Gs {
   }
 
   /* Setters and Getters */
-
-  /**
-   * imageFavicon
-   *
-   * @type {string}
-   */
-  get imageFavicon() {
-    return this._imageFavicon;
-  }
-
-  set imageFavicon(imageFavicon) {
-    this._imageFavicon = this.gsValidateInstance.validate(imageFavicon, 'string1', 'GsPage.imageFavicon');
-  }
 
   /**
    * imageLogo
@@ -114,7 +99,6 @@ class GsPage extends Gs {
    */
   addMetaTags(tpl) {
     const {
-      imageFavicon,
       organisationName,
       pageTitle,
     } = this;
@@ -130,8 +114,6 @@ class GsPage extends Gs {
     tpl.addMetaTag('apple-mobile-web-app-capable', 'yes');
 
     tpl.setTitle(`${pageTitle} | ${organisationName}`);
-
-    tpl.setFaviconUrl(imageFavicon);
 
     return tpl;
   }
