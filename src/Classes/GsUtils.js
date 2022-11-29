@@ -6,34 +6,9 @@ class GsUtils extends Gs {
    * @class
    * @summary Utility methods.
    * @public
-   * @param {object} config                - Module configuration.
-   * @param {object} config.deploymentIds  - Deployment IDs of this standalone project.
    */
-  constructor(config = {}) {
-    super();
-
-    // select the relevant arguments from the config object passed in
-    this.deploymentIds = config.deploymentIds;
-  }
 
   /* Setters and Getters */
-
-  /**
-   * deploymentIds
-   *
-   * @type {object}
-   */
-  get deploymentIds() {
-    return this._deploymentIds;
-  }
-
-  set deploymentIds(ids) {
-    if (Object.prototype.toString.call(ids) !== '[object Object]') {
-      throw new Error('GsUtils.deploymentIds must be an object');
-    }
-
-    this._deploymentIds = { ...ids };
-  }
 
   /* Instance methods */
 

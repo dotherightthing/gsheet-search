@@ -12,7 +12,6 @@
     "prepare": "husky install",
     "preview": "npx clasp push && npx clasp open --webapp --deploymentId $npm_package_config_headDeploymentId",
     "publish": "./scripts/publish.sh ${npm_package_config_pubDeploymentId} \"${npm_config_gsmessage}\"",
-    "test": "npx clasp push && npx clasp open --webapp --deploymentId $npm_package_config_testHeadDeploymentId",
     "postinstall": "node ./scripts/htmlify.js"
   },
   "repository": {
@@ -47,9 +46,8 @@
     "stylelint-selector-bem-pattern": "^2.1.1"
   },
   "config": {
-    "headDeploymentId": "AKfycbyXIo-wDHA4IIzSsMAmcT97XUiFPaMdsUaI2vPnLX1s",
-    "pubDeploymentId": "AKfycbyFMw-ILDiJD6E1oWd7Gv6UkQSAkNZ5OezOcTAWjqoNgtkM2X5ZUDfK1Afp3Ih_mn0PYg",
-    "testHeadDeploymentId": "AKfycbz2R2G4KDjQ9V5KFZQoc9P3Z3211bN9yZODmY8KiPc",
+    "headDeploymentId": "AKfycbxDAU1hFDr2beTfsx9TkcIBqoUkIbfCgoKsCdDYsxwc",
+    "pubDeploymentId": "",
     "htmlify": {
       "node_modules/pubsub.js": [
         "pubsub.js"
