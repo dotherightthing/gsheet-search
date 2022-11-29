@@ -220,6 +220,10 @@ class GsSheet extends Gs {
       console.error(error); // eslint-disable-line no-console
     }
 
+    if (sheet === null) {
+      throw new Error(`"${sheetTitle}" does not appear to exist in your spreadsheet (https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit#gid=0).`);
+    }
+
     return sheet;
   }
 
