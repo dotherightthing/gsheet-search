@@ -87,8 +87,3 @@ In the example above you would select the cells containing *Business*, *Address*
 
 1. Open the spreadsheet
 2. *Share > Add people and groups > [Enter email] > Editor*
-
-Note:
-
-* The app reads and writes company data, therefore you will need permission to edit the spreadsheet in order to access the app.
-* If the spreadsheet is not shared, the user may still be able to view it, but the app will not be able to write to it.
