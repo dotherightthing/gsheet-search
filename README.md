@@ -12,8 +12,6 @@ This app seeks to bypass usability issues present in the Google Sheets mobile ap
 
 * Attention needed to scroll 400+ rows of data while navigating the lift/stairs
 * Business names may be recorded in several different ways (e.g. *NZ Business*, vs *The NZ Business*, vs *BUS (NZ Business)*, vs *New Zealand Business*)
-* Difficult to copy and paste result into another app, or share a record with another person (need to remember and retype)
-* Quicker to add new data to a notepad app than to enter it into the spreadsheet, creating maintenance work later on
 
 ## Integration with data source
 
