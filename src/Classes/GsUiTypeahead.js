@@ -454,8 +454,11 @@ class GsUiTypeahead extends GsUi {
     } = this;
 
     const filtersContainerEl = document.getElementById(filtersContainerId);
-
     let html = '';
+
+    if (dataTokens.length) {
+      html = '<legend><span class="legend">Filter by</span></legend>';
+    }
 
     dataTokens.forEach((dataToken, i) => {
       html += '<div class="checkbox">';
@@ -464,7 +467,9 @@ class GsUiTypeahead extends GsUi {
       html += '</div>';
     });
 
-    filtersContainerEl.innerHTML = `<legend><span class="legend">Filter by</span></legend>${html}`;
+    filtersContainerEl.innerHTML = html;
+
+    filtersContainerEl.classList.remove('is-loading');
   }
 
   /**
@@ -662,7 +667,12 @@ class GsUiTypeahead extends GsUi {
   loadData(sheetTitle) {
     const {
       config,
+      filtersContainerId,
     } = this;
+
+    const filtersContainerEl = document.getElementById(filtersContainerId);
+
+    filtersContainerEl.classList.add('is-loading');
 
     google.script.run
       .withSuccessHandler(this.initTypeahead)
