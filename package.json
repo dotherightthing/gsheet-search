@@ -1,7 +1,7 @@
 {
   "name": "gsheet-search",
   "version": "0.1.0",
-  "description": "",
+  "description": "Mobile-friendly frontend to enable quick filtering of a Google Sheet",
   "main": "Main.js",
   "scripts": {
     "clasp:push": "node ./scripts/htmlify.js && npx clasp push",
