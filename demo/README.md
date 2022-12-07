@@ -1,11 +1,5 @@
 # GS Demo
 
-Regardless of whether you choose to set up your own standalone project or reuse the existing one, you will need to set up an Apps Script project which is attached to your spreadsheet document (i.e. 'container-bound').
-
-This will allow you to:
-
-* configure and deploy the web app
-
 ## Setup
 
 ### Part A - Spreadsheet
@@ -46,6 +40,10 @@ Note: the app will automatically exclude `GsSheet1Result` from the search data.
 2. Select *Data > Named Ranges > "GsSheet1DisplayGroupC" > Done*
 
 ### Part B - Apps Script project
+
+Regardless of whether you choose to set up your own standalone project or reuse the existing one, you will need to set up an Apps Script project which is attached to your spreadsheet document (i.e. 'container-bound').
+
+This will allow you to configure and deploy the web app.
 
 #### 1. Create an Apps Script project which is linked to your spreadsheet
 
