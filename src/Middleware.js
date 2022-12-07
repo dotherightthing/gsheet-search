@@ -12,7 +12,7 @@
  * @returns {string} Success message
  */
 function gsCacheClear() {
-  return GsCache.clearCache();
+  return GsCache.clearCache('');
 }
 
 /**
