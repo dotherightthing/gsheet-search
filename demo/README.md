@@ -69,7 +69,7 @@ This will allow you to configure and deploy the web app.
 
 #### 4. Create an initial deployment of the Apps Script project to enable testing
 
-1. Deploy > New deployment > Select type: `Web app` > Description: `Initial deployment` > Execute as: `User accessing the web app` > Who as access: `Only myself` > Deploy > Click the Web app link
+1. Deploy > New deployment > Select type: `Web app` > Description: `Initial deployment` > Execute as: `User accessing the web app` > Who has access: `Only myself` > Deploy > Click the Web app link
 2. When presented with a modal titled *Gsheet Search (Unverified)*, select *Review Permissions > Select account > Allow*
 3. Select *Deploy > Test deployments > Select type > Web app*
 
