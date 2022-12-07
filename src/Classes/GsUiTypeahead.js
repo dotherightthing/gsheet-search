@@ -5,18 +5,20 @@ class GsUiTypeahead {
   /**
    * @class
    * @public
-   * @param {object}  config                       - Module configuration.
-   * @param {string}  config.filterClass           - Class selector used to target each checkbox filter
-   * @param {string}  config.filtersContainerId    - ID selector used to target the filters container
-   * @param {boolean} config.filtersFocusTypeahead - Whether clicking a filter should re-focus the typeahead input (in order to display the results)
-   * @param {string}  config.formId                - ID selector used to target the parent form
-   * @param {string}  config.radiosContainerId     - ID selector used to target the radios container
-   * @param {Array}   config.sheets                - Array of sheet config objects
-   * @param {string}  config.typeaheadId           - ID selector used to target the parent form
+   * @param {object}  config                          - Module configuration.
+   * @param {string}  config.cacheClearButtonId       - ID selector used to target the Clear Cache button
+   * @param {string}  config.filterClass              - Class selector used to target each checkbox filter
+   * @param {string}  config.filtersContainerId       - ID selector used to target the filters container
+   * @param {boolean} config.filtersFocusTypeahead    - Whether clicking a filter should re-focus the typeahead input (in order to display the results)
+   * @param {string}  config.formId                   - ID selector used to target the parent form
+   * @param {string}  config.radiosContainerId        - ID selector used to target the radios container
+   * @param {Array}   config.sheets                   - Array of sheet config objects
+   * @param {string}  config.typeaheadId              - ID selector used to target the parent form
    */
   constructor(config = {}) {
     // select the relevant arguments from the config object passed in
     const {
+      cacheClearButtonId,
       filterClass,
       filtersContainerId,
       filtersFocusTypeahead,
@@ -27,6 +29,7 @@ class GsUiTypeahead {
     } = config;
 
     Object.assign(this, {
+      cacheClearButtonId,
       filterClass,
       filtersContainerId,
       filtersFocusTypeahead,
@@ -43,6 +46,19 @@ class GsUiTypeahead {
   }
 
   /* Getters and Setters */
+
+  /**
+   * cacheClearButtonId
+   *
+   * @type {string}
+   */
+  get cacheClearButtonId() {
+    return this._cacheClearButtonId;
+  }
+
+  set cacheClearButtonId(cacheClearButtonId) {
+    this._cacheClearButtonId = GsValidate.validate(cacheClearButtonId, 'string1', 'GsUiTypeahead.cacheClearButtonId');
+  }
 
   /**
    * dataTokensDisplayGroupA
@@ -233,6 +249,28 @@ class GsUiTypeahead {
   /* Instance methods */
 
   /**
+   * cacheClear
+   *
+   * @summary Clear the contents of the cache
+   */
+  cacheClear() {
+    const { cacheClearButtonId } = this;
+
+    document.getElementById(cacheClearButtonId).dataset.isLoading = true;
+
+    google.script.run
+      .withSuccessHandler(((output) => {
+        document.getElementById(cacheClearButtonId).dataset.isLoading = false;
+        GsUi.log(output);
+      }))
+      .withFailureHandler(((output) => {
+        document.getElementById(cacheClearButtonId).dataset.isLoading = false;
+        GsUi.log(output);
+      }))
+      .gsCacheClear();
+  }
+
+  /**
    * capitalise
    *
    * @summary Convert the leading character to uppercase
@@ -359,6 +397,22 @@ class GsUiTypeahead {
   }
 
   /**
+   * handleClick
+   *
+   * @summary Handle clicks/touches
+   * @param {object} event Event object
+   */
+  handleClick(event) {
+    const {
+      cacheClearButtonId,
+    } = this;
+
+    if (event.target.getAttribute('id') === cacheClearButtonId) {
+      this.cacheClear();
+    }
+  }
+
+  /**
    * handleFilterChange
    *
    * @memberof GsUiTypeahead
@@ -430,6 +484,8 @@ class GsUiTypeahead {
     });
 
     radiosContainerEl.innerHTML = `<legend><span class="legend">Search in</span></legend>${html}`;
+
+    document.addEventListener('click', this.handleClick.bind(this), false);
 
     formEl.addEventListener('change', this.handleChange.bind(this));
 

@@ -54,7 +54,10 @@ function doGet() {
 function init(config, standalone = false) {
   // hardcoded developer-only properties
 
+  config.cacheClearButtonId = 'cache-clear';
   config.debug = false;
+  config.filterClass = 'filter';
+  config.filtersContainerId = 'data-filters';
   config.fixedPositionIds = [];
 
   config.focusableSelectors = [
@@ -67,11 +70,19 @@ function init(config, standalone = false) {
   ];
 
   config.formId = 'search';
-  config.radiosContainerId = 'data-sources';
-  config.filterClass = 'filter';
-  config.filtersContainerId = 'data-filters';
-  config.typeaheadId = 'typeahead';
+
+  config.loaderComponentClass = 'loader';
+  config.loaderDataAttr = 'data-is-loading';
+  config.loaderDescriptionClass = 'loader-description';
+  config.loaderHideDelay = 1250;
+  config.loaderParentDataAttr = 'data-child-is-loading';
+  config.loaderRunLoaderId = 'run-loader';
+  config.loaderRunSaverId = 'run-saver';
+  config.loaderTitleClass = 'loader-title';
+
   config.pageTemplate = 'Search';
+  config.radiosContainerId = 'data-sources';
+  config.typeaheadId = 'typeahead';
 
   // eslint-disable-next-line no-console
   console.log('Gsheet Search loaded as standalone: ', standalone, ', with config: ', config);

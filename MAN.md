@@ -9,6 +9,8 @@
 <dd></dd>
 <dt><a href="#GsUiCss">GsUiCss</a></dt>
 <dd></dd>
+<dt><a href="#GsUiLoader">GsUiLoader</a></dt>
+<dd></dd>
 <dt><a href="#GsUiTypeahead">GsUiTypeahead</a></dt>
 <dd></dd>
 </dl>
@@ -406,6 +408,127 @@ getInstance
 | --- | --- | --- |
 | config | <code>object</code> | Config |
 
+<a name="GsUiLoader"></a>
+
+## GsUiLoader
+**Kind**: global class  
+**Summary**: Toggle a loading animation  
+**Access**: public  
+
+* [GsUiLoader](#GsUiLoader)
+    * [new GsUiLoader(config)](#new_GsUiLoader_new)
+    * _instance_
+        * [.loaderComponentClass](#GsUiLoader+loaderComponentClass) : <code>string</code>
+        * [.loaderDataAttr](#GsUiLoader+loaderDataAttr) : <code>string</code>
+        * [.loaderDescriptionClass](#GsUiLoader+loaderDescriptionClass) : <code>string</code>
+        * [.loaderHideDelay](#GsUiLoader+loaderHideDelay) : <code>number</code>
+        * [.loaderParentDataAttr](#GsUiLoader+loaderParentDataAttr) : <code>string</code>
+        * [.loaderRunLoaderId](#GsUiLoader+loaderRunLoaderId) : <code>string</code>
+        * [.loaderRunSaverId](#GsUiLoader+loaderRunSaverId) : <code>string</code>
+        * [.loaderTitleClass](#GsUiLoader+loaderTitleClass) : <code>string</code>
+        * [.show(loaderId, isLoading, [title], [description])](#GsUiLoader+show)
+    * _static_
+        * [.getInstance(config)](#GsUiLoader.getInstance) ⇒ [<code>GsUiLoader</code>](#GsUiLoader)
+
+<a name="new_GsUiLoader_new"></a>
+
+### new GsUiLoader(config)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| config | <code>object</code> | Module configuration. |
+| config.loaderComponentClass | <code>string</code> | Class selector of the loader element |
+| config.loaderDataAttr | <code>string</code> | Data attribute used to manage state |
+| config.loaderDescriptionClass | <code>string</code> | Class selector of the loader description |
+| config.loaderHideDelay | <code>number</code> | Number of milliseconds to wait before hiding the loader |
+| config.loaderParentDataAttr | <code>string</code> | Data attribute used to manage state of parent element |
+| config.loaderRunLoaderId | <code>string</code> | ID selector of the loader component that appears in the overlay |
+| config.loaderRunSaverId | <code>string</code> | ID selector of the loader component that appears save status bar |
+| config.loaderTitleClass | <code>string</code> | Class selector of the loader title |
+
+<a name="GsUiLoader+loaderComponentClass"></a>
+
+### gsUiLoader.loaderComponentClass : <code>string</code>
+loaderComponentClass
+
+**Kind**: instance property of [<code>GsUiLoader</code>](#GsUiLoader)  
+<a name="GsUiLoader+loaderDataAttr"></a>
+
+### gsUiLoader.loaderDataAttr : <code>string</code>
+loaderDataAttr
+
+**Kind**: instance property of [<code>GsUiLoader</code>](#GsUiLoader)  
+<a name="GsUiLoader+loaderDescriptionClass"></a>
+
+### gsUiLoader.loaderDescriptionClass : <code>string</code>
+loaderDescriptionClass
+
+**Kind**: instance property of [<code>GsUiLoader</code>](#GsUiLoader)  
+<a name="GsUiLoader+loaderHideDelay"></a>
+
+### gsUiLoader.loaderHideDelay : <code>number</code>
+loaderHideDelay
+
+**Kind**: instance property of [<code>GsUiLoader</code>](#GsUiLoader)  
+<a name="GsUiLoader+loaderParentDataAttr"></a>
+
+### gsUiLoader.loaderParentDataAttr : <code>string</code>
+loaderParentDataAttr
+
+**Kind**: instance property of [<code>GsUiLoader</code>](#GsUiLoader)  
+<a name="GsUiLoader+loaderRunLoaderId"></a>
+
+### gsUiLoader.loaderRunLoaderId : <code>string</code>
+loaderRunLoaderId
+
+**Kind**: instance property of [<code>GsUiLoader</code>](#GsUiLoader)  
+<a name="GsUiLoader+loaderRunSaverId"></a>
+
+### gsUiLoader.loaderRunSaverId : <code>string</code>
+loaderRunSaverId
+
+**Kind**: instance property of [<code>GsUiLoader</code>](#GsUiLoader)  
+<a name="GsUiLoader+loaderTitleClass"></a>
+
+### gsUiLoader.loaderTitleClass : <code>string</code>
+loaderTitleClass
+
+**Kind**: instance property of [<code>GsUiLoader</code>](#GsUiLoader)  
+<a name="GsUiLoader+show"></a>
+
+### gsUiLoader.show(loaderId, isLoading, [title], [description])
+show
+
+Hide or show the loader (icon visibility is set in CSS).
+
+**Kind**: instance method of [<code>GsUiLoader</code>](#GsUiLoader)  
+**See**: [https://loading.io/css/](https://loading.io/css/)  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| loaderId | <code>string</code> |  | Loader ID (loaderRunLoaderId or loaderRunSaverId depending on context) |
+| isLoading | <code>string</code> |  | Loading state (true|false|error) |
+| [title] | <code>string</code> | <code>null</code> | Visible title |
+| [description] | <code>string</code> | <code>null</code> | Visible description |
+
+<a name="GsUiLoader.getInstance"></a>
+
+### GsUiLoader.getInstance(config) ⇒ [<code>GsUiLoader</code>](#GsUiLoader)
+getInstance
+
+**Kind**: static method of [<code>GsUiLoader</code>](#GsUiLoader)  
+**Summary**: Note: this refers to class instance in prototype methods and class constructor in static methods.  
+**Returns**: [<code>GsUiLoader</code>](#GsUiLoader) - instance of class  
+**See**
+
+- [https://code.tutsplus.com/tutorials/how-to-implement-the-singleton-pattern-in-javascript-es6--cms-39927](https://code.tutsplus.com/tutorials/how-to-implement-the-singleton-pattern-in-javascript-es6--cms-39927)
+- [https://stackoverflow.com/a/50285439](https://stackoverflow.com/a/50285439)
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| config | <code>object</code> | Config |
+
 <a name="GsUiTypeahead"></a>
 
 ## GsUiTypeahead
@@ -415,6 +538,7 @@ getInstance
 * [GsUiTypeahead](#GsUiTypeahead)
     * [new GsUiTypeahead(config)](#new_GsUiTypeahead_new)
     * _instance_
+        * [.cacheClearButtonId](#GsUiTypeahead+cacheClearButtonId) : <code>string</code>
         * [.dataTokensDisplayGroupA](#GsUiTypeahead+dataTokensDisplayGroupA) : <code>Array</code>
         * [.dataTokensDisplayGroupB](#GsUiTypeahead+dataTokensDisplayGroupB) : <code>Array</code>
         * [.dataTokensDisplayGroupC](#GsUiTypeahead+dataTokensDisplayGroupC) : <code>Array</code>
@@ -429,9 +553,11 @@ getInstance
         * [.storedData](#GsUiTypeahead+storedData) : <code>Array</code>
         * [.typeaheadId](#GsUiTypeahead+typeaheadId) : <code>string</code>
         * [.typeaheadInstance](#GsUiTypeahead+typeaheadInstance) : <code>object</code>
+        * [.cacheClear()](#GsUiTypeahead+cacheClear)
         * [.capitalise(str)](#GsUiTypeahead+capitalise) ⇒ <code>string</code> \| <code>\*</code>
         * [.getTemplateHtml(dataItem, dataTokenIdentifier, dataTokensDisplayGroupA, dataTokensDisplayGroupB, dataTokensDisplayGroupC)](#GsUiTypeahead+getTemplateHtml) ⇒ <code>string</code>
         * [.handleChange(event)](#GsUiTypeahead+handleChange)
+        * [.handleClick(event)](#GsUiTypeahead+handleClick)
         * [.handleFilterChange()](#GsUiTypeahead+handleFilterChange)
         * [.handleLoadError(error)](#GsUiTypeahead+handleLoadError)
         * [.init()](#GsUiTypeahead+init)
@@ -450,6 +576,7 @@ getInstance
 | Param | Type | Description |
 | --- | --- | --- |
 | config | <code>object</code> | Module configuration. |
+| config.cacheClearButtonId | <code>string</code> | ID selector used to target the Clear Cache button |
 | config.filterClass | <code>string</code> | Class selector used to target each checkbox filter |
 | config.filtersContainerId | <code>string</code> | ID selector used to target the filters container |
 | config.filtersFocusTypeahead | <code>boolean</code> | Whether clicking a filter should re-focus the typeahead input (in order to display the results) |
@@ -458,6 +585,12 @@ getInstance
 | config.sheets | <code>Array</code> | Array of sheet config objects |
 | config.typeaheadId | <code>string</code> | ID selector used to target the parent form |
 
+<a name="GsUiTypeahead+cacheClearButtonId"></a>
+
+### gsUiTypeahead.cacheClearButtonId : <code>string</code>
+cacheClearButtonId
+
+**Kind**: instance property of [<code>GsUiTypeahead</code>](#GsUiTypeahead)  
 <a name="GsUiTypeahead+dataTokensDisplayGroupA"></a>
 
 ### gsUiTypeahead.dataTokensDisplayGroupA : <code>Array</code>
@@ -542,6 +675,13 @@ typeaheadId
 typeaheadInstance
 
 **Kind**: instance property of [<code>GsUiTypeahead</code>](#GsUiTypeahead)  
+<a name="GsUiTypeahead+cacheClear"></a>
+
+### gsUiTypeahead.cacheClear()
+cacheClear
+
+**Kind**: instance method of [<code>GsUiTypeahead</code>](#GsUiTypeahead)  
+**Summary**: Clear the contents of the cache  
 <a name="GsUiTypeahead+capitalise"></a>
 
 ### gsUiTypeahead.capitalise(str) ⇒ <code>string</code> \| <code>\*</code>
@@ -577,6 +717,18 @@ getTemplateHtml
 handleChange
 
 **Kind**: instance method of [<code>GsUiTypeahead</code>](#GsUiTypeahead)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| event | <code>object</code> | Event object |
+
+<a name="GsUiTypeahead+handleClick"></a>
+
+### gsUiTypeahead.handleClick(event)
+handleClick
+
+**Kind**: instance method of [<code>GsUiTypeahead</code>](#GsUiTypeahead)  
+**Summary**: Handle clicks/touches  
 
 | Param | Type | Description |
 | --- | --- | --- |

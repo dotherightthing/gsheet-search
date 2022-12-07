@@ -38,7 +38,7 @@ class GsCache {
     let output = '';
     let propertyKeys;
 
-    if (propertyKey !== 'undefined') {
+    if (typeof propertyKey !== 'undefined') {
       propertyKeys = [ `_cache${propertyKey}` ];
     } else {
       propertyKeys = properties.getKeys();

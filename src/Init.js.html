@@ -11,6 +11,7 @@ const config = JSON.parse('<?= tplConfig ?>');
 // note: GsUtils is also included, but doesn't require an instance
 GsUi.getInstance(config);
 GsUiCss.getInstance(config);
+GsUiLoader.getInstance(config);
 GsUiTypeahead.getInstance(config);
 
 document.onreadystatechange = () => {

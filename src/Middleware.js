@@ -6,6 +6,16 @@
  */
 
 /**
+ * gsCacheClear
+ *
+ * @summary Calls serverside function from clientside function (GsUiDialog.cacheClear)
+ * @returns {string} Success message
+ */
+function gsCacheClear() {
+  return GsCache.clearCache();
+}
+
+/**
  * gsSheetToJSON
  *
  * @summary Calls serverside function from clientside function (GsUiTypeahead.handleLoadClick)

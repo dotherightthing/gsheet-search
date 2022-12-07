@@ -61,6 +61,7 @@
       "src/Classes": [
         "GsUi.js",
         "GsUiCss.js",
+        "GsUiLoader.js",
         "GsUiTypeahead.js",
         "GsUtils.js",
         "GsValidate.js"

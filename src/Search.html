@@ -20,6 +20,20 @@
       <!--<input type="reset" value="Reset">-->
     </form>
 
+    <button class="button smaller loader grid-inline grid-button-inline" id="cache-clear" data-is-loading="false">
+      <div class="loader-title">Clear cache</div>
+      <div class="loader-icon">
+        <div class="is-loading">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <div class="is-loading-error"></div>
+        <div class="is-loading-complete"></div>
+      </div>
+    </button>
+
     <!-- start footer -->
     <footer id="footer">
       <div class="footer-version">
@@ -35,6 +49,7 @@
     <?!= GsPage.include('Htmlified/Typeahead-standalone.js'); ?>
     <?!= GsPage.include('Htmlified/GsUi.js'); ?>
     <?!= GsPage.include('Htmlified/GsUiCss.js'); ?>
+    <?!= GsPage.include('Htmlified/GsUiLoader.js'); ?>
     <?!= GsPage.include('Htmlified/GsUiTypeahead.js'); ?>
     <?!= GsPage.include('Htmlified/GsUtils.js'); ?>
     <?!= GsPage.include('Htmlified/GsValidate.js'); ?>
