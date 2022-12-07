@@ -1,90 +1,65 @@
 /**
  * @file GsUtils.js
  */
-class GsUtils extends Gs {
+class GsUtils {
   /**
    * @class
    * @summary Utility methods.
    * @public
    */
 
-  /* Setters and Getters */
-
-  /* Instance methods */
-
   /* Static methods */
 
   /**
-   * classFactory
+   * getIndefiniteArticle
    *
-   * @summary Create an instance of a class using the Factory Abstract pattern.
+   * @summary Get the appropriate indefinite article for the specified string
    * @memberof GsUtils
    * @static
-   * @param {string} className - Name of class to create an instance of
-   * @param {object} config - Parameters required by class constructor
-   * @returns {*} Instance of the specified class
-   * @see {@link https://stackoverflow.com/a/73945595}
+   * @param {string} str - String
+   * @returns {string} indefiniteArticle
    */
-  static classFactory(className, config) {
-    const classMap = new Map([
-      [ 'GsPage', GsPage ],
-    ]);
+  static getIndefiniteArticle(str) {
+    const firstLetter = str.slice(0, 1).toLowerCase();
+    const strLower = str.toLowerCase();
 
-    const Class = classMap.get(className, config);
+    let art = (firstLetter.match(/^(a|e|i|o|u)$/)) ? 'an' : 'a';
 
-    return new (Class)(config);
+    if (strLower === 'null') {
+      art = '';
+    }
+
+    return art;
   }
 
   /**
-   * classInstanceToObject
+   * getInstance
    *
-   * @summary A class instance can be passed from the backend to the frontend via template parameters.
-   *  However once on the frontend it appears to lose contact with its parent class.
-   *  This means that its properties can't be accessed because the class setter has prefixed them with underscores.
-   * @memberof GsUtils
-   * @static
-   * @param {*} classInstance - classInstance to convert
-   * @returns {object} Object
+   * @summary Note: this refers to class instance in prototype methods and class constructor in static methods.
+   * @param {object} config Config
+   * @returns {GsUtils} instance of class
+   * @see {@link https://code.tutsplus.com/tutorials/how-to-implement-the-singleton-pattern-in-javascript-es6--cms-39927}
+   * @see {@link https://stackoverflow.com/a/50285439}
    */
-  static classInstanceToObject(classInstance) {
-    const { ...objWithUnderscores } = classInstance;
-    const keys = Object.keys(objWithUnderscores);
-    const obj = {};
+  static getInstance(config) {
+    let _config = config;
 
-    // remove leading underscores added by the class setters
-    keys.forEach((key) => {
-      const objKey = key.replace('_', ''); // replaces first/leading underscore
-      obj[objKey] = objWithUnderscores[key];
-    });
+    if (!this.instance) {
+      if (typeof _config === 'undefined') {
+        const cacheKey = 'config';
+        const cachedConfig = GsCache.getCacheItem(cacheKey, true);
 
-    // return an object for use on the frontend
-    return obj;
-  }
+        if (GsValidate.isObject(cachedConfig)) {
+          _config = cachedConfig;
+        } else {
+          throw new Error('GsUtils.getInstance requires a configuration object the first time it is called and none was cached');
+        }
+      }
 
-  /**
-   * objectToClassInstance
-   *
-   * @summary Caching an instance converts it into an object. Convert it back into an instance of a class.
-   * @memberof GsUtils
-   * @static
-   * @param {object} obj - Object to convert
-   * @param {string} className - Name of class to create an instance of
-   * @returns {*} Instance of the specified class
-   */
-  static objectToClassInstance(obj, className) {
-    const keys = Object.keys(obj);
-    const config = {};
+      this.instance = new GsUtils(_config);
+    }
 
-    // remove leading underscores added by the class setters
-    keys.forEach((key) => {
-      const configKey = key.replace('_', ''); // replaces first/leading underscore
-      config[configKey] = obj[key];
-    });
-
-    const instance = GsUtils.classFactory(className, config);
-
-    // return a new instance that has access to class methods and properties
-    return instance;
+    return this.instance;
   }
 
   /**

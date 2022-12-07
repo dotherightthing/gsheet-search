@@ -1,7 +1,7 @@
 /**
  * @file GsUiTypeahead.js
  */
-class GsUiTypeahead extends GsUi {
+class GsUiTypeahead {
   /**
    * @class
    * @public
@@ -15,19 +15,26 @@ class GsUiTypeahead extends GsUi {
    * @param {string}  config.typeaheadId           - ID selector used to target the parent form
    */
   constructor(config = {}) {
-    super();
-
-    // is there a better way to pass this to loadData?
-    this.config = config;
-
     // select the relevant arguments from the config object passed in
-    this.filterClass = config.filterClass;
-    this.filtersContainerId = config.filtersContainerId;
-    this.filtersFocusTypeahead = config.filtersFocusTypeahead;
-    this.formId = config.formId;
-    this.radiosContainerId = config.radiosContainerId;
-    this.sheets = config.sheets;
-    this.typeaheadId = config.typeaheadId;
+    const {
+      filterClass,
+      filtersContainerId,
+      filtersFocusTypeahead,
+      formId,
+      radiosContainerId,
+      sheets,
+      typeaheadId,
+    } = config;
+
+    Object.assign(this, {
+      filterClass,
+      filtersContainerId,
+      filtersFocusTypeahead,
+      formId,
+      radiosContainerId,
+      sheets,
+      typeaheadId,
+    });
 
     // subscribe to other module's events
     pubsub.subscribe('domready', () => {
@@ -36,19 +43,6 @@ class GsUiTypeahead extends GsUi {
   }
 
   /* Getters and Setters */
-
-  /**
-   * config
-   *
-   * @type {object}
-   */
-  get config() {
-    return this._config;
-  }
-
-  set config(config) {
-    this._config = this.gsValidateInstance.validate(config, 'object', 'GsUiTypeahead.config');
-  }
 
   /**
    * dataTokensDisplayGroupA
@@ -60,7 +54,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set dataTokensDisplayGroupA(dataTokensDisplayGroupA) {
-    this._dataTokensDisplayGroupA = this.gsValidateInstance.validate(dataTokensDisplayGroupA, 'Array', 'GsUiTypeahead.dataTokensDisplayGroupA');
+    this._dataTokensDisplayGroupA = GsValidate.validate(dataTokensDisplayGroupA, 'Array', 'GsUiTypeahead.dataTokensDisplayGroupA');
   }
 
   /**
@@ -73,7 +67,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set dataTokensDisplayGroupB(dataTokensDisplayGroupB) {
-    this._dataTokensDisplayGroupB = this.gsValidateInstance.validate(dataTokensDisplayGroupB, 'Array', 'GsUiTypeahead.dataTokensDisplayGroupB');
+    this._dataTokensDisplayGroupB = GsValidate.validate(dataTokensDisplayGroupB, 'Array', 'GsUiTypeahead.dataTokensDisplayGroupB');
   }
 
   /**
@@ -86,7 +80,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set dataTokensDisplayGroupC(dataTokensDisplayGroupC) {
-    this._dataTokensDisplayGroupC = this.gsValidateInstance.validate(dataTokensDisplayGroupC, 'Array', 'GsUiTypeahead.dataTokensDisplayGroupC');
+    this._dataTokensDisplayGroupC = GsValidate.validate(dataTokensDisplayGroupC, 'Array', 'GsUiTypeahead.dataTokensDisplayGroupC');
   }
 
   /**
@@ -99,7 +93,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set dataTokenIdentifier(dataTokenIdentifier) {
-    this._dataTokenIdentifier = this.gsValidateInstance.validate(dataTokenIdentifier, 'string1', 'GsUiTypeahead.dataTokenIdentifier');
+    this._dataTokenIdentifier = GsValidate.validate(dataTokenIdentifier, 'string1', 'GsUiTypeahead.dataTokenIdentifier');
   }
 
   /**
@@ -112,7 +106,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set dataTokens(dataTokens) {
-    this._dataTokens = this.gsValidateInstance.validate(dataTokens, 'Array', 'GsUiTypeahead.dataTokens');
+    this._dataTokens = GsValidate.validate(dataTokens, 'Array', 'GsUiTypeahead.dataTokens');
   }
 
   /**
@@ -125,7 +119,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set filterClass(filterClass) {
-    this._filterClass = this.gsValidateInstance.validate(filterClass, 'string1', 'GsUiTypeahead.filterClass');
+    this._filterClass = GsValidate.validate(filterClass, 'string1', 'GsUiTypeahead.filterClass');
   }
 
   /**
@@ -138,7 +132,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set filtersContainerId(filtersContainerId) {
-    this._filtersContainerId = this.gsValidateInstance.validate(filtersContainerId, 'string1', 'GsUiTypeahead.filtersContainerId');
+    this._filtersContainerId = GsValidate.validate(filtersContainerId, 'string1', 'GsUiTypeahead.filtersContainerId');
   }
 
   /**
@@ -151,7 +145,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set filtersFocusTypeahead(filtersFocusTypeahead) {
-    this._filtersFocusTypeahead = this.gsValidateInstance.validate(filtersFocusTypeahead, 'boolean', 'GsUiTypeahead.filtersFocusTypeahead');
+    this._filtersFocusTypeahead = GsValidate.validate(filtersFocusTypeahead, 'boolean', 'GsUiTypeahead.filtersFocusTypeahead');
   }
 
   /**
@@ -164,7 +158,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set formId(formId) {
-    this._formId = this.gsValidateInstance.validate(formId, 'string1', 'GsUiTypeahead.formId');
+    this._formId = GsValidate.validate(formId, 'string1', 'GsUiTypeahead.formId');
   }
 
   /**
@@ -177,7 +171,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set radiosContainerId(radiosContainerId) {
-    this._radiosContainerId = this.gsValidateInstance.validate(radiosContainerId, 'string1', 'GsUiTypeahead.radiosContainerId');
+    this._radiosContainerId = GsValidate.validate(radiosContainerId, 'string1', 'GsUiTypeahead.radiosContainerId');
   }
 
   /**
@@ -190,7 +184,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set sheets(sheets) {
-    this._sheets = this.gsValidateInstance.validate(sheets, 'Array', 'GsUiTypeahead.sheets');
+    this._sheets = GsValidate.validate(sheets, 'Array', 'GsUiTypeahead.sheets');
   }
 
   /**
@@ -203,7 +197,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set storedData(storedData) {
-    this._storedData = this.gsValidateInstance.validate(storedData, 'Array', 'GsUiTypeahead.storedData');
+    this._storedData = GsValidate.validate(storedData, 'Array', 'GsUiTypeahead.storedData');
   }
 
   /**
@@ -216,7 +210,7 @@ class GsUiTypeahead extends GsUi {
   }
 
   set typeaheadId(typeaheadId) {
-    this._typeaheadId = this.gsValidateInstance.validate(typeaheadId, 'string1', 'GsUiTypeahead.typeaheadId');
+    this._typeaheadId = GsValidate.validate(typeaheadId, 'string1', 'GsUiTypeahead.typeaheadId');
   }
 
   /**
@@ -496,7 +490,7 @@ class GsUiTypeahead extends GsUi {
 
     // this is undefined when initTypeahead is called from server
     if (typeof this === 'undefined') {
-      _this = gsUiTypeaheadInstance;
+      _this = GsUiTypeahead.getInstance();
     } else {
       _this = this;
     }
@@ -666,7 +660,6 @@ class GsUiTypeahead extends GsUi {
    */
   loadData(sheetTitle) {
     const {
-      config,
       filtersContainerId,
     } = this;
 
@@ -677,6 +670,40 @@ class GsUiTypeahead extends GsUi {
     google.script.run
       .withSuccessHandler(this.initTypeahead)
       .withFailureHandler(this.handleError)
-      .gsSheetToJSON(config, sheetTitle);
+      .gsSheetToJSON(sheetTitle);
+  }
+
+  /* Static methods */
+
+  /**
+   * getInstance
+   *
+   * @summary Note: this refers to class instance in prototype methods and class constructor in static methods.
+   * @memberof GsUiTypeahead
+   * @static
+   * @param {object} config Config
+   * @returns {GsUiTypeahead} instance of class
+   * @see {@link https://code.tutsplus.com/tutorials/how-to-implement-the-singleton-pattern-in-javascript-es6--cms-39927}
+   * @see {@link https://stackoverflow.com/a/50285439}
+   */
+  static getInstance(config) {
+    let _config = config;
+
+    if (!this.instance) {
+      if (typeof _config === 'undefined') {
+        const cacheKey = 'config';
+        const cachedConfig = GsCache.getCacheItem(cacheKey, true);
+
+        if (GsValidate.isObject(cachedConfig)) {
+          _config = cachedConfig;
+        } else {
+          throw new Error('GsUiTypeahead.getInstance requires a configuration object the first time it is called and none was cached');
+        }
+      }
+
+      this.instance = new GsUiTypeahead(_config);
+    }
+
+    return this.instance;
   }
 }

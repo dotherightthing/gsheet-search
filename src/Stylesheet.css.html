@@ -198,11 +198,11 @@ fieldset {
 }
 
 form input#typeahead {
+  z-index: 2;
   font-size: 1.4rem;
   padding: .3rem .4rem .4rem .4rem;
   border: 2px solid;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, .5);
-  z-index: 2;
 }
 
 form input.tt-hint {
@@ -234,8 +234,8 @@ form input[type='reset'] {
 }
 
 .typeahead-standalone .tt-list {
-  border: 0;
   z-index: 1;
+  border: 0;
 }
 
 .typeahead-standalone .tt-list div[class^='tt-'] {
@@ -243,17 +243,17 @@ form input[type='reset'] {
 }
 
 .tt-list {
-  overflow: scroll;
   height: 20vh;
+  overflow: scroll;
 }
 
 .tt-suggestion {
   display: grid;
   grid-template-areas:
-    "a b"
-    "results results"
-    "c c"
-    "divider divider";
+    'a b'
+    'results results'
+    'c c'
+    'divider divider';
   grid-template-columns: 1fr 1fr;
   grid-gap: var(--gutter-quarter);
   margin: var(--gutter-quarter);
@@ -265,7 +265,7 @@ form input[type='reset'] {
 
 .tt-suggestion::after {
   grid-area: divider;
-  content: "";
+  content: '';
   display: block;
   width: 100%;
   border-bottom: 2px solid var(--bg-brand-dark);
@@ -309,8 +309,8 @@ form input[type='reset'] {
 
 .tt-suggestion .text-result {
   background-color: var(--bg-person);
-  text-transform: uppercase;
   font-size: .9em;
+  text-transform: uppercase;
 }
 
 .legend {
@@ -333,15 +333,15 @@ form input[type='reset'] {
 
 .checkbox > input,
 .radio > input {
-  -webkit-appearance: none;
-  appearance: none;
   position: absolute;
-  bottom: 0;
   right: 0;
+  bottom: 0;
   width: 1rem;
   height: 1rem;
   border-radius: 0; /* prevent rounded triangle in Safari iOS */
   margin: 0;
+  -webkit-appearance: none;
+  appearance: none;
 
   /* triangle */
   -webkit-clip-path: polygon(100% 33%, 0% 100%, 100% 100%);
@@ -384,26 +384,26 @@ form input[type='reset'] {
 -------------------------------------- */
 
 footer {
+  display: grid;
   position: fixed;
   right: 0;
   bottom: -20vw;
   left: 0;
-  transform: rotate(-30deg);
-  display: grid;
-  grid-template-columns: auto 6rem;
-  column-gap: var(--gutter-half);
-  align-items: end;
   width: 117vw;
+  align-items: end;
   padding: 0 4vw 0 25vw;
   border-bottom: 40vw solid var(--bg-brand-mid);
   margin: 0;
+  transform: rotate(-30deg);
+  grid-template-columns: auto 6rem;
+  column-gap: var(--gutter-half);
   mix-blend-mode: luminosity; /* darken, multiply, luminosity */
 }
 
 .footer-version {
   color: var(--bg-brand-mid);
-  text-transform: uppercase;
   font-size: .7rem;
+  text-transform: uppercase;
 }
 
 .footer-logo > img {

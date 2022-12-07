@@ -1,7 +1,7 @@
 /**
  * @file GsSheet.js
  */
-class GsSheet extends Gs {
+class GsSheet {
   /**
    * @class
    * @summary Properties and methods relating to querying of the spreadsheet.
@@ -10,30 +10,19 @@ class GsSheet extends Gs {
    * @param {string} config.spreadsheetId - ID of a spreadsheet which contains sheets
    */
   constructor(config = {}) {
-    super();
-
-    // is there a better way to pass this to sheetToJSON?
-    this.config = config;
-
     // select the relevant arguments from the config object passed in
-    this.sheets = config.sheets;
-    this.spreadsheetId = config.spreadsheetId;
+    const {
+      sheets,
+      spreadsheetId,
+    } = config;
+
+    Object.assign(this, {
+      sheets,
+      spreadsheetId,
+    });
   }
 
   /* Setters and Getters */
-
-  /**
-   * config
-   *
-   * @type {object}
-   */
-  get config() {
-    return this._config;
-  }
-
-  set config(config) {
-    this._config = this.gsValidateInstance.validate(config, 'object', 'GsSheet.config');
-  }
 
   /**
    * sheets
@@ -45,7 +34,7 @@ class GsSheet extends Gs {
   }
 
   set sheets(sheets) {
-    this._sheets = this.gsValidateInstance.validate(sheets, 'Array', 'GsSheet.sheets');
+    this._sheets = GsValidate.validate(sheets, 'Array', 'GsSheet.sheets');
   }
 
   /**
@@ -58,7 +47,7 @@ class GsSheet extends Gs {
   }
 
   set spreadsheetId(spreadsheetId) {
-    this._spreadsheetId = this.gsValidateInstance.validate(spreadsheetId, 'string1', 'GsSheet.spreadsheetId');
+    this._spreadsheetId = GsValidate.validate(spreadsheetId, 'string1', 'GsSheet.spreadsheetId');
   }
 
   /* Instance methods */
@@ -107,13 +96,10 @@ class GsSheet extends Gs {
     // read from cache if there
 
     const sheetTitleSafe = GsUtils.stringToId(sheetTitle);
-    const cacheKey = `_json-${sheetTitleSafe}-${spreadsheetId}`;
+    const cacheKey = `${sheetTitleSafe}-${spreadsheetId}`;
     let json = GsCache.getCacheItem(cacheKey);
 
-    // TypeError: GsValidate.isObject is not a function
-    // if (GsValidate.isObject(json)) { ... }
-
-    if (Object.prototype.toString.call(json) === '[object Object]') {
+    if (GsValidate.isObject(json)) {
       return json;
     }
 
@@ -174,9 +160,9 @@ class GsSheet extends Gs {
       dataTokensDisplayGroupC, // [ 'header5' ]
     };
 
-    if (Object.prototype.toString.call(json) === '[object Object]') {
-      GsCache.setCacheItem(cacheKey, json);
-    }
+    const obj = GsValidate.validate(json, 'object', 'GsSheet.sheetToJSON');
+
+    GsCache.setCacheItem(cacheKey, obj);
 
     return json;
   }
@@ -228,4 +214,36 @@ class GsSheet extends Gs {
   }
 
   /* Static methods */
+
+  /**
+   * getInstance
+   *
+   * @summary Note: this refers to class instance in prototype methods and class constructor in static methods.
+   * @memberof GsSheet
+   * @static
+   * @param {object} config Config
+   * @returns {GsSheet} instance of class
+   * @see {@link https://code.tutsplus.com/tutorials/how-to-implement-the-singleton-pattern-in-javascript-es6--cms-39927}
+   * @see {@link https://stackoverflow.com/a/50285439}
+   */
+  static getInstance(config) {
+    let _config = config;
+
+    if (!this.instance) {
+      if (typeof _config === 'undefined') {
+        const cacheKey = 'config';
+        const cachedConfig = GsCache.getCacheItem(cacheKey, true);
+
+        if (GsValidate.isObject(cachedConfig)) {
+          _config = cachedConfig;
+        } else {
+          throw new Error('GsSheet.getInstance requires a configuration object the first time it is called and none was cached');
+        }
+      }
+
+      this.instance = new GsSheet(_config);
+    }
+
+    return this.instance;
+  }
 }

@@ -31,16 +31,15 @@
     </footer>
     <!-- end footer -->
 
-    <script>
-      const tplConfig = JSON.parse('<?= tplConfig ?>');
-    </script>
-
     <?!= GsPage.include('Htmlified/Pubsub.js'); ?>
     <?!= GsPage.include('Htmlified/Typeahead-standalone.js'); ?>
     <?!= GsPage.include('Htmlified/GsUi.js'); ?>
     <?!= GsPage.include('Htmlified/GsUiCss.js'); ?>
     <?!= GsPage.include('Htmlified/GsUiTypeahead.js'); ?>
+    <?!= GsPage.include('Htmlified/GsUtils.js'); ?>
     <?!= GsPage.include('Htmlified/GsValidate.js'); ?>
-    <?!= GsPage.include('Init.js'); ?>
+    <?!= GsPage.include('Init.js', {
+      tplConfig,
+    }); ?>
   </body>
 </html>

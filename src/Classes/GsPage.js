@@ -1,34 +1,57 @@
 /**
  * @file GsPage.js
  */
-class GsPage extends Gs {
+class GsPage {
   /**
    * @class
    * @summary Properties and methods relating to the HTML templating.
    * @public
    * @param {object} config                    - Module configuration.
    * @param {string} config.imageLogo          - Image displayed at the bottom of the page and in the background.
-   * @param {string} config.organisationName   - Web browser page title.
+   * @param {string} config.organisationName   - Used in web browser web browser page title.
+   * @param {string} config.pageTemplate       - HTML template file.
    * @param {string} config.pageTitle          - Web browser page title.
    * @param {string} config.sheetResultHeader  - Column headers to use for results.
    * @param {string} config.sheetSearchHeaders - Column headers to search and filter by.
-   * @param {string} config.tplFile            - HTML template file.
    */
   constructor(config = {}) {
-    super();
-
     // select the relevant arguments from the config object passed in
-    this.imageLogo = config.imageLogo;
-    this.organisationName = config.organisationName;
-    this.pageTitle = config.pageTitle;
-    this.sheetResultHeader = config.sheetResultHeader;
-    this.sheetSearchHeaders = config.sheetSearchHeaders;
-    this.tplFile = config.tplFile;
+    const {
+      imageLogo,
+      organisationName,
+      pageTemplate,
+      pageTitle,
+      sheetResultHeader,
+      sheetSearchHeaders,
+    } = config;
+
+    Object.assign(this, {
+      config,
+      imageLogo,
+      organisationName,
+      pageTemplate,
+      pageTitle,
+      sheetResultHeader,
+      sheetSearchHeaders,
+    });
 
     this.template = this.createHtmlTemplate(config);
   }
 
   /* Setters and Getters */
+
+  /**
+   * config
+   *
+   * @type {object}
+   */
+  get config() {
+    return this._config;
+  }
+
+  set config(config) {
+    this._config = GsValidate.validate(config, 'object', 'GsPage.config');
+  }
 
   /**
    * imageLogo
@@ -40,7 +63,7 @@ class GsPage extends Gs {
   }
 
   set imageLogo(imageLogo) {
-    this._imageLogo = this.gsValidateInstance.validate(imageLogo, 'string1', 'GsPage.imageLogo');
+    this._imageLogo = GsValidate.validate(imageLogo, 'string1', 'GsPage.imageLogo');
   }
 
   /**
@@ -53,7 +76,20 @@ class GsPage extends Gs {
   }
 
   set organisationName(organisationName) {
-    this._organisationName = this.gsValidateInstance.validate(organisationName, 'string1', 'GsPage.organisationName');
+    this._organisationName = GsValidate.validate(organisationName, 'string1', 'GsPage.organisationName');
+  }
+
+  /**
+   * pageTemplate
+   *
+   * @type {string}
+   */
+  get pageTemplate() {
+    return this._pageTemplate;
+  }
+
+  set pageTemplate(pageTemplate) {
+    this._pageTemplate = GsValidate.validate(pageTemplate, 'string1', 'GsPage.pageTemplate');
   }
 
   /**
@@ -66,20 +102,7 @@ class GsPage extends Gs {
   }
 
   set pageTitle(pageTitle) {
-    this._pageTitle = this.gsValidateInstance.validate(pageTitle, 'string1', 'GsPage.pageTitle');
-  }
-
-  /**
-   * tplFile
-   *
-   * @type {string}
-   */
-  get tplFile() {
-    return this._tplFile;
-  }
-
-  set tplFile(tplFile) {
-    this._tplFile = this.gsValidateInstance.validate(tplFile, 'string1', 'GsPage.tplFile');
+    this._pageTitle = GsValidate.validate(pageTitle, 'string1', 'GsPage.pageTitle');
   }
 
   /* Instance methods */
@@ -123,26 +146,26 @@ class GsPage extends Gs {
    *
    * @summary Generates an HtmlTemplate object from the HTML file and the supplied template variables
    * @memberof GsPage
-   * @param {object} config Config
-   * @returns {object} provided page in the urlquery '?page=[PAGEID]' or main index page
+   * @returns {object} page Page
    * @see {@link https://developers.google.com/apps-script/guides/html/templates#code.gs_3}
    * @see {@link https://developers.google.com/apps-script/reference/html/html-template}
    * @see {@link https://www.youtube.com/watch?v=VyNJtjH84Aw}
    */
-  createHtmlTemplate(config) {
+  createHtmlTemplate() {
     const {
+      config,
       imageLogo,
       organisationName,
+      pageTemplate,
       pageTitle,
-      tplFile,
     } = this;
 
     // HtmlTemplate object
-    let tpl = HtmlService.createTemplateFromFile(tplFile);
+    let tpl = HtmlService.createTemplateFromFile(pageTemplate);
 
     // create variables object
     const tplVariables = {
-      tplConfig: JSON.stringify(config),
+      tplConfig: JSON.stringify(config), // pass entire config to the frontend
       tplCompanyLogo: imageLogo,
       tplCompanyName: organisationName,
       tplPageTitle: pageTitle,
@@ -159,6 +182,36 @@ class GsPage extends Gs {
   }
 
   /* Static methods */
+
+  /**
+   * getInstance
+   *
+   * @summary Note: this refers to class instance in prototype methods and class constructor in static methods.
+   * @param {object} config Config
+   * @returns {GsPage} instance of class
+   * @see {@link https://code.tutsplus.com/tutorials/how-to-implement-the-singleton-pattern-in-javascript-es6--cms-39927}
+   * @see {@link https://stackoverflow.com/a/50285439}
+   */
+  static getInstance(config) {
+    let _config = config;
+
+    if (!this.instance) {
+      if (typeof _config === 'undefined') {
+        const cacheKey = 'config';
+        const cachedConfig = GsCache.getCacheItem(cacheKey, true);
+
+        if (GsValidate.isObject(cachedConfig)) {
+          _config = cachedConfig;
+        } else {
+          throw new Error('GsPage.getInstance requires a configuration object the first time it is called and none was cached');
+        }
+      }
+
+      this.instance = new GsPage(_config);
+    }
+
+    return this.instance;
+  }
 
   /**
    * include

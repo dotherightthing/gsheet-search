@@ -1,16 +1,14 @@
 /**
  * @file Main.gs
- * @summary Initialises the GS App and creates global variables.
+ * @summary Initialises the GS App.
  */
 
 // global config settings
 
 // these are the standalone settings
-// when used as a library, the host project passes its own config into GsheetSearch.doGet()
+// when used as a library, the host project passes its own config into GsheetSearch.init()
 
-let standalone = true;
-
-const gsConfig = {
+const standaloneConfig = {
   // Link to an image such as the one on your organisation's website
   imageLogo: 'https://via.placeholder.com/500x138/fff/000/png?text=Logo',
   // Name of your organisation
@@ -37,35 +35,56 @@ const gsConfig = {
 /**
  * doGet
  *
- * @summary Called when the user loads the web app in a web browser.
+ * @summary Called when the user loads the web app in a web browser. This autostarts the app.
+ * @returns {string} - App template
+ */
+function doGet() {
+  const appTemplate = init(standaloneConfig, true);
+
+  return appTemplate;
+}
+
+/**
+ * doGet
+ *
  * @param {object} config - Config
+ * @param {boolean} standalone - True if loaded directly, False if loaded as a library.
  * @returns {*} - HTML Template
  */
-function doGet(config) {
-  // when consumed as a library, an object is passed to this function
-  // when tested directly, the default object is passed
-  if (Object.prototype.hasOwnProperty.call(config, 'queryString')) { // default object
-    // eslint-disable-next-line no-param-reassign
-    config = gsConfig; // app config
-  } else {
-    // used as a library, config is passed in
-    standalone = false;
-  }
-
+function init(config, standalone = false) {
   // hardcoded developer-only properties
+
   config.debug = false;
   config.fixedPositionIds = [];
+
+  config.focusableSelectors = [
+    'a[href]',
+    'button:not([disabled])',
+    'input:not([disabled])',
+    'select:not([disabled])',
+    'textarea:not([disabled])',
+    '[tabindex="0"]:not(.dialog-tabtrap)',
+  ];
+
   config.formId = 'search';
   config.radiosContainerId = 'data-sources';
   config.filterClass = 'filter';
   config.filtersContainerId = 'data-filters';
   config.typeaheadId = 'typeahead';
-  config.tplFile = 'Search';
+  config.pageTemplate = 'Search';
 
   // eslint-disable-next-line no-console
   console.log('Gsheet Search loaded as standalone: ', standalone, ', with config: ', config);
 
-  const page = new GsPage(config);
+  // generate singleton instances up front while we have the config
+  // so we don't need to keep passing it around
+  // note: order is important
+  GsUtils.getInstance(config);
 
-  return page.template;
+  // store the config so that it can be accessed by instantiations in Middleware.js
+  // which don't seem to be aware of prior instantiations.
+  const cacheKey = 'config';
+  GsCache.setCacheItem(cacheKey, config, true);
+
+  return GsPage.getInstance(config).createHtmlTemplate();
 }

@@ -16,7 +16,7 @@ set -e
 
 # arguments passed to this script
 DEPLOYMENT_ID=$1
-KRM_MESSAGE=$2
+GS_MESSAGE=$2
 
 # get current project version from clasp
 CLASP_VERSIONS=`npx clasp versions` # ~ 6 Versions ~ ...
@@ -42,14 +42,14 @@ cd $INIT_CWD \
 && echo "v$CLASP_VERSION_BUMP - $PUBLISH_DATE" > $VERSION_FILE \
 && echo > $TAGS_FILE \
 && echo '<table><thead><tr><th>Version</th><th>When</th><th>Summary</th></tr></thead><tbody>' >> $TAGS_FILE \
-&& echo "<tr><td>0.$CLASP_VERSION_BUMP.0</td><td>$PUBLISH_DATE_FOR_HISTORY</td><td>$KRM_MESSAGE.</td></tr>" >> $TAGS_FILE \
+&& echo "<tr><td>0.$CLASP_VERSION_BUMP.0</td><td>$PUBLISH_DATE_FOR_HISTORY</td><td>$GS_MESSAGE.</td></tr>" >> $TAGS_FILE \
 && git log --no-walk --tags --pretty="<tr><td>%D</td><td>%cd</td><td>%s</td></tr>" --date=short | sed 's/tag: v//' | sed 's/HEAD -> main, //' | sed 's/, origin\/main//' >> $TAGS_FILE \
 && echo '</tbody></table>' >> $TAGS_FILE \
 && git add $TAGS_FILE \
 && git add $VERSION_FILE \
 && git commit -m "Bump version" \
-&& npm version $NPM_VERSION_BUMP --message "$KRM_MESSAGE" \
+&& npm version $NPM_VERSION_BUMP --message "$GS_MESSAGE" \
 && npm run clasp:push \
-&& npx clasp version "$KRM_MESSAGE" \
-&& npx clasp deploy --description "$KRM_MESSAGE" --deploymentId $DEPLOYMENT_ID --versionNumber $CLASP_VERSION_BUMP \
+&& npx clasp version "$GS_MESSAGE" \
+&& npx clasp deploy --description "$GS_MESSAGE" --deploymentId $DEPLOYMENT_ID --versionNumber $CLASP_VERSION_BUMP \
 && npx clasp open --webapp --deploymentId $DEPLOYMENT_ID

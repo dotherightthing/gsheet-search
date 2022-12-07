@@ -4,15 +4,16 @@
   "description": "Mobile-friendly frontend to enable quick filtering of a Google Sheet",
   "main": "Main.js",
   "scripts": {
-    "clasp:push": "node ./scripts/htmlify.js && npx clasp push",
-    "man": "npx jsdoc2md --template ./templates/MAN.hbs --files ./src/**/*.js* > ./MAN.md",
-    "editor": "node ./scripts/htmlify.js && npx clasp push && npx clasp open",
     "lint:css": "npx stylelint './src/**/*.css.html'",
     "lint:js": "npx eslint ./src/**/*.js",
+    "man": "npx jsdoc2md --template ./templates/MAN.hbs --files ./src/**/*.js* > ./MAN.md",
+    "openEditor": "npm run push && npx clasp open",
+    "openPreview": "npm run push && npx clasp open --webapp --deploymentId $npm_package_config_headDeploymentId",
+    "postinstall": "node ./scripts/htmlify.js",
     "prepare": "husky install",
-    "preview": "node ./scripts/htmlify.js && npx clasp push && npx clasp open --webapp --deploymentId $npm_package_config_headDeploymentId",
     "publish": "./scripts/publish.sh ${npm_package_config_pubDeploymentId} \"${npm_config_gsmessage}\"",
-    "postinstall": "node ./scripts/htmlify.js"
+    "push": "node ./scripts/htmlify.js && npx clasp push",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -35,6 +36,7 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-compat": "^4.0.1",
     "eslint-plugin-html": "^6.2.0",
+    "eslint-plugin-jsdoc": "^39.6.2",
     "eslint-plugin-json": "^3.1.0",
     "husky": "^7.0.4",
     "jsdoc-to-markdown": "^7.1.0",
@@ -60,12 +62,12 @@
         "GsUi.js",
         "GsUiCss.js",
         "GsUiTypeahead.js",
+        "GsUtils.js",
         "GsValidate.js"
       ]
     }
   },
   "dependencies": {
-    "eslint-plugin-jsdoc": "^39.6.2",
     "pubsub.js": "^1.5.2",
     "typeahead-standalone": "^4.13.0"
   }

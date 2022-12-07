@@ -27,7 +27,7 @@
     "GsheetSearch": "readonly",
     "GsUtils": "readonly",
     "GsValidate": "readonly",
-    "gsValidateInstance": "readonly",
+    "GsValidate": "readonly",
     "GsUi": "readonly",
     "GsUiCss": "readonly",
     "GsUiTypeahead": "readonly",

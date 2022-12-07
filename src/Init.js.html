@@ -4,15 +4,14 @@
  * @summary Client side scripting for the GS web app.
  *  Instances are generated so that classes can subscribe to pubsub events and respond accordingly.
  */
-const gsUiConfig = { ...tplConfig };
+const config = JSON.parse('<?= tplConfig ?>');
 
 // used by other classes
 // note: backend file copied into frontend dependencies
 // note: GsUtils is also included, but doesn't require an instance
-const gsValidateInstance = new GsValidate();
-const gsUiInstance = new GsUi();
-const gsUiCssInstance = new GsUiCss(gsUiConfig);
-const gsUiTypeaheadInstance = new GsUiTypeahead(gsUiConfig);
+GsUi.getInstance(config);
+GsUiCss.getInstance(config);
+GsUiTypeahead.getInstance(config);
 
 document.onreadystatechange = () => {
   // Polyfill for forEach

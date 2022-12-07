@@ -9,14 +9,10 @@
  * gsSheetToJSON
  *
  * @summary Calls serverside function from clientside function (GsUiTypeahead.handleLoadClick)
- * @param {object} config Config
  * @param {string} sheetTitle Sheet title
  * @returns {object} Sheet as JSON
  * @todo This needs to be called differently when the app is consumed as a library
  */
-function gsSheetToJSON(config, sheetTitle) {
-  // instantiate required classes, optionally passing on the config object
-  const gsSheetInstance = new GsSheet(config);
-
-  return gsSheetInstance.sheetToJSON(sheetTitle);
+function gsSheetToJSON(sheetTitle) {
+  return GsSheet.getInstance().sheetToJSON(sheetTitle);
 }

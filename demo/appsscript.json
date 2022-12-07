@@ -1,0 +1,23 @@
+{
+  "timeZone": "Pacific/Auckland",
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "dependencies": {
+    "libraries": [
+      {
+        "userSymbol": "GsheetCompostCollections",
+        "version": "0",
+        "libraryId": "1_ZAI64WLHlg7M0yss76_X2s-4Ph0qdlbE-ShzF-Kjpuof54ATSzX5qil",
+        "developmentMode": true
+      }
+    ]
+  },
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/script.container.ui",
+    "https://www.googleapis.com/auth/spreadsheets"
+  ],
+  "webapp": {
+    "executeAs": "USER_ACCESSING",
+    "access": "MYSELF"
+  }
+}

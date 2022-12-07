@@ -8,9 +8,7 @@ class GsValidate {
    * @public
    */
 
-  /* Setters and Getters */
-
-  /* Instance methods */
+  /* Static methods */
 
   /**
    * errorMessage
@@ -20,16 +18,17 @@ class GsValidate {
    * @param {*} value - Value to validate
    * @param {Array} types - Expected type(s)
    * @param {string} identifier - Label to use in error message
+   * @static
    */
-  errorMessage(value, types, identifier) {
+  static errorMessage(value, types, identifier) {
     const actualType = typeof value;
-    const actualTypeArticle = this.getIndefiniteArticle(actualType);
+    const actualTypeArticle = GsUtils.getIndefiniteArticle(actualType);
     const typeSeparator = ', or ';
     let typeArticle;
     let typesStr = '';
 
     types.forEach((type) => {
-      typeArticle = this.getIndefiniteArticle(type);
+      typeArticle = GsUtils.getIndefiniteArticle(type);
       typesStr += `${typeArticle} ${type}${typeSeparator}`;
     });
 
@@ -40,36 +39,15 @@ class GsValidate {
   }
 
   /**
-   * getIndefiniteArticle
-   *
-   * @summary Get the appropriate indefinite article for the specified string
-   * @memberof GsValidate
-   * @param {string} str - String
-   * @returns {string} indefiniteArticle
-   * @see {@link https://github.com/dotherightthing/kaicycle-run-mobile-tests}
-   */
-  getIndefiniteArticle(str) {
-    const firstLetter = str.slice(0, 1).toLowerCase();
-    const strLower = str.toLowerCase();
-
-    let art = (firstLetter.match(/^(a|e|i|o|u)$/)) ? 'an' : 'a';
-
-    if (strLower.match(/^(null|undefined)$/)) {
-      art = '';
-    }
-
-    return art;
-  }
-
-  /**
    * isArray
    *
    * @summary Validate that a value is an array
    * @memberof GsValidate
    * @param {*} value - Value to validate
    * @returns {boolean} valid
+   * @static
    */
-  isArray(value) {
+  static isArray(value) {
     return (Array.isArray(value));
   }
 
@@ -80,8 +58,9 @@ class GsValidate {
    * @memberof GsValidate
    * @param {*} value - Value to validate
    * @returns {boolean} valid
+   * @static
    */
-  isBoolean(value) {
+  static isBoolean(value) {
     return (typeof value === 'boolean');
   }
 
@@ -92,8 +71,9 @@ class GsValidate {
    * @memberof GsValidate
    * @param {*} value - Value to validate
    * @returns {boolean} valid
+   * @static
    */
-  isNull(value) {
+  static isNull(value) {
     return (value === null);
   }
 
@@ -104,8 +84,9 @@ class GsValidate {
    * @memberof GsValidate
    * @param {*} value - Value to validate
    * @returns {boolean} valid
+   * @static
    */
-  isNumber(value) {
+  static isNumber(value) {
     return (!isNaN(value)); // eslint-disable-line no-restricted-globals
   }
 
@@ -116,8 +97,9 @@ class GsValidate {
    * @memberof GsValidate
    * @param {*} value - Value to validate
    * @returns {boolean} valid
+   * @static
    */
-  isObject(value) {
+  static isObject(value) {
     return (Object.prototype.toString.call(value) === '[object Object]');
   }
 
@@ -128,8 +110,9 @@ class GsValidate {
    * @memberof GsValidate
    * @param {*} value - Value to validate
    * @returns {boolean} valid
+   * @static
    */
-  isString(value) {
+  static isString(value) {
     return (typeof value === 'string');
   }
 
@@ -140,9 +123,31 @@ class GsValidate {
    * @memberof GsValidate
    * @param {*} value - Value to validate
    * @returns {boolean} valid
+   * @static
    */
-  isString1(value) {
-    return (value.trim().length > 0);
+  static isString1(value) {
+    if (typeof value === 'string') {
+      return (value.trim().length > 0);
+    }
+
+    return false;
+  }
+
+  /**
+   * isStringE
+   *
+   * @summary Validate that a value is a string of E (E = Error)
+   * @memberof GsValidate
+   * @param {*} value - Value to validate
+   * @returns {boolean} valid
+   * @static
+   */
+  static isStringE(value) {
+    if (typeof value === 'string') {
+      return (value === 'E');
+    }
+
+    return false;
   }
 
   /**
@@ -153,25 +158,10 @@ class GsValidate {
    * @param {*} value - Value to validate
    * @param {string} type - Type
    * @returns {boolean} valid
+   * @static
    */
-  isTypeOf(value, type) {
+  static isTypeOf(value, type) {
     return (typeof value === type);
-  }
-
-  /**
-   * stringToCapitalised
-   *
-   * @summary Capitalise a string
-   * @memberof GsValidate
-   * @param {string} str - String to convert
-   * @returns {string} capitalisedStr
-   */
-  stringToCapitalised(str) {
-    if (typeof str !== 'string') {
-      return '';
-    }
-
-    return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
   /**
@@ -184,22 +174,22 @@ class GsValidate {
    * @param {string} identifier - Label to use in error message
    * @param {boolean} condition - Validate if condition is true
    * @returns {*} value
-   * @todo Test
+   * @static
    */
-  validate(value, type, identifier, condition = true) {
+  static validate(value, type, identifier, condition = true) {
     if (condition) {
       const types = type.split('|');
       let valid = false;
 
       // type can be singular (e.g. 'number') or multiple (e.g. 'number|string|boolean')
       types.every((t) => {
-        const validationMethod = `is${this.stringToCapitalised(t)}`;
+        const validationMethod = `is${GsUtils.stringToCapitalised(t)}`;
 
-        if (validationMethod.match(/^(isArray|isBoolean|isNull|isNumber|isObject|isString|isString1|isTypeOf)$/)) {
+        if (validationMethod.match(/^(isArray|isBoolean|isNull|isNumber|isObject|isString|isString1|isStringE|isTypeOf)$/)) {
           if (validationMethod === 'isTypeOf') {
-            valid = this[validationMethod](value, type);
+            valid = GsValidate[validationMethod](value, type);
           } else {
-            valid = this[validationMethod](value);
+            valid = GsValidate[validationMethod](value);
           }
 
           // value is valid if any type is valid
@@ -207,19 +197,17 @@ class GsValidate {
             return false; // stop looping
           }
         } else {
-          throw new Error(`krmValidateInstance.validate does not support type ${type}`);
+          throw new Error(`GsValidate.validate does not support type ${type}`);
         }
 
         return true; // continue looping
       });
 
       if (!valid) {
-        throw new Error(this.errorMessage(value, types, identifier));
+        throw new Error(GsValidate.errorMessage(value, types, identifier));
       }
     }
 
     return value;
   }
-
-  /* Static methods */
 }

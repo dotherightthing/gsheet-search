@@ -6,8 +6,7 @@
   ],
 	"settings": {
     "files.associations": {
-      "src/*.css.html": "css",
-      "src/*.js.html": "javascript",
+      "**/src/*.html": "html",
       "**/src/Partials/*.part.html": "html",
     },
     "editor.tabSize": 2,

@@ -1,61 +1,78 @@
 /**
  * @file GsCache.js
+ * @summary Caches data to improve performance.
+ * @description
+ *  The PropertiesService is used for caching as it provides better access for debugging.
+ *  If the app is hosted as a library (container-bound), data is cached in Document Properties.
+ *  If the app is hosted standalone, data is cached in Script Properties.
+ *  Only Script Properties are exposed in Apps Script > Project Settings.
  */
-class GsCache extends Gs { // eslint-disable-line no-unused-vars
+class GsCache {
   /**
    * @class
    * @summary Temporarily cache results that take time to fetch/compute (memoization).
    *  Current limitations - value size: 9 KB, property store: 500 KB
    * @public
-   * @param {object}  config       - Module configuration.
-   * @param {boolean} config.debug - Output debugging messages.
    * @see {@link https://developers.google.com/apps-script/guides/services/quotas}
    */
-  constructor(config = {}) {
-    super();
 
-    // select the relevant arguments from the config object passed in
-    this.debug = config.debug;
-  }
-
-  /* Getters and Setters */
-
-  /**
-   * debug
-   *
-   * @type {boolean}
-   */
-  get debug() {
-    return this._debug;
-  }
-
-  set debug(debug) {
-    this._debug = this.gsValidateInstance.validate(debug, 'boolean', 'GsCache.debug');
-  }
-
-  /**
-   * Static methods
-   *
-   * static - self contained, do not need to reference the instance
-   * non-static - need access to the instance/'this'
-   */
+  /* Static methods */
 
   /**
    * clearCache
    *
    * @summary Removes all keys and values from the script cache.
    * @memberof GsCache
-   * @returns {string} Success message
    * @static
-   * @todo Only delete properties which start with '_cache', to allow config to live here too
-   * @todo getDocumentProperties might work better for spreadsheet specific properties
+   * @param {string} propertyKey Single property key to remove (rather than all keys)
+   * @returns {string} output Success message
    */
-  static clearCache() {
-    const scriptProperties = PropertiesService.getScriptProperties();
+  static clearCache(propertyKey) {
+    let properties = PropertiesService.getDocumentProperties();
 
-    scriptProperties.deleteAllProperties();
+    if (properties === null) {
+      properties = PropertiesService.getScriptProperties();
+    }
 
-    return 'Stored script properties deleted'; // eslint-disable-line no-console
+    const deletedKeys = [];
+    let output = '';
+    let propertyKeys;
+
+    if (propertyKey !== 'undefined') {
+      propertyKeys = [ `_cache${propertyKey}` ];
+    } else {
+      propertyKeys = properties.getKeys();
+    }
+
+    propertyKeys.forEach((propKey) => {
+      if (propKey.startsWith('_cache')) {
+        properties.deleteProperty(propKey);
+        deletedKeys.push(propKey);
+      }
+    });
+
+    if (propertyKeys.length) {
+      const suffix = (propertyKeys.length > 1) ? 's' : '';
+
+      output = `Deleted cache${suffix} "${deletedKeys.sort().join('" and "')}"`;
+    } else {
+      output = 'No caches to delete';
+    }
+
+    return output;
+  }
+
+  /**
+   * clearCacheItem
+   *
+   * @summary Removes a single key and value from the script cache.
+   * @memberof GsCache
+   * @static
+   * @param {string} propertyKey Single property key to remove
+   * @returns {*} Function call
+   */
+  static clearCacheItem(propertyKey) {
+    return GsCache.clearCache(propertyKey);
   }
 
   /**
@@ -65,30 +82,32 @@ class GsCache extends Gs { // eslint-disable-line no-unused-vars
    * @memberof GsCache
    * @static
    * @param {string} key Unique cache key
-   * @returns {object} Cache value
-   * @todo Cannot destructure property 'debug' of 'gsCacheInstance' as it is undefined.
+   * @param {boolean} hasOwnCache Cache separately from the main cache in order to stay within the size limit
+   * @returns {object} cacheItemValue
    */
-  static getCacheItem(key) {
-    // const { debug } = gsCacheInstance;
+  static getCacheItem(key, hasOwnCache = false) {
+    let properties = PropertiesService.getDocumentProperties();
 
-    // console.log('getCacheItem %s', key);
-    let value = null;
-    const scriptProperties = PropertiesService.getScriptProperties();
-    const stored = scriptProperties.getProperty(key);
-
-    if (stored !== null) {
-      value = JSON.parse(stored);
-
-      // if (debug) {
-      //   console.log('Read script property %s as %s', key, value); // eslint-disable-line no-console
-      // }
+    if (properties === null) {
+      properties = PropertiesService.getScriptProperties();
     }
 
-    return value;
+    // get existing cache
+    const parentKey = hasOwnCache ? `_cache_${key}` : '_cache';
+    const cached = properties.getProperty(parentKey);
+    let cacheItemValue = null;
+
+    if (cached !== null) {
+      const cache = JSON.parse(cached);
+
+      cacheItemValue = cache[key];
+    }
+
+    return cacheItemValue;
   }
 
   /**
-   * cacheLog
+   * logCache
    *
    * @summary Outputs the contents of the script cache to the console.
    * @memberof GsCache
@@ -96,18 +115,30 @@ class GsCache extends Gs { // eslint-disable-line no-unused-vars
    * @returns {object} Cache contents, sorted alphabetically.
    * @see {@link https://spreadsheet.dev/array-method-sort-in-apps-script}
    */
-  static cacheLog() {
-    const scriptProperties = PropertiesService.getScriptProperties();
-    const valueObj = scriptProperties.getProperties();
-    const valueKeys = Object.keys(valueObj);
-    const valueKeysSorted = valueKeys.sort();
-    const sortedObj = {};
+  static logCache() {
+    let properties = PropertiesService.getDocumentProperties();
 
-    valueKeysSorted.forEach((valueKey) => {
-      sortedObj[valueKey] = valueObj[valueKey];
+    if (properties === null) {
+      properties = PropertiesService.getScriptProperties();
+    }
+
+    const parentObj = properties.getProperties(); // _cache, _cache_foo etc
+    const parentKeys = Object.keys(parentObj).sort();
+    const parentObjSorted = {};
+
+    parentKeys.forEach((parentKey) => {
+      const childObj = JSON.parse(parentObj[parentKey]); // appName etc
+      const childKeys = Object.keys(childObj).sort();
+      const childObjSorted = {};
+
+      childKeys.forEach((childKey) => {
+        childObjSorted[childKey] = childObj[childKey];
+      });
+
+      parentObjSorted[parentKey] = childObjSorted;
     });
 
-    return sortedObj;
+    return parentObjSorted;
   }
 
   /**
@@ -118,15 +149,28 @@ class GsCache extends Gs { // eslint-disable-line no-unused-vars
    * @static
    * @param {string} key Unique cache key
    * @param {object} value Cache value
+   * @param {boolean} hasOwnCache Cache separately from the main cache in order to stay within the size limit
    */
-  static setCacheItem(key, value) {
-    // const { debug } = gsCacheInstance; // TypeError: Cannot destructure property 'debug' of 'gsCacheInstance' as it is undefined.
-    const scriptProperties = PropertiesService.getScriptProperties();
+  static setCacheItem(key, value, hasOwnCache = false) {
+    let properties = PropertiesService.getDocumentProperties();
 
-    scriptProperties.setProperty(key, JSON.stringify(value));
+    if (properties === null) {
+      properties = PropertiesService.getScriptProperties();
+    }
 
-    // if (debug) {
-    //   console.log('Write script property %s as %s', key, value); // eslint-disable-line no-console
-    // }
+    // get existing cache
+    const parentKey = hasOwnCache ? `_cache_${key}` : '_cache';
+    const cached = properties.getProperty(parentKey);
+    let cache = {};
+
+    if (cached !== null) {
+      cache = JSON.parse(cached);
+    }
+
+    // add new item
+    cache[key] = value;
+
+    // update cache
+    properties.setProperty(parentKey, JSON.stringify(cache));
   }
 }
