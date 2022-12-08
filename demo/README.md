@@ -67,17 +67,22 @@ This will allow you to configure and deploy the web app.
       e.g. In Firefox: Edit > Find in page > `organisationName`
 3. The `doGet` function runs the app from a web browser
 
-#### 4. Create an initial deployment of the Apps Script project to enable testing
+### 4. Add the middleware communication layer
+
+1. Files > + > Script > `Middleware`
+2. Copy the contents of [demo/Middleware.js](https://github.com/dotherightthing/gsheet-search/blob/main/demo/Middleware.js) to `Middleware.gs` (`.js` files have a `.gs` extension in the Apps Script editor)
+
+#### 5. Create an initial deployment of the Apps Script project to enable testing
 
 1. Deploy > New deployment > Select type: `Web app` > Description: `Initial deployment` > Execute as: `User accessing the web app` > Who has access: `Only myself` > Deploy > Click the Web app link
 2. When presented with a modal titled *Gsheet Search (Unverified)*, select *Review Permissions > Select account > Allow*
 3. Select *Deploy > Test deployments > Select type > Web app*
 
-#### 5. Test that everything is working
+#### 6. Test that everything is working
 
 1. Deploy > Test deployments > Web app > Click URL link > Check that the app loads
 
-#### 6. Share the spreadsheet with any editors and app users
+#### 7. Share the spreadsheet with any editors and app users
 
 1. Open the spreadsheet
 2. *Share > Add people and groups > [Enter email] > Editor*

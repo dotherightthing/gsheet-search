@@ -3,12 +3,8 @@
  * @summary Initialises the GS App.
  */
 
-// global config settings
-
-// these are the standalone settings
-// when used as a library, the host project passes its own config into GsheetSearch.init()
-
-const standaloneConfig = {
+// standalone configuration
+const saConfig = {
   // Link to an image such as the one on your organisation's website
   imageLogo: 'https://via.placeholder.com/500x138/fff/000/png?text=Logo',
   // Name of your organisation
@@ -39,7 +35,7 @@ const standaloneConfig = {
  * @returns {string} - App template
  */
 function doGet() {
-  const appTemplate = init(standaloneConfig, true);
+  const appTemplate = init(saConfig, true);
 
   return appTemplate;
 }
