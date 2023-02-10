@@ -86,3 +86,9 @@ This will allow you to configure and deploy the web app.
 
 1. Open the spreadsheet
 2. *Share > Add people and groups > [Enter email] > Editor*
+
+#### 8. Output the sheet as JSON (optional)
+
+To use the sheet data in another app, provide 'endpoints' which use the Apps Script `ContentService` to output spreadsheet content in JSON format.
+
+See `doGet()`.

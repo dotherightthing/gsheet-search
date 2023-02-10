@@ -10,6 +10,7 @@
   "globals": {
     "Atomics": "readonly",
     "google": "readonly",
+    "ContentService": "readonly",
     "GroupsApp": "readonly",
     "HtmlService": "readonly",
     "Logger": "readonly",
